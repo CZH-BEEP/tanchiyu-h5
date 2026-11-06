@@ -16,7 +16,7 @@ body{padding:28px 18px 42px;background:radial-gradient(circle at 18% 10%,rgba(24
 html,body{background:#1d2433;color:#2a1f1b;font-family:"Trebuchet MS","PingFang SC","Microsoft YaHei",sans-serif}
 body{background:#f0dca6;background-image:radial-gradient(#c28b4d 1.1px,transparent 1.1px),linear-gradient(135deg,#f7e7b8 0%,#e5bf75 48%,#a8c97f 100%);background-size:18px 18px,100% 100%;padding-top:34px}
 body:before{content:"";position:fixed;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(75,45,24,.05) 0 2px,transparent 2px 7px);mix-blend-mode:multiply}.music{background:#fff4cf;color:#2a1f1b;border:3px solid #2a1f1b;border-radius:12px;box-shadow:5px 5px 0 #2a1f1b;backdrop-filter:none}.wrap{max-width:1050px}.eyebrow{background:#fff4cf;color:#2a1f1b;border:3px solid #2a1f1b;box-shadow:4px 4px 0 #2a1f1b;border-radius:12px;font-weight:900}.hero h1{color:#2a1f1b;text-shadow:5px 5px 0 #ffcf5a,8px 8px 0 #2a1f1b;letter-spacing:.12em}.hero p,.meta{color:#3e3029;font-weight:800}.grid{gap:22px}.game{background:#fff4cf;border:4px solid #2a1f1b;border-radius:20px;color:#2a1f1b;box-shadow:8px 8px 0 #2a1f1b;transform:rotate(var(--tilt,-1deg));min-height:350px}.game:nth-child(2){--tilt:1.2deg}.game:nth-child(3){--tilt:-.6deg}.game:hover{transform:translateY(-4px) rotate(var(--tilt,-1deg));box-shadow:12px 12px 0 #2a1f1b}.game:before{opacity:1;background:var(--poster)}.fish{--poster:linear-gradient(160deg,#79d5d0 0 58%,#f7d15b 58% 66%,#ff8d54 66%)}.arcana{--poster:linear-gradient(160deg,#40253e 0 55%,#f0c16d 55% 63%,#fff4cf 63%)}.bullet{--poster:linear-gradient(160deg,#253068 0 54%,#ff72a5 54% 62%,#9be7ff 62%)}.tag{background:#fff4cf;color:#2a1f1b;border:3px solid #2a1f1b;border-radius:10px;box-shadow:3px 3px 0 #2a1f1b}.game h2{color:#fff4cf;text-shadow:3px 3px 0 #2a1f1b,-1px -1px 0 #2a1f1b,1px -1px 0 #2a1f1b,-1px 1px 0 #2a1f1b;letter-spacing:.14em}.game p{max-width:62%;color:#fff4cf;text-shadow:2px 2px 0 rgba(42,31,27,.85);font-weight:900}.art{filter:drop-shadow(5px 5px 0 #2a1f1b);opacity:1}.btn{background:#fff4cf;color:#2a1f1b;border:3px solid #2a1f1b;border-radius:12px;box-shadow:4px 4px 0 #2a1f1b}
-@media (max-width:760px){.hero h1{text-shadow:4px 4px 0 #ffcf5a,6px 6px 0 #2a1f1b}.game p{max-width:72%}.game{min-height:330px}}
+.toolbar{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;margin:4px 0 18px}.search{display:flex;align-items:center;gap:10px;background:#fff4cf;border:4px solid #2a1f1b;border-radius:16px;box-shadow:5px 5px 0 #2a1f1b;padding:10px 13px}.search span{font-size:20px}.search input{width:100%;border:0;outline:0;background:transparent;color:#2a1f1b;font:900 16px "Trebuchet MS","PingFang SC","Microsoft YaHei",sans-serif}.search input::placeholder{color:#7c6048}.filters{display:flex;gap:9px;flex-wrap:wrap;justify-content:flex-end}.filter{border:3px solid #2a1f1b;border-radius:12px;background:#fff4cf;color:#2a1f1b;box-shadow:4px 4px 0 #2a1f1b;padding:10px 12px;font-weight:900;cursor:pointer}.filter.active{background:#ffcf5a;transform:translate(2px,2px);box-shadow:2px 2px 0 #2a1f1b}.game.hidden{display:none}.empty{display:none;margin-top:22px;padding:22px;text-align:center;background:#fff4cf;border:4px solid #2a1f1b;border-radius:18px;box-shadow:7px 7px 0 #2a1f1b;color:#2a1f1b;font-weight:900}.empty.show{display:block}.count{display:inline-flex;margin-left:10px;padding:4px 9px;border:3px solid #2a1f1b;border-radius:999px;background:#fff4cf;color:#2a1f1b;font-size:14px;vertical-align:middle;box-shadow:3px 3px 0 #2a1f1b}@media (max-width:760px){.hero h1{text-shadow:4px 4px 0 #ffcf5a,6px 6px 0 #2a1f1b}.game p{max-width:72%}.game{min-height:330px}.toolbar{grid-template-columns:1fr}.filters{justify-content:flex-start}.filter{padding:9px 10px}.count{margin-top:10px;margin-left:0}}
 </style>
 </head>
 <body>
@@ -24,25 +24,34 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;background:rep
 <main class="wrap">
   <section class="hero">
     <div class="eyebrow">✦ CZH-BEEP H5 Arcade</div>
-    <h1>小游戏合集</h1>
+    <h1>小游戏合集 <span class="count" id="count">3 款</span></h1>
     <p>这里保留原来的贪吃鱼，也加入原创卡牌与弹幕射击小游戏。手机和电脑都能直接打开玩。</p>
   </section>
-  <section class="grid" aria-label="游戏列表">
-    <a class="game fish" href="./fish/">
+  <section class="toolbar" aria-label="搜索和筛选">
+    <label class="search"><span>⌕</span><input id="search" type="search" placeholder="搜索：鱼、卡牌、弹幕、射击..." autocomplete="off"></label>
+    <div class="filters" id="filters">
+      <button class="filter active" type="button" data-filter="all">全部</button>
+      <button class="filter" type="button" data-filter="动作">动作</button>
+      <button class="filter" type="button" data-filter="卡牌">卡牌</button>
+      <button class="filter" type="button" data-filter="射击">射击</button>
+    </div>
+  </section>
+  <section class="grid" id="gameGrid" aria-label="游戏列表">
+    <a class="game fish" href="./fish/" data-tags="动作 成长 闯关 吃鱼 贪吃鱼 无尽 灵敏度 摇杆">
       <span class="tag">动作成长</span>
       <h2>贪 吃 鱼</h2>
       <p>吃掉小鱼、躲避大鱼，挑战 10 个关卡，通关后解锁无尽模式。支持灵敏度调整。</p>
       <svg class="art" viewBox="0 0 180 180" aria-hidden="true"><defs><linearGradient id="sea" x1="0" x2="1"><stop stop-color="#ffd166"/><stop offset="1" stop-color="#ff7a59"/></linearGradient></defs><circle cx="88" cy="92" r="68" fill="rgba(255,255,255,.12)"/><path d="M50 93c18-31 62-34 88-3 13-13 26-18 37-19-5 15-14 27-27 36 8 11 14 22 17 35-13-3-25-10-35-21-30 25-67 21-83-9-3-6-3-13 3-19z" fill="url(#sea)"/><circle cx="106" cy="86" r="8" fill="#fff"/><circle cx="109" cy="86" r="3" fill="#12303f"/></svg>
       <span class="btn">开始游戏 →</span>
     </a>
-    <a class="game arcana" href="./arcana/">
+    <a class="game arcana" href="./arcana/" data-tags="卡牌 回合 策略 秘仪 星尘 防御 攻击 占卜">
       <span class="tag">回合卡牌</span>
       <h2>秘 仪 回 响</h2>
       <p>原创世界观：在黄昏车站中收集星尘，用攻击、护盾、占卜和仪式牌击退迷雾造物。</p>
       <svg class="art" viewBox="0 0 180 180" aria-hidden="true"><circle cx="90" cy="90" r="70" fill="rgba(255,255,255,.12)"/><rect x="50" y="27" width="80" height="126" rx="13" fill="#f7d99b" transform="rotate(-7 90 90)"/><rect x="61" y="40" width="58" height="100" rx="8" fill="#23162a" transform="rotate(-7 90 90)"/><path d="M91 58l9 23 24 3-18 16 5 24-20-12-21 12 6-24-19-16 24-3z" fill="#d8a657"/><circle cx="90" cy="91" r="18" fill="none" stroke="#f7d99b" stroke-width="4"/></svg>
       <span class="btn">开始游戏 →</span>
     </a>
-    <a class="game bullet" href="./bullet/">
+    <a class="game bullet" href="./bullet/" data-tags="射击 弹幕 动作 飞机 躲避 星幕 火力 护盾">
       <span class="tag">弹幕射击</span>
       <h2>星 幕 突 围</h2>
       <p>竖屏弹幕射击：拖动战机躲开星弹，自动射击敌机，拾取能量升级火力和护盾。</p>
@@ -50,6 +59,7 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;background:rep
       <span class="btn">开始游戏 →</span>
     </a>
   </section>
+  <div class="empty" id="empty">没找到这个游戏。换个关键词试试，比如“鱼”“卡牌”“射击”。</div>
   <p class="meta">提示：如果 GitHub Pages 缓存未刷新，可以稍等后强制刷新页面。</p>
 </main>
 <script>
@@ -62,6 +72,38 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;background:rep
   function sync(){btn.classList.toggle('off',muted);btn.textContent=muted?'×':'♪'}
   btn.addEventListener('click',function(){muted=!muted;localStorage.setItem('arcade.musicMuted.v1',muted?'1':'0');sync();if(muted)stop();else ensure()});
   document.addEventListener('pointerdown',ensure,{once:true});sync();
+})();
+(function(){
+  var search=document.getElementById('search');
+  var filters=document.getElementById('filters');
+  var cards=[].slice.call(document.querySelectorAll('.game'));
+  var empty=document.getElementById('empty');
+  var count=document.getElementById('count');
+  var active='all';
+  function textOf(card){return (card.textContent+' '+(card.getAttribute('data-tags')||'')).toLowerCase().replace(/\s+/g,' ')}
+  function apply(){
+    var q=(search.value||'').trim().toLowerCase();
+    var shown=0;
+    cards.forEach(function(card){
+      var text=textOf(card);
+      var okFilter=active==='all'||text.indexOf(active.toLowerCase())>-1;
+      var okSearch=!q||text.indexOf(q)>-1;
+      var show=okFilter&&okSearch;
+      card.classList.toggle('hidden',!show);
+      if(show) shown++;
+    });
+    empty.classList.toggle('show',shown===0);
+    count.textContent=shown+' 款';
+  }
+  search.addEventListener('input',apply);
+  filters.addEventListener('click',function(e){
+    var btn=e.target.closest('.filter');
+    if(!btn)return;
+    active=btn.getAttribute('data-filter')||'all';
+    [].forEach.call(filters.querySelectorAll('.filter'),function(b){b.classList.toggle('active',b===btn)});
+    apply();
+  });
+  apply();
 })();
 </script>
 </body>
