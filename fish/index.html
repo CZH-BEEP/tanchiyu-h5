@@ -333,6 +333,8 @@
   /* ================= 音效 ================= */
   var actx = null;
   var muted = localStorage.getItem(MUTE_KEY) === '1';
+  var musicTimer = null;
+  var musicStep = 0;
 
   function ensureAudio() {
     if (!actx) {
@@ -340,6 +342,23 @@
       if (AC) actx = new AC();
     }
     if (actx && actx.state === 'suspended') actx.resume();
+    startMusic();
+  }
+
+  function startMusic() {
+    if (!actx || muted || musicTimer) return;
+    var notes = [196, 247, 294, 330, 294, 247, 220, 247];
+    musicTimer = setInterval(function () {
+      if (muted || document.hidden) return;
+      var f = notes[musicStep++ % notes.length];
+      beep({ freq: f, type: 'sine', dur: 0.28, vol: 0.035 });
+      beep({ freq: f * 1.5, type: 'triangle', dur: 0.18, vol: 0.018, delay: 0.08 });
+    }, 430);
+  }
+
+  function stopMusic() {
+    if (musicTimer) clearInterval(musicTimer);
+    musicTimer = null;
   }
 
   function beep(o) {
@@ -393,7 +412,11 @@
     localStorage.setItem(MUTE_KEY, muted ? '1' : '0');
     syncSoundBtn();
     ensureAudio();
-    if (!muted) beep({ freq: 720, type: 'sine', dur: 0.1, vol: 0.12 });
+    if (muted) stopMusic();
+    else {
+      startMusic();
+      beep({ freq: 720, type: 'sine', dur: 0.1, vol: 0.12 });
+    }
   });
 
   function syncSensitivity() {

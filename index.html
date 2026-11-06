@@ -9,12 +9,13 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{min-height:100%;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;color:#fff;background:#171225;overflow-x:hidden}
-body{padding:28px 18px 42px;background:radial-gradient(circle at 18% 10%,rgba(245,196,95,.28),transparent 32%),radial-gradient(circle at 88% 20%,rgba(126,87,194,.28),transparent 30%),linear-gradient(160deg,#100d1d,#251831 55%,#35233a)}
+body{padding:28px 18px 42px;background:radial-gradient(circle at 18% 10%,rgba(245,196,95,.28),transparent 32%),radial-gradient(circle at 88% 20%,rgba(126,87,194,.28),transparent 30%),linear-gradient(160deg,#100d1d,#251831 55%,#35233a)}.music{position:fixed;right:16px;top:16px;z-index:4;width:42px;height:42px;border-radius:50%;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.1);color:#fff;font-weight:900;backdrop-filter:blur(8px);cursor:pointer}.music.off{opacity:.55}
 .wrap{width:min(980px,100%);margin:0 auto}.hero{padding:22px 0 26px}.eyebrow{display:inline-flex;gap:8px;align-items:center;padding:8px 13px;border:1px solid rgba(255,255,255,.18);border-radius:999px;background:rgba(255,255,255,.08);font-size:13px;color:#f7d99b}.hero h1{margin-top:18px;font-size:clamp(40px,9vw,76px);line-height:.96;letter-spacing:.08em;text-shadow:0 14px 40px rgba(0,0,0,.35)}.hero p{margin-top:18px;max-width:660px;color:#d8cde2;line-height:1.8;font-size:16px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-top:18px}.game{position:relative;min-height:360px;padding:22px;border-radius:30px;overflow:hidden;text-decoration:none;color:#fff;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);box-shadow:0 24px 70px rgba(0,0,0,.28);transition:transform .18s,box-shadow .18s,border-color .18s}.game:active{transform:scale(.985)}.game:hover{transform:translateY(-4px);box-shadow:0 34px 90px rgba(0,0,0,.36);border-color:rgba(255,255,255,.28)}.game:before{content:"";position:absolute;inset:0;background:var(--bg);opacity:.9}.game>*{position:relative;z-index:1}.tag{display:inline-flex;padding:7px 11px;border-radius:999px;background:rgba(0,0,0,.24);border:1px solid rgba(255,255,255,.18);font-size:12px;font-weight:800;letter-spacing:.08em}.game h2{margin-top:18px;font-size:34px;letter-spacing:.08em}.game p{margin-top:10px;line-height:1.7;color:rgba(255,255,255,.84)}.art{position:absolute;right:18px;bottom:18px;width:180px;height:180px;opacity:.95}.btn{position:absolute;left:22px;bottom:22px;display:inline-flex;align-items:center;gap:8px;padding:12px 16px;border-radius:999px;background:#fff;color:#1a1425;font-weight:900;box-shadow:0 12px 30px rgba(0,0,0,.25)}.meta{margin-top:22px;color:#c7bdd1;font-size:13px;line-height:1.7}.fish{--bg:linear-gradient(145deg,#067196,#17a8a2)}.arcana{--bg:linear-gradient(145deg,#211126,#6c3554 55%,#c5894b)}
 @media (max-width:760px){body{padding:20px 12px 30px}.grid{grid-template-columns:1fr}.game{min-height:315px}.art{width:145px;height:145px;opacity:.8}.game h2{font-size:30px}}
 </style>
 </head>
 <body>
+<button class="music" id="musicBtn" aria-label="背景音乐">♪</button>
 <main class="wrap">
   <section class="hero">
     <div class="eyebrow">✦ CZH-BEEP H5 Arcade</div>
@@ -39,5 +40,17 @@ body{padding:28px 18px 42px;background:radial-gradient(circle at 18% 10%,rgba(24
   </section>
   <p class="meta">提示：如果 GitHub Pages 缓存未刷新，可以稍等后强制刷新页面。</p>
 </main>
+<script>
+(function(){
+  var btn=document.getElementById('musicBtn'),actx=null,timer=null,step=0,muted=localStorage.getItem('arcade.musicMuted.v1')==='1';
+  function ensure(){if(!actx){var AC=window.AudioContext||window.webkitAudioContext;if(AC)actx=new AC()}if(actx&&actx.state==='suspended')actx.resume();start()}
+  function beep(f,d,v,t){if(!actx||muted)return;var now=actx.currentTime+(t||0),o=actx.createOscillator(),g=actx.createGain();o.type='sine';o.frequency.value=f;g.gain.setValueAtTime(.001,now);g.gain.exponentialRampToValueAtTime(v,now+.02);g.gain.exponentialRampToValueAtTime(.001,now+d);o.connect(g);g.connect(actx.destination);o.start(now);o.stop(now+d+.04)}
+  function start(){if(!actx||muted||timer)return;var notes=[220,277,330,415,370,330,277,247];timer=setInterval(function(){if(document.hidden||muted)return;var f=notes[step++%notes.length];beep(f,.38,.035);beep(f/2,.5,.02,.04)},520)}
+  function stop(){if(timer)clearInterval(timer);timer=null}
+  function sync(){btn.classList.toggle('off',muted);btn.textContent=muted?'×':'♪'}
+  btn.addEventListener('click',function(){muted=!muted;localStorage.setItem('arcade.musicMuted.v1',muted?'1':'0');sync();if(muted)stop();else ensure()});
+  document.addEventListener('pointerdown',ensure,{once:true});sync();
+})();
+</script>
 </body>
 </html>
