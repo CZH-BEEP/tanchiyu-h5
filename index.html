@@ -1,0 +1,1270 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#08324A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="description" content="贪吃鱼 H5 小游戏：10 个关卡、特色鱼种、技能解锁和无尽模式。">
+<meta property="og:title" content="贪吃鱼 H5 小游戏">
+<meta property="og:description" content="吃掉小鱼、解锁技能、挑战无尽模式。">
+<title>贪吃鱼</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{
+    height:100%;overflow:hidden;background:#08324A;
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    color:#fff;user-select:none;-webkit-user-select:none;
+  }
+  #game{position:fixed;inset:0;display:block;touch-action:none}
+
+  /* ---------- 顶部 HUD ---------- */
+  .hud{
+    position:fixed;top:0;left:0;right:0;z-index:10;
+    padding:calc(env(safe-area-inset-top) + 14px) 16px 0;
+    display:flex;align-items:center;gap:10px;pointer-events:none;
+  }
+  .pill{
+    display:flex;align-items:baseline;gap:8px;
+    padding:8px 16px;border-radius:999px;
+    background:rgba(255,255,255,.14);
+    border:1px solid rgba(255,255,255,.22);
+    backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  }
+  .pill .label{font-size:12px;letter-spacing:.08em;opacity:.75}
+  .pill strong{
+    font-size:20px;font-weight:800;font-variant-numeric:tabular-nums;
+    line-height:1;letter-spacing:.02em;
+  }
+  .pill.best strong{color:#FFD166}
+  .pill.level strong{color:#7DD3FC}
+  .pill.target strong{color:#86EFAC}
+  .hud.menuing .level,.hud.menuing .target,.hud.menuing .home{display:none}
+  .spacer{flex:1}
+  .skillBar{
+    position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom) + 18px);z-index:12;
+    transform:translateX(-50%);display:flex;gap:10px;pointer-events:none;
+  }
+  .skillBtn{
+    pointer-events:auto;position:relative;width:58px;height:58px;border:0;border-radius:20px;
+    background:rgba(255,255,255,.16);color:#fff;font-size:24px;font-weight:900;cursor:pointer;
+    border:1px solid rgba(255,255,255,.24);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+    box-shadow:0 10px 24px rgba(0,0,0,.18);overflow:hidden;
+  }
+  .skillBtn small{position:absolute;left:0;right:0;bottom:5px;font-size:10px;font-weight:800;color:rgba(255,255,255,.86)}
+  .skillBtn:active{transform:scale(.94)}
+  .skillBtn.locked,.skillBtn.cooling{opacity:.48;cursor:not-allowed}
+  .skillBtn .cool{position:absolute;inset:0;display:grid;place-items:center;background:rgba(4,30,44,.58);font-size:14px}
+  .skillBar.menuing{display:none}
+  .icon{
+    pointer-events:auto;display:grid;place-items:center;
+    width:40px;height:40px;border-radius:50%;cursor:pointer;
+    background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);
+    color:#fff;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+    transition:transform .15s,background .15s;
+  }
+  .icon:active{transform:scale(.92)}
+  .icon .slash{display:none}
+  .icon.muted .wave{display:none}
+  .icon.muted .slash{display:block}
+  @media (max-width:520px){
+    .hud{gap:6px;padding-left:10px;padding-right:10px}
+    .pill{padding:7px 10px;gap:5px}
+    .pill .label{font-size:10px}
+    .pill strong{font-size:16px}
+    .icon{width:36px;height:36px;flex:0 0 auto}
+    .skillBtn{width:52px;height:52px;border-radius:18px;font-size:22px}
+  }
+
+  /* ---------- 遮罩层 ---------- */
+  .screen{
+    position:fixed;inset:0;z-index:20;display:grid;place-items:center;
+    padding:24px;background:rgba(4,30,44,.38);
+    backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
+    transition:opacity .28s ease,visibility .28s;
+  }
+  .screen.hidden{opacity:0;visibility:hidden;pointer-events:none}
+
+  .card{
+    width:min(380px,100%);text-align:center;
+    padding:30px 24px 26px;border-radius:30px;
+    background:#FFFFFF;color:#0B3C55;
+    box-shadow:0 26px 60px rgba(0,0,0,.38);
+    animation:pop .32s cubic-bezier(.2,1.4,.5,1) both;
+  }
+  .card.menu{width:min(520px,100%);max-height:min(760px,88vh);overflow:auto}
+  @keyframes pop{from{opacity:0;transform:translateY(14px) scale(.94)}to{opacity:1;transform:none}}
+
+  .card h1{
+    font-size:34px;font-weight:900;letter-spacing:.12em;
+    color:#0E7490;
+  }
+  .card h2{font-size:24px;font-weight:900;letter-spacing:.06em;color:#0E7490}
+  .sub{margin-top:8px;font-size:14px;line-height:1.6;color:#5B7A8C}
+
+  .hint{margin-top:18px;display:grid;gap:8px;text-align:left}
+  .hint div{
+    font-size:13px;color:#3E6274;line-height:1.5;
+    background:#F1F7FA;border-radius:14px;padding:10px 14px;
+  }
+  .hint b{color:#0E7490;margin-right:6px}
+
+  .primary{
+    margin-top:22px;width:100%;cursor:pointer;
+    padding:15px 26px;border:0;border-radius:999px;
+    font-size:18px;font-weight:800;letter-spacing:.06em;color:#fff;
+    background:linear-gradient(135deg,#FF8A3D,#FF6B6B);
+    box-shadow:0 10px 22px rgba(255,107,107,.38);
+    transition:transform .12s,box-shadow .12s;
+  }
+  .primary:active{transform:translateY(2px) scale(.99);box-shadow:0 6px 14px rgba(255,107,107,.32)}
+  .secondary{
+    margin-top:10px;width:100%;cursor:pointer;
+    padding:12px 20px;border-radius:999px;border:1px solid #B9D8E4;
+    background:#F1F7FA;color:#0E7490;font-size:15px;font-weight:800;
+  }
+  .levelGrid{margin-top:18px;display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+  .levelBtn{
+    position:relative;min-height:62px;border:0;border-radius:18px;cursor:pointer;
+    color:#0B3C55;background:#E8F6FB;font-weight:900;font-size:20px;
+    box-shadow:inset 0 -3px 0 rgba(14,116,144,.12);
+  }
+  .levelBtn small{display:block;margin-top:2px;font-size:10px;font-weight:800;color:#5B7A8C}
+  .levelBtn.done{background:#D1FAE5;color:#047857}
+  .levelBtn.current{background:linear-gradient(135deg,#7DD3FC,#A7F3D0);color:#075985}
+  .levelBtn.locked{cursor:not-allowed;background:#EEF2F7;color:#9AAEBB;box-shadow:none}
+  .levelBtn.locked:after{content:'锁';display:block;font-size:11px;margin-top:2px;color:#9AAEBB}
+  .endlessBtn{margin-top:12px;background:linear-gradient(135deg,#08324A,#0E7490);box-shadow:0 10px 22px rgba(8,50,74,.26)}
+  .modeMeta{margin-top:12px;font-size:13px;color:#5B7A8C;line-height:1.6;background:#F1F7FA;border-radius:16px;padding:11px 14px}
+
+  .bestLine{margin-top:14px;font-size:13px;color:#7A96A6}
+  .bestLine b{color:#F59E0B;font-size:15px;font-variant-numeric:tabular-nums}
+
+  .finalScore{
+    margin-top:16px;font-size:60px;font-weight:900;line-height:1;
+    color:#FF6B6B;font-variant-numeric:tabular-nums;letter-spacing:-.02em;
+  }
+  .newBest{
+    display:inline-block;margin-top:10px;padding:5px 14px;border-radius:999px;
+    font-size:12px;font-weight:800;letter-spacing:.1em;color:#fff;
+    background:linear-gradient(135deg,#FFC24B,#FF8A3D);
+  }
+  .newBest.hidden{display:none}
+
+  @media (max-height:600px){
+    .card{padding:22px 20px}
+    .card h1{font-size:28px}
+    .hint{margin-top:12px;gap:6px}
+    .primary{margin-top:16px;padding:13px 22px;font-size:16px}
+    .levelGrid{gap:8px;margin-top:12px}
+    .levelBtn{min-height:50px;font-size:17px}
+    .finalScore{font-size:48px;margin-top:10px}
+  }
+</style>
+</head>
+<body>
+<canvas id="game"></canvas>
+
+<div class="hud menuing" id="hud">
+  <div class="pill score"><span class="label">得分</span><strong id="scoreVal">0</strong></div>
+  <div class="pill level"><span class="label">关卡</span><strong id="levelVal">1</strong></div>
+  <div class="pill target"><span class="label">目标</span><strong id="targetVal">0</strong></div>
+  <div class="pill best"><span class="label">最高</span><strong id="bestVal">0</strong></div>
+  <div class="spacer"></div>
+  <button class="icon home" id="homeBtn" aria-label="返回主界面">⌂</button>
+  <button class="icon" id="soundBtn" aria-label="音效开关">
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M11 5 6 9H3v6h3l5 4V5z"/>
+      <path class="wave" d="M15.5 8.5a5 5 0 0 1 0 7"/>
+      <path class="wave" d="M18.4 6.1a9 9 0 0 1 0 11.8"/>
+      <path class="slash" d="M4 4l16 16"/>
+    </svg>
+  </button>
+</div>
+
+<div class="skillBar menuing" id="skillBar"></div>
+
+<div class="screen" id="menuScreen">
+  <div class="card menu">
+    <h1>贪 吃 鱼</h1>
+    <p class="sub">10 个目标关卡，全部通关后解锁无尽模式</p>
+    <div class="modeMeta" id="menuMeta">选择一个已解锁关卡开始挑战</div>
+    <div class="levelGrid" id="levelGrid"></div>
+    <button class="primary endlessBtn" id="endlessBtn">无尽模式</button>
+    <div class="hint">
+      <div><b>移动</b>鼠标 / 手指拖动 / 方向键 WASD</div>
+      <div><b>技能</b>点击底部技能按钮，或按 1/2/3/4 快捷键</div>
+      <div><b>目标</b>普通关达到目标分即通关；无尽模式挑战最高分</div>
+    </div>
+    <p class="bestLine">最高无尽分 <b id="startBest">0</b></p>
+  </div>
+</div>
+
+<div class="screen hidden" id="overScreen">
+  <div class="card">
+    <h2>游戏结束</h2>
+    <div class="finalScore" id="finalScore">0</div>
+    <span class="newBest hidden" id="newBest">新纪录</span>
+    <p class="sub" id="overSub">被大鱼吃掉了</p>
+    <button class="primary" id="retryBtn">再玩一局</button>
+    <button class="secondary" id="menuBtn">返回主界面</button>
+    <p class="bestLine">最高无尽分 <b id="overBest">0</b></p>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var canvas = document.getElementById('game');
+  var ctx = canvas.getContext('2d');
+  var hud = document.getElementById('hud');
+  var scoreEl = document.getElementById('scoreVal');
+  var skillBar = document.getElementById('skillBar');
+  var levelEl = document.getElementById('levelVal');
+  var targetEl = document.getElementById('targetVal');
+  var bestEl = document.getElementById('bestVal');
+  var startBestEl = document.getElementById('startBest');
+  var overBestEl = document.getElementById('overBest');
+  var menuScreen = document.getElementById('menuScreen');
+  var levelGrid = document.getElementById('levelGrid');
+  var menuMeta = document.getElementById('menuMeta');
+  var endlessBtn = document.getElementById('endlessBtn');
+  var overScreen = document.getElementById('overScreen');
+  var finalScoreEl = document.getElementById('finalScore');
+  var newBestEl = document.getElementById('newBest');
+  var overSubEl = document.getElementById('overSub');
+  var retryBtn = document.getElementById('retryBtn');
+  var homeBtn = document.getElementById('homeBtn');
+  var overTitleEl = overScreen.querySelector('h2');
+  var soundBtn = document.getElementById('soundBtn');
+
+  var BEST_KEY = 'tanchiyu.best.v1';
+  var UNLOCK_KEY = 'tanchiyu.unlock.v1';
+  var MUTE_KEY = 'tanchiyu.muted.v1';
+  var COLORS = ['#FF7A59', '#FFC24B', '#4ECDC4', '#A78BFA', '#F472B6', '#60A5FA', '#34D399', '#FB7185'];
+  var FISH_TYPES = [
+    { id: 'normal', name: '小鱼', minLevel: 1, weight: 58, score: 1, grow: 1, color: null },
+    { id: 'gold', name: '金币鱼', minLevel: 2, weight: 13, score: 2.6, grow: 0.8, color: '#FFD166' },
+    { id: 'swift', name: '冲刺鱼', minLevel: 3, weight: 12, score: 1.7, grow: 1, color: '#60A5FA', speed: 1.75 },
+    { id: 'puffer', name: '刺豚', minLevel: 5, weight: 9, score: 2.1, grow: 1.2, color: '#F97316', dangerousBonus: 1.08 },
+    { id: 'ghost', name: '幽灵鱼', minLevel: 7, weight: 8, score: 2.4, grow: 1, color: '#A78BFA', alpha: 0.62 }
+  ];
+  var SKILLS = [
+    { id: 'shield', name: '护盾', icon: '盾', minLevel: 2, cd: 12, duration: 4.5 },
+    { id: 'magnet', name: '磁吸', icon: '吸', minLevel: 4, cd: 14, duration: 5 },
+    { id: 'dash', name: '冲刺', icon: '冲', minLevel: 6, cd: 9, duration: 1.1 },
+    { id: 'slow', name: '减速', icon: '慢', minLevel: 8, cd: 16, duration: 4 }
+  ];
+  var LEVELS = [
+    { target: 120, start: 8, max: 10, danger: 0.12, speed: 0.88 },
+    { target: 220, start: 9, max: 11, danger: 0.16, speed: 0.94 },
+    { target: 340, start: 9, max: 12, danger: 0.2, speed: 1 },
+    { target: 480, start: 10, max: 13, danger: 0.23, speed: 1.05 },
+    { target: 650, start: 10, max: 14, danger: 0.27, speed: 1.1 },
+    { target: 850, start: 11, max: 15, danger: 0.31, speed: 1.14 },
+    { target: 1100, start: 12, max: 16, danger: 0.34, speed: 1.18 },
+    { target: 1400, start: 12, max: 17, danger: 0.38, speed: 1.23 },
+    { target: 1800, start: 13, max: 18, danger: 0.42, speed: 1.28 },
+    { target: 2300, start: 14, max: 20, danger: 0.46, speed: 1.34 }
+  ];
+
+  var W = 0, H = 0, DPR = 1;
+  var MAX_R = 52;
+
+  var G = {
+    mode: 'menu',
+    score: 0,
+    best: Number(localStorage.getItem(BEST_KEY) || 0) || 0,
+    unlocked: clamp(Number(localStorage.getItem(UNLOCK_KEY) || 1) || 1, 1, 11),
+    modeType: 'level',
+    level: 1,
+    target: LEVELS[0].target,
+    won: false,
+    time: 0,
+    spawnTimer: 0,
+    effects: { shield: 0, magnet: 0, dash: 0, slow: 0 },
+    cooldowns: { shield: 0, magnet: 0, dash: 0, slow: 0 }
+  };
+
+  var player = { x: 0, y: 0, r: 16, vx: 0, vy: 0, face: 1 };
+  var pointer = { x: 0, y: 0, active: false };
+  var keys = { left: false, right: false, up: false, down: false };
+
+  var npcs = [];
+  var particles = [];
+  var popups = [];
+  var bubbles = [];
+  var weeds = [];
+
+  /* ================= 音效 ================= */
+  var actx = null;
+  var muted = localStorage.getItem(MUTE_KEY) === '1';
+
+  function ensureAudio() {
+    if (!actx) {
+      var AC = window.AudioContext || window.webkitAudioContext;
+      if (AC) actx = new AC();
+    }
+    if (actx && actx.state === 'suspended') actx.resume();
+  }
+
+  function beep(o) {
+    if (!actx || muted) return;
+    var t = actx.currentTime + (o.delay || 0);
+    var dur = o.dur || 0.12;
+    var osc = actx.createOscillator();
+    var gain = actx.createGain();
+    osc.type = o.type || 'sine';
+    osc.frequency.setValueAtTime(o.freq, t);
+    if (o.to && o.to !== o.freq) {
+      osc.frequency.exponentialRampToValueAtTime(Math.max(30, o.to), t + dur);
+    }
+    gain.gain.setValueAtTime(0.0001, t);
+    gain.gain.exponentialRampToValueAtTime(o.vol == null ? 0.16 : o.vol, t + 0.012);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    osc.connect(gain);
+    gain.connect(actx.destination);
+    osc.start(t);
+    osc.stop(t + dur + 0.03);
+  }
+
+  function sndEat(r) {
+    var base = Math.max(300, 780 - r * 7);
+    beep({ freq: base, type: 'triangle', dur: 0.08, vol: 0.17 });
+    beep({ freq: base * 1.5, type: 'triangle', dur: 0.1, vol: 0.1, delay: 0.055 });
+  }
+  function sndDie() {
+    beep({ freq: 320, to: 60, type: 'sawtooth', dur: 0.55, vol: 0.16 });
+    beep({ freq: 180, to: 45, type: 'square', dur: 0.6, vol: 0.07, delay: 0.05 });
+  }
+  function sndStart() {
+    beep({ freq: 440, type: 'sine', dur: 0.1, vol: 0.12 });
+    beep({ freq: 660, type: 'sine', dur: 0.1, vol: 0.12, delay: 0.09 });
+    beep({ freq: 880, type: 'sine', dur: 0.16, vol: 0.12, delay: 0.18 });
+  }
+  function sndBest() {
+    beep({ freq: 660, type: 'triangle', dur: 0.12, vol: 0.13 });
+    beep({ freq: 880, type: 'triangle', dur: 0.12, vol: 0.13, delay: 0.12 });
+    beep({ freq: 1180, type: 'triangle', dur: 0.24, vol: 0.13, delay: 0.24 });
+  }
+
+  function syncSoundBtn() {
+    soundBtn.classList.toggle('muted', muted);
+    soundBtn.setAttribute('aria-label', muted ? '开启音效' : '关闭音效');
+  }
+
+  soundBtn.addEventListener('click', function (e) {
+    e.stopPropagation();
+    muted = !muted;
+    localStorage.setItem(MUTE_KEY, muted ? '1' : '0');
+    syncSoundBtn();
+    ensureAudio();
+    if (!muted) beep({ freq: 720, type: 'sine', dur: 0.1, vol: 0.12 });
+  });
+
+  /* ================= 工具 ================= */
+  function rand(a, b) { return a + Math.random() * (b - a); }
+  function clamp(v, a, b) { return v < a ? a : (v > b ? b : v); }
+  function pick(arr) { return arr[(Math.random() * arr.length) | 0]; }
+
+  function darken(hex, t) {
+    var n = parseInt(hex.slice(1), 16);
+    var r = (n >> 16) & 255, g = (n >> 8) & 255, b = n & 255;
+    r = Math.round(r * (1 - t)); g = Math.round(g * (1 - t)); b = Math.round(b * (1 - t));
+    return 'rgb(' + r + ',' + g + ',' + b + ')';
+  }
+
+  /* ================= 场景尺寸 ================= */
+  function resize() {
+    DPR = Math.min(window.devicePixelRatio || 1, 2);
+    W = window.innerWidth;
+    H = window.innerHeight;
+    canvas.width = Math.round(W * DPR);
+    canvas.height = Math.round(H * DPR);
+    canvas.style.width = W + 'px';
+    canvas.style.height = H + 'px';
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+
+    buildBubbles();
+    buildWeeds();
+
+    player.x = clamp(player.x, player.r, W - player.r);
+    player.y = clamp(player.y, player.r, H - player.r);
+  }
+
+  function buildBubbles() {
+    bubbles.length = 0;
+    var count = Math.round((W * H) / 26000);
+    count = clamp(count, 14, 40);
+    for (var i = 0; i < count; i++) {
+      bubbles.push({
+        x: rand(0, W),
+        y: rand(0, H),
+        r: rand(1.5, 5),
+        sp: rand(14, 42),
+        phase: rand(0, Math.PI * 2),
+        amp: rand(4, 16),
+        a: rand(0.12, 0.4)
+      });
+    }
+  }
+
+  function buildWeeds() {
+    weeds.length = 0;
+    var count = Math.max(5, Math.round(W / 110));
+    for (var i = 0; i < count; i++) {
+      weeds.push({
+        x: (W / count) * i + rand(-12, 12),
+        h: rand(56, 150),
+        w: rand(7, 13),
+        phase: rand(0, Math.PI * 2),
+        speed: rand(0.5, 0.95)
+      });
+    }
+  }
+
+  /* ================= 鱼 ================= */
+  function getLevelCfg() {
+    return G.modeType === 'endless'
+      ? { target: Infinity, start: 10, max: 18, danger: 0.24 + Math.min(0.3, G.score / 2200), speed: 1 + Math.min(0.5, G.score / 3500) }
+      : LEVELS[G.level - 1];
+  }
+
+  function currentUnlockLevel() {
+    return G.modeType === 'endless' ? 10 : G.level;
+  }
+
+  function pickFishType() {
+    var level = currentUnlockLevel();
+    var pool = FISH_TYPES.filter(function (t) { return level >= t.minLevel; });
+    var total = pool.reduce(function (s, t) { return s + t.weight; }, 0);
+    var n = Math.random() * total;
+    for (var i = 0; i < pool.length; i++) {
+      n -= pool[i].weight;
+      if (n <= 0) return pool[i];
+    }
+    return pool[0];
+  }
+
+  function spawnNpc() {
+    var cfg = getLevelCfg();
+    var margin = 80;
+    var x, y;
+    var e = (Math.random() * 4) | 0;
+    if (e === 0) { x = rand(-margin, W + margin); y = -margin; }
+    else if (e === 1) { x = W + margin; y = rand(-margin, H + margin); }
+    else if (e === 2) { x = rand(-margin, W + margin); y = H + margin; }
+    else { x = -margin; y = rand(-margin, H + margin); }
+
+    var type = pickFishType();
+    var dangerChance = cfg.danger;
+    if (type.id === 'puffer') dangerChance += 0.08;
+    var r;
+    if (Math.random() < dangerChance) {
+      r = player.r * rand(1.18, 2.1);
+    } else {
+      r = rand(9, Math.max(13, player.r * 0.9));
+    }
+    r = clamp(r, 9, 58);
+
+    var tx = rand(W * 0.12, W * 0.88);
+    var ty = rand(H * 0.12, H * 0.88);
+
+    npcs.push({
+      x: x,
+      y: y,
+      r: r,
+      type: type,
+      angle: Math.atan2(ty - y, tx - x),
+      speed: Math.max(38, 215 - r * 2.4) * rand(0.85, 1.25) * cfg.speed * (type.speed || 1),
+      color: type.color || pick(COLORS),
+      phase: rand(0, Math.PI * 2),
+      wobFreq: rand(1.4, 2.8),
+      face: 1,
+      deadly: false
+    });
+  }
+
+  function updateNpcs(dt) {
+    for (var i = npcs.length - 1; i >= 0; i--) {
+      var f = npcs[i];
+      var slowMul = G.effects.slow > 0 ? 0.48 : 1;
+      var ghostWave = f.type && f.type.id === 'ghost' ? Math.sin(G.time * 3 + f.phase) * 0.9 : 0;
+      f.angle += (Math.sin(G.time * f.wobFreq + f.phase) * 1.1 + ghostWave) * dt;
+      f.x += Math.cos(f.angle) * f.speed * slowMul * dt;
+      f.y += Math.sin(f.angle) * f.speed * slowMul * dt;
+      if (f.x < -160 || f.x > W + 160 || f.y < -160 || f.y > H + 160) {
+        npcs.splice(i, 1);
+        continue;
+      }
+      f.face = Math.cos(f.angle) < 0 ? -1 : 1;
+      var vx = Math.cos(f.angle) * f.speed;
+      var vy = Math.sin(f.angle) * f.speed;
+      f.tilt = clamp(Math.atan2(vy, Math.abs(vx) + 60) * 0.8, -0.32, 0.32);
+      var dangerBonus = f.type && f.type.dangerousBonus ? f.type.dangerousBonus : 1;
+      f.deadly = f.r * dangerBonus > player.r * 1.12;
+      f.edible = player.r > f.r * 1.12 * dangerBonus;
+    }
+  }
+
+  /* ================= 玩家 ================= */
+  function updatePlayer(dt) {
+    var maxSpeed = clamp(520 - player.r * 3, 300, 520) * (G.effects.dash > 0 ? 1.8 : 1);
+    var dvx = 0, dvy = 0;
+
+    var kx = (keys.right ? 1 : 0) - (keys.left ? 1 : 0);
+    var ky = (keys.down ? 1 : 0) - (keys.up ? 1 : 0);
+
+    if (kx || ky) {
+      var len = Math.hypot(kx, ky);
+      dvx = (kx / len) * maxSpeed;
+      dvy = (ky / len) * maxSpeed;
+      pointer.active = false;
+    } else if (pointer.active) {
+      var dx = pointer.x - player.x;
+      var dy = pointer.y - player.y;
+      var d = Math.hypot(dx, dy);
+      if (d > 3) {
+        var sp = Math.min(maxSpeed, d * 6);
+        dvx = (dx / d) * sp;
+        dvy = (dy / d) * sp;
+      }
+    }
+
+    var k = 1 - Math.exp(-8 * dt);
+    player.vx += (dvx - player.vx) * k;
+    player.vy += (dvy - player.vy) * k;
+    player.x += player.vx * dt;
+    player.y += player.vy * dt;
+
+    var pad = player.r * 0.7;
+    if (player.x < pad) { player.x = pad; player.vx = Math.max(0, player.vx); }
+    if (player.x > W - pad) { player.x = W - pad; player.vx = Math.min(0, player.vx); }
+    if (player.y < pad) { player.y = pad; player.vy = Math.max(0, player.vy); }
+    if (player.y > H - pad) { player.y = H - pad; player.vy = Math.min(0, player.vy); }
+
+    if (Math.abs(player.vx) > 12) player.face = player.vx < 0 ? -1 : 1;
+    player.tilt = clamp(Math.atan2(player.vy, Math.abs(player.vx) + 90) * 0.9, -0.35, 0.35);
+  }
+
+  function idlePlayer() {
+    player.x = W / 2 + Math.cos(G.time * 0.55) * W * 0.07;
+    player.y = H * 0.56 + Math.sin(G.time * 0.75) * H * 0.035;
+    player.face = Math.sin(G.time * 0.55) > 0 ? -1 : 1;
+    player.tilt = Math.cos(G.time * 0.55) * 0.12 * player.face;
+  }
+
+  /* ================= 碰撞 ================= */
+  function handleCollisions() {
+    for (var i = npcs.length - 1; i >= 0; i--) {
+      var f = npcs[i];
+      var dx = f.x - player.x;
+      var dy = f.y - player.y;
+      var d = Math.hypot(dx, dy);
+
+      if (G.effects.magnet > 0 && f.edible && d < player.r * 7) {
+        var pull = Math.min(1, 360 / Math.max(80, d));
+        f.x -= dx * 0.035 * pull;
+        f.y -= dy * 0.035 * pull;
+      }
+      if (f.edible && d < player.r * 0.9 + f.r * 0.55) {
+        eatFish(f, i);
+        continue;
+      }
+      if (f.deadly && d < player.r * 0.6 + f.r * 0.72) {
+        if (G.effects.shield > 0) {
+          G.effects.shield = 0;
+          burst(player.x, player.y, '#7DD3FC', 22);
+          npcs.splice(i, 1);
+          renderSkills();
+          continue;
+        }
+        gameOver();
+        return;
+      }
+    }
+  }
+
+  function eatFish(f, index) {
+    var type = f.type || FISH_TYPES[0];
+    var gain = Math.round((f.r * 2 + 2) * (type.score || 1));
+    G.score += gain;
+    player.r = Math.min(MAX_R, player.r + (f.r * 0.05 + 0.35) * (type.grow || 1));
+
+    burst(f.x, f.y, f.color, 12);
+    popups.push({
+      x: f.x,
+      y: f.y,
+      text: (type.id === 'gold' ? '金币+' : type.id === 'puffer' ? '刺豚+' : '+') + gain,
+      color: '#FFFFFF',
+      life: 0.9,
+      max: 0.9,
+      size: 16 + Math.min(10, f.r * 0.25)
+    });
+    sndEat(f.r);
+    npcs.splice(index, 1);
+    updateHud();
+    if (G.modeType === 'level' && G.score >= G.target) finishLevel();
+  }
+
+  function burst(x, y, color, n) {
+    for (var i = 0; i < n; i++) {
+      var a = rand(0, Math.PI * 2);
+      var sp = rand(40, 190);
+      particles.push({
+        x: x, y: y,
+        vx: Math.cos(a) * sp,
+        vy: Math.sin(a) * sp,
+        r: rand(1.8, 4.6),
+        color: Math.random() < 0.3 ? '#FFFFFF' : color,
+        life: rand(0.4, 0.85),
+        max: 0.85
+      });
+    }
+  }
+
+  function updateParticles(dt) {
+    for (var i = particles.length - 1; i >= 0; i--) {
+      var p = particles[i];
+      p.x += p.vx * dt;
+      p.y += p.vy * dt;
+      p.vx *= Math.pow(0.02, dt);
+      p.vy *= Math.pow(0.02, dt);
+      p.vy -= 24 * dt;
+      p.life -= dt;
+      if (p.life <= 0) particles.splice(i, 1);
+    }
+  }
+
+  function updatePopups(dt) {
+    for (var i = popups.length - 1; i >= 0; i--) {
+      var p = popups[i];
+      p.y -= 46 * dt;
+      p.life -= dt;
+      if (p.life <= 0) popups.splice(i, 1);
+    }
+  }
+
+  function skillUnlocked(skill) {
+    var level = G.mode === 'menu' ? Math.max(1, G.unlocked - 1) : currentUnlockLevel();
+    return level >= skill.minLevel;
+  }
+
+  function renderSkills() {
+    skillBar.innerHTML = '';
+    skillBar.classList.toggle('menuing', G.mode === 'menu');
+    for (var i = 0; i < SKILLS.length; i++) {
+      var s = SKILLS[i];
+      var btn = document.createElement('button');
+      var locked = !skillUnlocked(s);
+      var cooling = G.cooldowns[s.id] > 0;
+      btn.className = 'skillBtn' + (locked ? ' locked' : '') + (cooling ? ' cooling' : '');
+      btn.type = 'button';
+      btn.disabled = locked || cooling;
+      btn.title = locked ? s.name + '：第' + s.minLevel + '关解锁' : s.name;
+      btn.innerHTML = s.icon + '<small>' + (locked ? s.minLevel + '关' : s.name) + '</small>' + (cooling ? '<span class="cool">' + Math.ceil(G.cooldowns[s.id]) + '</span>' : '');
+      if (!locked && !cooling) {
+        (function (skill) {
+          btn.addEventListener('click', function () { useSkill(skill.id); });
+        })(s);
+      }
+      skillBar.appendChild(btn);
+    }
+  }
+
+  function useSkill(id) {
+    if (G.mode !== 'playing') return;
+    var skill = SKILLS.filter(function (s) { return s.id === id; })[0];
+    if (!skill || !skillUnlocked(skill) || G.cooldowns[id] > 0) return;
+    G.effects[id] = skill.duration;
+    G.cooldowns[id] = skill.cd;
+    burst(player.x, player.y, id === 'shield' ? '#7DD3FC' : id === 'magnet' ? '#86EFAC' : id === 'dash' ? '#FBBF24' : '#A78BFA', 18);
+    popups.push({ x: player.x, y: player.y - player.r, text: skill.name, color: '#FFFFFF', life: 0.9, max: 0.9, size: 18 });
+    beep({ freq: id === 'dash' ? 980 : 720, type: 'triangle', dur: 0.14, vol: 0.12 });
+    renderSkills();
+  }
+
+  function updateSkills(dt) {
+    var changed = false;
+    for (var i = 0; i < SKILLS.length; i++) {
+      var id = SKILLS[i].id;
+      if (G.effects[id] > 0) {
+        G.effects[id] = Math.max(0, G.effects[id] - dt);
+        if (G.effects[id] === 0) changed = true;
+      }
+      if (G.cooldowns[id] > 0) {
+        var before = Math.ceil(G.cooldowns[id]);
+        G.cooldowns[id] = Math.max(0, G.cooldowns[id] - dt);
+        if (Math.ceil(G.cooldowns[id]) !== before || G.cooldowns[id] === 0) changed = true;
+      }
+    }
+    if (changed) renderSkills();
+  }
+
+  function resetSkills() {
+    for (var i = 0; i < SKILLS.length; i++) {
+      G.effects[SKILLS[i].id] = 0;
+      G.cooldowns[SKILLS[i].id] = 0;
+    }
+    renderSkills();
+  }
+
+  function resetKeys() {
+    keys.left = keys.right = keys.up = keys.down = false;
+  }
+
+  function continueAfterOver() {
+    ensureAudio();
+    if (G.won && G.level === 10) startGame('endless', 10);
+    else if (G.won) startGame('level', Math.min(10, G.level + 1));
+    else startGame(G.modeType, G.level);
+  }
+
+  /* ================= 状态切换 ================= */
+  function updateHud() {
+    scoreEl.textContent = G.score;
+    bestEl.textContent = G.best;
+    startBestEl.textContent = G.best;
+    overBestEl.textContent = G.best;
+    levelEl.textContent = G.modeType === 'endless' ? '∞' : G.level;
+    targetEl.textContent = G.modeType === 'endless' ? '∞' : Math.max(0, G.target - G.score);
+    hud.classList.toggle('menuing', G.mode === 'menu');
+  }
+
+  function renderMenu() {
+    levelGrid.innerHTML = '';
+    for (var i = 1; i <= LEVELS.length; i++) {
+      var btn = document.createElement('button');
+      btn.className = 'levelBtn';
+      btn.type = 'button';
+      btn.innerHTML = i + '<small>目标 ' + LEVELS[i - 1].target + '</small>';
+      if (i < G.unlocked) btn.classList.add('done');
+      if (i === G.unlocked && i <= 10) btn.classList.add('current');
+      if (i > G.unlocked) {
+        btn.classList.add('locked');
+        btn.disabled = true;
+      } else {
+        (function (level) {
+          btn.addEventListener('click', function () { startGame('level', level); });
+        })(i);
+      }
+      levelGrid.appendChild(btn);
+    }
+    endlessBtn.disabled = G.unlocked < 11;
+    endlessBtn.textContent = G.unlocked >= 11 ? '无尽模式' : '无尽模式（通关10关解锁）';
+    endlessBtn.style.opacity = G.unlocked >= 11 ? '1' : '.55';
+    var fishText = '鱼种：金币鱼2关、冲刺鱼3关、刺豚5关、幽灵鱼7关';
+    var skillText = '技能：护盾2关、磁吸4关、冲刺6关、减速8关';
+    menuMeta.textContent = (G.unlocked >= 11
+      ? '10 关已全部通关，可以挑战无尽模式'
+      : '当前解锁到第 ' + G.unlocked + ' 关，通关第10关后开启无尽模式') + '｜' + fishText + '｜' + skillText;
+    updateHud();
+    renderSkills();
+  }
+
+  function showMenu() {
+    G.mode = 'menu';
+    resetKeys();
+    resetSkills();
+    overScreen.classList.add('hidden');
+    menuScreen.classList.remove('hidden');
+    renderMenu();
+  }
+
+  function startGame(type, level) {
+    ensureAudio();
+    G.modeType = type || G.modeType || 'level';
+    G.level = level || G.level || 1;
+    G.target = G.modeType === 'endless' ? Infinity : LEVELS[G.level - 1].target;
+    G.mode = 'playing';
+    G.won = false;
+    G.score = 0;
+    G.spawnTimer = 0;
+    npcs.length = 0;
+    particles.length = 0;
+    popups.length = 0;
+
+    resetKeys();
+    player.r = 16;
+    player.x = W / 2;
+    player.y = H * 0.55;
+    player.vx = 0;
+    player.vy = 0;
+    player.face = 1;
+    pointer.active = false;
+    pointer.x = player.x;
+    pointer.y = player.y;
+
+    updateHud();
+    resetSkills();
+    menuScreen.classList.add('hidden');
+    overScreen.classList.add('hidden');
+
+    var cfg = getLevelCfg();
+    for (var i = 0; i < cfg.start; i++) spawnNpc();
+    sndStart();
+  }
+
+  var overTimer = null;
+
+  function finishLevel() {
+    if (G.mode !== 'playing' || G.modeType === 'endless') return;
+    G.mode = 'over';
+    G.won = true;
+    burst(player.x, player.y, '#FFC24B', 34);
+    if (G.unlocked === G.level && G.unlocked < 11) {
+      G.unlocked = G.level + 1;
+      localStorage.setItem(UNLOCK_KEY, String(G.unlocked));
+    }
+    updateHud();
+    overTitleEl.textContent = '挑战成功';
+    finalScoreEl.textContent = G.score;
+    overSubEl.textContent = G.level === 10 ? '第10关通关，无尽模式已解锁' : '第 ' + G.level + ' 关通关，解锁下一关';
+    retryBtn.textContent = G.level === 10 ? '挑战无尽模式' : '下一关';
+    newBestEl.textContent = '通关';
+    newBestEl.classList.remove('hidden');
+    clearTimeout(overTimer);
+    overTimer = setTimeout(function () {
+      if (G.mode === 'over') overScreen.classList.remove('hidden');
+    }, 650);
+    sndBest();
+  }
+
+  function gameOver() {
+    if (G.mode !== 'playing') return;
+    G.mode = 'over';
+    G.won = false;
+    burst(player.x, player.y, '#FFC24B', 26);
+    sndDie();
+
+    var isNew = G.modeType === 'endless' && G.score > G.best;
+    if (isNew) {
+      G.best = G.score;
+      localStorage.setItem(BEST_KEY, String(G.best));
+      updateHud();
+      setTimeout(function () { if (G.mode === 'over') sndBest(); }, 550);
+    }
+
+    overTitleEl.textContent = '游戏结束';
+    finalScoreEl.textContent = G.score;
+    overSubEl.textContent = G.modeType === 'endless'
+      ? (isNew ? '刷新了你的最高无尽分' : '无尽挑战结束')
+      : '第 ' + G.level + ' 关挑战失败，再试一次';
+    retryBtn.textContent = '再玩一局';
+    newBestEl.textContent = '新纪录';
+    newBestEl.classList.toggle('hidden', !isNew);
+
+    clearTimeout(overTimer);
+    overTimer = setTimeout(function () {
+      if (G.mode === 'over') overScreen.classList.remove('hidden');
+    }, 700);
+  }
+
+  /* ================= 绘制：背景 ================= */
+  function drawBackground() {
+    var g = ctx.createLinearGradient(0, 0, 0, H);
+    g.addColorStop(0, '#08324A');
+    g.addColorStop(0.5, '#0D5C7A');
+    g.addColorStop(1, '#1B9AA8');
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, W, H);
+
+    // 光柱
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    for (var i = 0; i < 4; i++) {
+      var x = W * (0.1 + i * 0.26) + Math.sin(G.time * 0.25 + i) * 26;
+      var w = 70 + i * 24;
+      ctx.beginPath();
+      ctx.moveTo(x, -40);
+      ctx.lineTo(x + w, -40);
+      ctx.lineTo(x + w + 90, H + 40);
+      ctx.lineTo(x + 40, H + 40);
+      ctx.closePath();
+      ctx.fillStyle = 'rgba(255,255,255,' + (0.028 + i * 0.006) + ')';
+      ctx.fill();
+    }
+    ctx.restore();
+
+    // 海草
+    for (var j = 0; j < weeds.length; j++) {
+      var wd = weeds[j];
+      var sway = Math.sin(G.time * wd.speed + wd.phase) * 20;
+      ctx.beginPath();
+      ctx.moveTo(wd.x, H + 20);
+      ctx.quadraticCurveTo(wd.x + sway * 0.5, H - wd.h * 0.55, wd.x + sway, H - wd.h);
+      ctx.lineWidth = wd.w;
+      ctx.lineCap = 'round';
+      ctx.strokeStyle = 'rgba(11,86,100,.55)';
+      ctx.stroke();
+    }
+
+    // 沙地
+    ctx.beginPath();
+    ctx.moveTo(0, H + 2);
+    for (var x2 = 0; x2 <= W; x2 += 24) {
+      ctx.lineTo(x2, H - 26 - Math.sin(x2 * 0.013 + 1.2) * 9);
+    }
+    ctx.lineTo(W, H + 2);
+    ctx.closePath();
+    ctx.fillStyle = 'rgba(5,38,56,.6)';
+    ctx.fill();
+
+    // 气泡
+    for (var k = 0; k < bubbles.length; k++) {
+      var b = bubbles[k];
+      var bx = b.x + Math.sin(G.time * 1.2 + b.phase) * b.amp;
+      ctx.beginPath();
+      ctx.arc(bx, b.y, b.r, 0, Math.PI * 2);
+      ctx.strokeStyle = 'rgba(255,255,255,' + b.a + ')';
+      ctx.lineWidth = 1.2;
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(bx - b.r * 0.3, b.y - b.r * 0.3, b.r * 0.28, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(255,255,255,' + (b.a * 0.9) + ')';
+      ctx.fill();
+    }
+  }
+
+  function updateBubbles(dt) {
+    for (var i = 0; i < bubbles.length; i++) {
+      var b = bubbles[i];
+      b.y -= b.sp * dt;
+      if (b.y < -10) {
+        b.y = H + 10;
+        b.x = rand(0, W);
+      }
+    }
+  }
+
+  /* ================= 绘制：鱼 ================= */
+  function fishBody(r, color, accent, phase) {
+    var wag = Math.sin(phase) * 0.42;
+
+    // 尾巴
+    ctx.fillStyle = accent;
+    ctx.beginPath();
+    ctx.moveTo(-r * 0.92, 0);
+    ctx.lineTo(-r * 1.86, -r * 0.74 + wag * r * 0.5);
+    ctx.quadraticCurveTo(-r * 1.5, 0, -r * 1.86, r * 0.74 + wag * r * 0.5);
+    ctx.closePath();
+    ctx.fill();
+
+    // 背鳍
+    ctx.beginPath();
+    ctx.moveTo(-r * 0.15, -r * 0.6);
+    ctx.quadraticCurveTo(-r * 0.2, -r * 1.3, r * 0.5, -r * 0.5);
+    ctx.closePath();
+    ctx.fill();
+
+    // 身体
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.ellipse(0, 0, r * 1.12, r * 0.8, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // 肚皮高光
+    ctx.fillStyle = 'rgba(255,255,255,.32)';
+    ctx.beginPath();
+    ctx.ellipse(r * 0.08, r * 0.3, r * 0.7, r * 0.34, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // 胸鳍
+    ctx.fillStyle = accent;
+    ctx.globalAlpha = 0.9;
+    ctx.beginPath();
+    ctx.ellipse(r * 0.05, r * 0.05, r * 0.34, r * 0.2, 0.5 + wag * 0.25, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.globalAlpha = 1;
+
+    // 眼睛
+    ctx.fillStyle = '#FFFFFF';
+    ctx.beginPath();
+    ctx.arc(r * 0.56, -r * 0.2, r * 0.24, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#12303F';
+    ctx.beginPath();
+    ctx.arc(r * 0.63, -r * 0.2, r * 0.11, 0, Math.PI * 2);
+    ctx.fill();
+
+    // 嘴
+    ctx.strokeStyle = 'rgba(18,48,63,.55)';
+    ctx.lineWidth = Math.max(1.4, r * 0.055);
+    ctx.lineCap = 'round';
+    ctx.beginPath();
+    ctx.moveTo(r * 0.96, r * 0.14);
+    ctx.quadraticCurveTo(r * 1.02, r * 0.3, r * 0.9, r * 0.36);
+    ctx.stroke();
+  }
+
+  function drawPlayer() {
+    ctx.save();
+    ctx.translate(player.x, player.y + Math.sin(G.time * 4) * 1.2);
+    ctx.shadowColor = G.effects.shield > 0 ? 'rgba(125,211,252,.9)' : 'rgba(255,200,80,.5)';
+    ctx.shadowBlur = G.effects.shield > 0 ? 34 : 22;
+    ctx.scale(player.face, 1);
+    ctx.rotate(player.tilt || 0);
+    fishBody(player.r, '#FFC24B', '#FF8A3D', G.time * 7);
+    if (G.effects.magnet > 0) {
+      ctx.strokeStyle = 'rgba(134,239,172,.22)';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(0, 0, player.r * 7, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+    if (G.effects.shield > 0) {
+      ctx.strokeStyle = 'rgba(125,211,252,.75)';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.arc(0, 0, player.r * 1.55, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  function drawFishTypeMark(f) {
+    var t = f.type ? f.type.id : 'normal';
+    if (t === 'gold') {
+      ctx.fillStyle = '#FFF7AD';
+      ctx.font = '900 ' + Math.max(12, f.r * 0.55) + 'px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('$', -f.r * 0.1, 0);
+    } else if (t === 'swift') {
+      ctx.strokeStyle = 'rgba(255,255,255,.72)';
+      ctx.lineWidth = Math.max(2, f.r * 0.08);
+      for (var i = 0; i < 3; i++) {
+        ctx.beginPath();
+        ctx.moveTo(-f.r * (1.45 + i * 0.2), -f.r * (0.35 - i * 0.25));
+        ctx.lineTo(-f.r * (2.0 + i * 0.18), -f.r * (0.35 - i * 0.25));
+        ctx.stroke();
+      }
+    } else if (t === 'puffer') {
+      ctx.fillStyle = '#7C2D12';
+      for (var a = 0; a < Math.PI * 2; a += Math.PI / 4) {
+        ctx.beginPath();
+        ctx.moveTo(Math.cos(a) * f.r * 0.9, Math.sin(a) * f.r * 0.65);
+        ctx.lineTo(Math.cos(a) * f.r * 1.28, Math.sin(a) * f.r * 0.92);
+        ctx.lineTo(Math.cos(a + 0.16) * f.r * 0.88, Math.sin(a + 0.16) * f.r * 0.65);
+        ctx.closePath();
+        ctx.fill();
+      }
+    } else if (t === 'ghost') {
+      ctx.strokeStyle = 'rgba(255,255,255,.8)';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([4, 5]);
+      ctx.beginPath();
+      ctx.ellipse(0, 0, f.r * 1.34, f.r, 0, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+  }
+
+  function drawNpc(f) {
+    ctx.save();
+    ctx.translate(f.x, f.y);
+    ctx.scale(f.face, 1);
+    ctx.rotate(f.tilt || 0);
+
+    if (f.deadly) {
+      ctx.shadowColor = 'rgba(255,80,80,.35)';
+      ctx.shadowBlur = 14;
+    }
+    if (f.type && f.type.id === 'ghost') ctx.globalAlpha = 0.45 + Math.sin(G.time * 5 + f.phase) * 0.12;
+    fishBody(f.r, f.color, darken(f.color, 0.24), G.time * f.wobFreq * 3 + f.phase);
+    drawFishTypeMark(f);
+    ctx.globalAlpha = 1;
+
+    if (f.deadly) {
+      ctx.shadowBlur = 0;
+      // 凶恶的眉毛
+      ctx.strokeStyle = '#7F1D1D';
+      ctx.lineWidth = Math.max(1.6, f.r * 0.07);
+      ctx.lineCap = 'round';
+      ctx.beginPath();
+      ctx.moveTo(f.r * 0.34, -f.r * 0.52);
+      ctx.lineTo(f.r * 0.78, -f.r * 0.3);
+      ctx.stroke();
+      // 牙齿
+      if (f.r > 22) {
+        ctx.fillStyle = '#FFFFFF';
+        for (var i = 0; i < 2; i++) {
+          var tx = f.r * (0.78 + i * 0.14);
+          ctx.beginPath();
+          ctx.moveTo(tx, f.r * 0.12);
+          ctx.lineTo(tx + f.r * 0.09, f.r * 0.12);
+          ctx.lineTo(tx + f.r * 0.04, f.r * 0.3);
+          ctx.closePath();
+          ctx.fill();
+        }
+      }
+    }
+    ctx.restore();
+  }
+
+  function drawParticles() {
+    for (var i = 0; i < particles.length; i++) {
+      var p = particles[i];
+      ctx.globalAlpha = Math.max(0, p.life / p.max);
+      ctx.fillStyle = p.color;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  function drawPopups() {
+    for (var i = 0; i < popups.length; i++) {
+      var p = popups[i];
+      var a = Math.min(1, p.life / (p.max * 0.6));
+      ctx.globalAlpha = a;
+      ctx.fillStyle = p.color;
+      ctx.font = '800 ' + p.size + 'px -apple-system,"PingFang SC","Microsoft YaHei",sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.shadowColor = 'rgba(0,0,0,.35)';
+      ctx.shadowBlur = 6;
+      ctx.fillText(p.text, p.x, p.y);
+    }
+    ctx.globalAlpha = 1;
+    ctx.shadowBlur = 0;
+  }
+
+  /* ================= 主循环 ================= */
+  function update(dt) {
+    G.time += dt;
+    updateBubbles(dt);
+
+    if (G.mode === 'menu') {
+      idlePlayer();
+      updateNpcs(dt);
+      return;
+    }
+
+    if (G.mode === 'over') {
+      updateNpcs(dt);
+      updateParticles(dt);
+      updatePopups(dt);
+      return;
+    }
+
+    // playing
+    updatePlayer(dt);
+    updateSkills(dt);
+    updateNpcs(dt);
+    handleCollisions();
+    updateParticles(dt);
+    updatePopups(dt);
+
+    G.spawnTimer -= dt;
+    var cfg = getLevelCfg();
+    var targetCount = Math.min(cfg.max, cfg.start + Math.floor(G.score / 260));
+    if (npcs.length < targetCount && G.spawnTimer <= 0) {
+      spawnNpc();
+      G.spawnTimer = Math.max(0.18, 0.42 - (cfg.speed - 1) * 0.12);
+    }
+  }
+
+  function render() {
+    drawBackground();
+
+    var sorted = npcs.slice().sort(function (a, b) { return a.r - b.r; });
+    for (var i = 0; i < sorted.length; i++) {
+      if (sorted[i].deadly) drawNpc(sorted[i]);
+    }
+    for (var j = 0; j < sorted.length; j++) {
+      if (!sorted[j].deadly) drawNpc(sorted[j]);
+    }
+
+    if (G.mode !== 'over' || G.won) drawPlayer();
+
+    drawParticles();
+    drawPopups();
+  }
+
+  var last = 0;
+  function loop(now) {
+    if (!last) last = now;
+    var dt = (now - last) / 1000;
+    last = now;
+    if (dt > 0.05) dt = 0.05;
+    update(dt);
+    render();
+    requestAnimationFrame(loop);
+  }
+
+  /* ================= 输入 ================= */
+  window.addEventListener('pointermove', function (e) {
+    pointer.x = e.clientX;
+    pointer.y = e.clientY;
+    pointer.active = true;
+  }, { passive: true });
+
+  window.addEventListener('pointerdown', function (e) {
+    pointer.x = e.clientX;
+    pointer.y = e.clientY;
+    pointer.active = true;
+  }, { passive: true });
+
+  window.addEventListener('keydown', function (e) {
+    var k = e.key.toLowerCase();
+    if (k === 'arrowleft' || k === 'a') { keys.left = true; pointer.active = false; }
+    if (k === 'arrowright' || k === 'd') { keys.right = true; pointer.active = false; }
+    if (k === 'arrowup' || k === 'w') { keys.up = true; pointer.active = false; }
+    if (k === 'arrowdown' || k === 's') { keys.down = true; pointer.active = false; }
+    if (k === ' ' || k === 'enter') {
+      e.preventDefault();
+      if (G.mode === 'menu') startGame('level', G.unlocked <= 10 ? G.unlocked : 1);
+      else if (G.mode === 'over' && !overScreen.classList.contains('hidden')) continueAfterOver();
+    }
+    if (k === '1') useSkill('shield');
+    if (k === '2') useSkill('magnet');
+    if (k === '3') useSkill('dash');
+    if (k === '4') useSkill('slow');
+    if (k === 'escape' && G.mode !== 'menu') showMenu();
+    if (/^arrow|^[wasd]$/.test(k) || k === ' ') e.preventDefault();
+  });
+
+  window.addEventListener('keyup', function (e) {
+    var k = e.key.toLowerCase();
+    if (k === 'arrowleft' || k === 'a') keys.left = false;
+    if (k === 'arrowright' || k === 'd') keys.right = false;
+    if (k === 'arrowup' || k === 'w') keys.up = false;
+    if (k === 'arrowdown' || k === 's') keys.down = false;
+  });
+
+  window.addEventListener('contextmenu', function (e) { e.preventDefault(); });
+
+  endlessBtn.addEventListener('click', function () {
+    if (G.unlocked >= 11) startGame('endless', 10);
+  });
+  retryBtn.addEventListener('click', continueAfterOver);
+  homeBtn.addEventListener('click', showMenu);
+  document.getElementById('menuBtn').addEventListener('click', showMenu);
+
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden && actx) actx.suspend();
+    else if (!document.hidden && actx) actx.resume();
+    last = 0;
+  });
+
+  /* ================= 启动 ================= */
+  window.addEventListener('resize', resize);
+  window.addEventListener('orientationchange', function () { setTimeout(resize, 220); });
+
+  resize();
+  player.x = W / 2;
+  player.y = H * 0.56;
+  updateHud();
+  syncSoundBtn();
+  renderMenu();
+
+  for (var i = 0; i < 9; i++) spawnNpc();
+
+  requestAnimationFrame(function (t) { last = t; loop(t); });
+})();
+</script>
+</body>
+</html>
