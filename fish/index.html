@@ -177,6 +177,9 @@
     .levelBtn{min-height:50px;font-size:17px}
     .finalScore{font-size:48px;margin-top:10px}
   }
+  /* 贴纸海洋界面：实色、厚描边、贝壳纸纹，弱化通用渐变玻璃感 */
+  html,body{background:#0b6f83;font-family:"Trebuchet MS","PingFang SC","Microsoft YaHei",sans-serif}
+  .pill,.icon,.skillBtn,.joystick{background:#fff4cf;color:#17313a;border:3px solid #17313a;box-shadow:4px 4px 0 #17313a;backdrop-filter:none;-webkit-backdrop-filter:none}.pill .label{opacity:1;color:#3a6b72;font-weight:900}.pill.best strong,.pill.level strong,.pill.target strong{color:#e06d38}.skillBtn{border-radius:15px}.skillBtn .cool{background:rgba(23,49,58,.72);color:#fff4cf}.joystick{border-radius:24px;background:#ffe9a8}.joystickBase{border:3px dashed #17313a;inset:16px}.joystickKnob{background:#ff8d54;border:3px solid #17313a;box-shadow:3px 3px 0 #17313a}.screen{background:rgba(11,111,131,.72);backdrop-filter:none;-webkit-backdrop-filter:none}.card{background:#fff4cf;color:#17313a;border:4px solid #17313a;border-radius:18px;box-shadow:8px 8px 0 #17313a}.card h1,.card h2{color:#17313a;text-shadow:3px 3px 0 #7ed6cf;letter-spacing:.14em}.sub,.bestLine{color:#4b666b;font-weight:800}.hint div,.modeMeta,.settingBox{background:#dff4df;border:3px solid #17313a;border-radius:12px;color:#17313a;box-shadow:3px 3px 0 rgba(23,49,58,.35)}.hint b,.settingTop{color:#0b6f83}.primary,.secondary,.levelBtn{border:3px solid #17313a;border-radius:14px;box-shadow:4px 4px 0 #17313a}.primary{background:#ff8d54;color:#17313a}.secondary{background:#dff4df;color:#17313a}.levelBtn{background:#fff8d8;color:#17313a}.levelBtn.done{background:#9fe1ae;color:#17313a}.levelBtn.current{background:#7ed6cf;color:#17313a}.levelBtn.locked{background:#c8d0c3;color:#607073}.endlessBtn{background:#7ed6cf;color:#17313a}.finalScore{color:#e64f38;text-shadow:3px 3px 0 #ffd166}.newBest{background:#ffd166;color:#17313a;border:3px solid #17313a;border-radius:10px}
 </style>
 </head>
 <body>
@@ -1024,15 +1027,21 @@
   /* ================= 绘制：鱼 ================= */
   function fishBody(r, color, accent, phase) {
     var wag = Math.sin(phase) * 0.42;
+    var ink = '#17313A';
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
 
     // 尾巴
     ctx.fillStyle = accent;
+    ctx.strokeStyle = ink;
+    ctx.lineWidth = Math.max(2.4, r * 0.11);
     ctx.beginPath();
     ctx.moveTo(-r * 0.92, 0);
     ctx.lineTo(-r * 1.86, -r * 0.74 + wag * r * 0.5);
     ctx.quadraticCurveTo(-r * 1.5, 0, -r * 1.86, r * 0.74 + wag * r * 0.5);
     ctx.closePath();
     ctx.fill();
+    ctx.stroke();
 
     // 背鳍
     ctx.beginPath();
@@ -1040,12 +1049,16 @@
     ctx.quadraticCurveTo(-r * 0.2, -r * 1.3, r * 0.5, -r * 0.5);
     ctx.closePath();
     ctx.fill();
+    ctx.stroke();
 
     // 身体
     ctx.fillStyle = color;
+    ctx.strokeStyle = ink;
+    ctx.lineWidth = Math.max(2.6, r * 0.12);
     ctx.beginPath();
     ctx.ellipse(0, 0, r * 1.12, r * 0.8, 0, 0, Math.PI * 2);
     ctx.fill();
+    ctx.stroke();
 
     // 肚皮高光
     ctx.fillStyle = 'rgba(255,255,255,.32)';
