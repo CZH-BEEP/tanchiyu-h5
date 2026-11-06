@@ -136,6 +136,11 @@
   .levelBtn.locked:after{content:'锁';display:block;font-size:11px;margin-top:2px;color:#9AAEBB}
   .endlessBtn{margin-top:12px;background:linear-gradient(135deg,#08324A,#0E7490);box-shadow:0 10px 22px rgba(8,50,74,.26)}
   .modeMeta{margin-top:12px;font-size:13px;color:#5B7A8C;line-height:1.6;background:#F1F7FA;border-radius:16px;padding:11px 14px}
+  .settingBox{margin-top:12px;text-align:left;background:#F1F7FA;border-radius:16px;padding:12px 14px;color:#3E6274}
+  .settingTop{display:flex;align-items:center;justify-content:space-between;font-size:13px;font-weight:800;color:#0E7490;margin-bottom:8px}
+  .settingTop span:last-child{font-variant-numeric:tabular-nums;color:#F97316}
+  .range{width:100%;accent-color:#FF8A3D;cursor:pointer}
+  .rangeLabels{display:flex;justify-content:space-between;font-size:11px;color:#7A96A6;margin-top:4px}
 
   .bestLine{margin-top:14px;font-size:13px;color:#7A96A6}
   .bestLine b{color:#F59E0B;font-size:15px;font-variant-numeric:tabular-nums}
@@ -189,10 +194,15 @@
     <h1>贪 吃 鱼</h1>
     <p class="sub">10 个目标关卡，全部通关后解锁无尽模式</p>
     <div class="modeMeta" id="menuMeta">选择一个已解锁关卡开始挑战</div>
+    <div class="settingBox">
+      <div class="settingTop"><span>移动灵敏度</span><span id="sensitivityVal">100%</span></div>
+      <input class="range" id="sensitivityRange" type="range" min="70" max="180" step="5" value="125" aria-label="移动灵敏度">
+      <div class="rangeLabels"><span>稳</span><span>快</span><span>很灵敏</span></div>
+    </div>
     <div class="levelGrid" id="levelGrid"></div>
     <button class="primary endlessBtn" id="endlessBtn">无尽模式</button>
     <div class="hint">
-      <div><b>移动</b>鼠标 / 手指拖动 / 方向键 WASD</div>
+      <div><b>移动</b>鼠标 / 手指拖动 / 方向键 WASD，主界面可调灵敏度</div>
       <div><b>技能</b>点击底部技能按钮，或按 1/2/3/4 快捷键</div>
       <div><b>目标</b>普通关达到目标分即通关；无尽模式挑战最高分</div>
     </div>
@@ -229,6 +239,8 @@
   var menuScreen = document.getElementById('menuScreen');
   var levelGrid = document.getElementById('levelGrid');
   var menuMeta = document.getElementById('menuMeta');
+  var sensitivityRange = document.getElementById('sensitivityRange');
+  var sensitivityVal = document.getElementById('sensitivityVal');
   var endlessBtn = document.getElementById('endlessBtn');
   var overScreen = document.getElementById('overScreen');
   var finalScoreEl = document.getElementById('finalScore');
@@ -242,6 +254,7 @@
   var BEST_KEY = 'tanchiyu.best.v1';
   var UNLOCK_KEY = 'tanchiyu.unlock.v1';
   var MUTE_KEY = 'tanchiyu.muted.v1';
+  var SENS_KEY = 'tanchiyu.sensitivity.v1';
   var COLORS = ['#FF7A59', '#FFC24B', '#4ECDC4', '#A78BFA', '#F472B6', '#60A5FA', '#34D399', '#FB7185'];
   var FISH_TYPES = [
     { id: 'normal', name: '小鱼', minLevel: 1, weight: 58, score: 1, grow: 1, color: null },
@@ -281,6 +294,7 @@
     level: 1,
     target: LEVELS[0].target,
     won: false,
+    sensitivity: clamp(Number(localStorage.getItem(SENS_KEY) || 125) || 125, 70, 180) / 100,
     time: 0,
     spawnTimer: 0,
     effects: { shield: 0, magnet: 0, dash: 0, slow: 0 },
@@ -361,6 +375,18 @@
     syncSoundBtn();
     ensureAudio();
     if (!muted) beep({ freq: 720, type: 'sine', dur: 0.1, vol: 0.12 });
+  });
+
+  function syncSensitivity() {
+    var percent = Math.round(G.sensitivity * 100);
+    sensitivityRange.value = percent;
+    sensitivityVal.textContent = percent + '%';
+  }
+
+  sensitivityRange.addEventListener('input', function () {
+    G.sensitivity = Number(sensitivityRange.value) / 100;
+    localStorage.setItem(SENS_KEY, String(Math.round(G.sensitivity * 100)));
+    syncSensitivity();
   });
 
   /* ================= 工具 ================= */
@@ -510,7 +536,7 @@
 
   /* ================= 玩家 ================= */
   function updatePlayer(dt) {
-    var maxSpeed = clamp(520 - player.r * 3, 300, 520) * (G.effects.dash > 0 ? 1.8 : 1);
+    var maxSpeed = clamp(700 - player.r * 3.2, 430, 720) * G.sensitivity * (G.effects.dash > 0 ? 1.8 : 1);
     var dvx = 0, dvy = 0;
 
     var kx = (keys.right ? 1 : 0) - (keys.left ? 1 : 0);
@@ -526,13 +552,13 @@
       var dy = pointer.y - player.y;
       var d = Math.hypot(dx, dy);
       if (d > 3) {
-        var sp = Math.min(maxSpeed, d * 6);
+        var sp = Math.min(maxSpeed, d * (8 + G.sensitivity * 5));
         dvx = (dx / d) * sp;
         dvy = (dy / d) * sp;
       }
     }
 
-    var k = 1 - Math.exp(-8 * dt);
+    var k = 1 - Math.exp(-(10 + G.sensitivity * 6) * dt);
     player.vx += (dvx - player.vx) * k;
     player.vy += (dvy - player.vy) * k;
     player.x += player.vx * dt;
@@ -1259,6 +1285,7 @@
   player.y = H * 0.56;
   updateHud();
   syncSoundBtn();
+  syncSensitivity();
   renderMenu();
 
   for (var i = 0; i < 9; i++) spawnNpc();
