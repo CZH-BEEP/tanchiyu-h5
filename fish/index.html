@@ -56,6 +56,18 @@
   .skillBtn.locked,.skillBtn.cooling{opacity:.48;cursor:not-allowed}
   .skillBtn .cool{position:absolute;inset:0;display:grid;place-items:center;background:rgba(4,30,44,.58);font-size:14px}
   .skillBar.menuing{display:none}
+  .joystick{
+    position:fixed;left:calc(env(safe-area-inset-left) + 18px);bottom:calc(env(safe-area-inset-bottom) + 22px);z-index:13;
+    width:116px;height:116px;border-radius:50%;display:none;place-items:center;pointer-events:auto;touch-action:none;
+    background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);
+    box-shadow:0 14px 34px rgba(0,0,0,.22),inset 0 0 22px rgba(255,255,255,.08);
+    backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  }
+  .joystick.playing{display:grid}
+  .joystickBase{position:absolute;inset:14px;border-radius:50%;border:1px dashed rgba(255,255,255,.28)}
+  .joystickKnob{width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,#FFD166,#FF8A3D);box-shadow:0 8px 18px rgba(0,0,0,.24);transform:translate(var(--jx,0px),var(--jy,0px))}
+  @media (hover:hover) and (pointer:fine){.joystick{display:none!important}}
+  @media (max-width:520px){.skillBar{right:12px;left:auto;transform:none;bottom:calc(env(safe-area-inset-bottom) + 20px);gap:7px}.joystick{width:108px;height:108px}}
   .icon{
     pointer-events:auto;display:grid;place-items:center;
     width:40px;height:40px;border-radius:50%;cursor:pointer;
@@ -188,6 +200,10 @@
 </div>
 
 <div class="skillBar menuing" id="skillBar"></div>
+<div class="joystick" id="joystick" aria-label="移动摇杆">
+  <div class="joystickBase"></div>
+  <div class="joystickKnob" id="joystickKnob"></div>
+</div>
 
 <div class="screen" id="menuScreen">
   <div class="card menu">
@@ -202,7 +218,7 @@
     <div class="levelGrid" id="levelGrid"></div>
     <button class="primary endlessBtn" id="endlessBtn">无尽模式</button>
     <div class="hint">
-      <div><b>移动</b>鼠标 / 手指拖动 / 方向键 WASD，主界面可调灵敏度</div>
+      <div><b>移动</b>手机摇杆 / 鼠标手指拖动 / 方向键 WASD，主界面可调灵敏度</div>
       <div><b>技能</b>点击底部技能按钮，或按 1/2/3/4 快捷键</div>
       <div><b>目标</b>普通关达到目标分即通关；无尽模式挑战最高分</div>
     </div>
@@ -250,6 +266,8 @@
   var homeBtn = document.getElementById('homeBtn');
   var overTitleEl = overScreen.querySelector('h2');
   var soundBtn = document.getElementById('soundBtn');
+  var joystick = document.getElementById('joystick');
+  var joystickKnob = document.getElementById('joystickKnob');
 
   var BEST_KEY = 'tanchiyu.best.v1';
   var UNLOCK_KEY = 'tanchiyu.unlock.v1';
@@ -303,6 +321,7 @@
 
   var player = { x: 0, y: 0, r: 16, vx: 0, vy: 0, face: 1 };
   var pointer = { x: 0, y: 0, active: false };
+  var joystickState = { active: false, id: null, x: 0, y: 0 };
   var keys = { left: false, right: false, up: false, down: false };
 
   var npcs = [];
@@ -542,7 +561,11 @@
     var kx = (keys.right ? 1 : 0) - (keys.left ? 1 : 0);
     var ky = (keys.down ? 1 : 0) - (keys.up ? 1 : 0);
 
-    if (kx || ky) {
+    if (joystickState.active) {
+      dvx = joystickState.x * maxSpeed;
+      dvy = joystickState.y * maxSpeed;
+      pointer.active = false;
+    } else if (kx || ky) {
       var len = Math.hypot(kx, ky);
       dvx = (kx / len) * maxSpeed;
       dvy = (ky / len) * maxSpeed;
@@ -738,6 +761,16 @@
 
   function resetKeys() {
     keys.left = keys.right = keys.up = keys.down = false;
+    resetJoystick();
+  }
+
+  function resetJoystick() {
+    joystickState.active = false;
+    joystickState.id = null;
+    joystickState.x = 0;
+    joystickState.y = 0;
+    joystickKnob.style.setProperty('--jx', '0px');
+    joystickKnob.style.setProperty('--jy', '0px');
   }
 
   function continueAfterOver() {
@@ -756,6 +789,7 @@
     levelEl.textContent = G.modeType === 'endless' ? '∞' : G.level;
     targetEl.textContent = G.modeType === 'endless' ? '∞' : Math.max(0, G.target - G.score);
     hud.classList.toggle('menuing', G.mode === 'menu');
+    joystick.classList.toggle('playing', G.mode === 'playing');
   }
 
   function renderMenu() {
@@ -1222,13 +1256,58 @@
   }
 
   /* ================= 输入 ================= */
+  function updateJoystick(e) {
+    var rect = joystick.getBoundingClientRect();
+    var cx = rect.left + rect.width / 2;
+    var cy = rect.top + rect.height / 2;
+    var max = rect.width * 0.34;
+    var dx = e.clientX - cx;
+    var dy = e.clientY - cy;
+    var d = Math.hypot(dx, dy);
+    var m = d > max ? max / d : 1;
+    var kx = dx * m;
+    var ky = dy * m;
+    joystickState.x = kx / max;
+    joystickState.y = ky / max;
+    joystickKnob.style.setProperty('--jx', kx + 'px');
+    joystickKnob.style.setProperty('--jy', ky + 'px');
+  }
+
+  joystick.addEventListener('pointerdown', function (e) {
+    if (G.mode !== 'playing') return;
+    e.preventDefault();
+    ensureAudio();
+    joystickState.active = true;
+    joystickState.id = e.pointerId;
+    pointer.active = false;
+    joystick.setPointerCapture(e.pointerId);
+    updateJoystick(e);
+  });
+
+  joystick.addEventListener('pointermove', function (e) {
+    if (!joystickState.active || e.pointerId !== joystickState.id) return;
+    e.preventDefault();
+    updateJoystick(e);
+  });
+
+  function endJoystick(e) {
+    if (e && joystickState.id !== e.pointerId) return;
+    resetJoystick();
+  }
+
+  joystick.addEventListener('pointerup', endJoystick);
+  joystick.addEventListener('pointercancel', endJoystick);
+  joystick.addEventListener('lostpointercapture', endJoystick);
+
   window.addEventListener('pointermove', function (e) {
+    if (joystickState.active || joystick.contains(e.target)) return;
     pointer.x = e.clientX;
     pointer.y = e.clientY;
     pointer.active = true;
   }, { passive: true });
 
   window.addEventListener('pointerdown', function (e) {
+    if (joystick.contains(e.target)) return;
     pointer.x = e.clientX;
     pointer.y = e.clientY;
     pointer.active = true;
