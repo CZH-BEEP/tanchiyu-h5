@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#171225">
-<meta name="description" content="H5 小游戏合集：贪吃鱼、秘仪回响、星幕突围与迷你方可梦。">
+<meta name="description" content="H5 小游戏合集：贪吃鱼、秘仪回响与星幕突围。">
 <title>小游戏合集</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
@@ -27,17 +27,16 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;background:rep
 <main class="wrap">
   <section class="hero">
     <div class="eyebrow">✦ CZH-BEEP H5 Arcade</div>
-    <h1>小游戏合集 <span class="count" id="count">4 款</span></h1>
-    <p>这里保留原来的贪吃鱼，也加入卡牌、弹幕射击和方块萌宠对战。手机和电脑都能直接打开玩。</p>
+    <h1>小游戏合集 <span class="count" id="count">3 款</span></h1>
+    <p>这里保留原来的贪吃鱼，也加入卡牌和弹幕射击。手机和电脑都能直接打开玩。</p>
   </section>
   <section class="toolbar" aria-label="搜索和筛选">
-    <label class="search"><span>⌕</span><input id="search" type="search" placeholder="搜索：鱼、卡牌、弹幕、射击、宠物..." autocomplete="off"></label>
+    <label class="search"><span>⌕</span><input id="search" type="search" placeholder="搜索：鱼、卡牌、弹幕、射击..." autocomplete="off"></label>
     <div class="filters" id="filters">
       <button class="filter active" type="button" data-filter="all">全部</button>
       <button class="filter" type="button" data-filter="动作">动作</button>
       <button class="filter" type="button" data-filter="卡牌">卡牌</button>
       <button class="filter" type="button" data-filter="射击">射击</button>
-      <button class="filter" type="button" data-filter="宠物">宠物</button>
     </div>
   </section>
   <section class="grid" id="gameGrid" aria-label="游戏列表">
@@ -62,15 +61,8 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;background:rep
       <svg class="art" viewBox="0 0 180 180" aria-hidden="true"><circle cx="90" cy="90" r="72" fill="rgba(255,255,255,.12)"/><path d="M90 22l22 78 39 22-41 8-20 34-20-34-41-8 39-22z" fill="#fff" opacity=".9"/><path d="M90 42l13 55 24 14-28 4-9 22-9-22-28-4 24-14z" fill="#ff6fb1"/><circle cx="47" cy="52" r="5" fill="#f7d99b"/><circle cx="138" cy="66" r="4" fill="#9bf6ff"/><circle cx="130" cy="135" r="6" fill="#f7d99b"/></svg>
       <span class="btn">开始游戏 →</span>
     </a>
-    <a class="game pocket" href="./pocket/" data-tags="宠物 RPG 俯视 地图 行走 NPC 对话 草丛 随机遭遇 回合 对战 收服 伙伴 小队 迷你世界 方块 迷你方可梦 克制 技能 存档 背包">
-      <span class="tag">俯视 RPG</span>
-      <h2>迷 你 方 可 梦</h2>
-      <p>2D 俯视捉宠 RPG：瓦片地图行走、NPC 对话、草丛遭遇、回合战斗、捕捉、队伍背包和存档。</p>
-      <svg class="art" viewBox="0 0 180 180" aria-hidden="true"><rect x="18" y="28" width="144" height="122" rx="18" fill="rgba(255,255,255,.16)"/><rect x="35" y="92" width="110" height="38" rx="19" fill="#ffcf5a" stroke="#2a1f1b" stroke-width="8"/><circle cx="90" cy="111" r="18" fill="#fff4cf" stroke="#2a1f1b" stroke-width="8"/><path d="M52 90c6-30 27-48 54-43 28 5 43 27 40 51-18 5-63 7-94-8z" fill="#7ec7ff" stroke="#2a1f1b" stroke-width="8"/><circle cx="82" cy="72" r="8" fill="#fff4cf" stroke="#2a1f1b" stroke-width="5"/><circle cx="117" cy="78" r="8" fill="#fff4cf" stroke="#2a1f1b" stroke-width="5"/><path d="M74 39l-12-20 28 10m33 13l20-16-8 31" fill="none" stroke="#2a1f1b" stroke-width="8" stroke-linecap="round"/><circle cx="47" cy="137" r="9" fill="#83c965" stroke="#2a1f1b" stroke-width="5"/><circle cx="134" cy="139" r="7" fill="#83c965" stroke="#2a1f1b" stroke-width="5"/></svg>
-      <span class="btn">开始游戏 →</span>
-    </a>
   </section>
-  <div class="empty" id="empty">没找到这个游戏。换个关键词试试，比如“鱼”“卡牌”“射击”“宠物”。</div>
+  <div class="empty" id="empty">没找到这个游戏。换个关键词试试，比如“鱼”“卡牌”“射击”。</div>
   <p class="meta">提示：如果 GitHub Pages 缓存未刷新，可以稍等后强制刷新页面。</p>
 </main>
 <script>
