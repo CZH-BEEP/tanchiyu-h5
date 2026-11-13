@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#171225">
-<meta name="description" content="H5 小游戏合集：贪吃鱼、秘仪回响与星幕突围。">
+<meta name="description" content="H5 小游戏合集：贪吃鱼、秘仪回响、星幕突围与轨道残骸站。">
 <title>小游戏合集</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
@@ -15,7 +15,7 @@ body{padding:28px 18px 42px;background:radial-gradient(circle at 18% 10%,rgba(24
 /* 手工街机海报风：厚描边、纸纹、贴纸卡片，减少玻璃拟态 AI 感 */
 html,body{background:#1d2433;color:#2a1f1b;font-family:"Trebuchet MS","PingFang SC","Microsoft YaHei",sans-serif}
 body{background:#f0dca6;background-image:radial-gradient(#c28b4d 1.1px,transparent 1.1px),linear-gradient(135deg,#f7e7b8 0%,#e5bf75 48%,#a8c97f 100%);background-size:18px 18px,100% 100%;padding-top:34px}
-body:before{content:"";position:fixed;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(75,45,24,.05) 0 2px,transparent 2px 7px);mix-blend-mode:multiply}.music{background:#fff4cf;color:#2a1f1b;border:3px solid #2a1f1b;border-radius:12px;box-shadow:5px 5px 0 #2a1f1b;backdrop-filter:none}.wrap{max-width:1050px}.eyebrow{background:#fff4cf;color:#2a1f1b;border:3px solid #2a1f1b;box-shadow:4px 4px 0 #2a1f1b;border-radius:12px;font-weight:900}.hero h1{color:#2a1f1b;text-shadow:5px 5px 0 #ffcf5a,8px 8px 0 #2a1f1b;letter-spacing:.12em}.hero p,.meta{color:#3e3029;font-weight:800}.grid{gap:22px}.game{background:#fff4cf;border:4px solid #2a1f1b;border-radius:20px;color:#2a1f1b;box-shadow:8px 8px 0 #2a1f1b;transform:rotate(var(--tilt,-1deg));min-height:350px}.game:nth-child(2){--tilt:1.2deg}.game:nth-child(3){--tilt:-.6deg}.game:hover{transform:translateY(-4px) rotate(var(--tilt,-1deg));box-shadow:12px 12px 0 #2a1f1b}.game:before{opacity:1;background:var(--poster)}.fish{--poster:linear-gradient(160deg,#79d5d0 0 58%,#f7d15b 58% 66%,#ff8d54 66%)}.arcana{--poster:linear-gradient(160deg,#40253e 0 55%,#f0c16d 55% 63%,#fff4cf 63%)}.bullet{--poster:linear-gradient(160deg,#253068 0 54%,#ff72a5 54% 62%,#9be7ff 62%)}.pocket{--poster:linear-gradient(160deg,#7ec7ff 0 43%,#83c965 43% 68%,#ffcf5a 68%)}.tag{background:#fff4cf;color:#2a1f1b;border:3px solid #2a1f1b;border-radius:10px;box-shadow:3px 3px 0 #2a1f1b}.game h2{color:#fff4cf;text-shadow:3px 3px 0 #2a1f1b,-1px -1px 0 #2a1f1b,1px -1px 0 #2a1f1b,-1px 1px 0 #2a1f1b;letter-spacing:.14em}.game p{max-width:62%;color:#fff4cf;text-shadow:2px 2px 0 rgba(42,31,27,.85);font-weight:900}.art{filter:drop-shadow(5px 5px 0 #2a1f1b);opacity:1}.btn{background:#fff4cf;color:#2a1f1b;border:3px solid #2a1f1b;border-radius:12px;box-shadow:4px 4px 0 #2a1f1b}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(75,45,24,.05) 0 2px,transparent 2px 7px);mix-blend-mode:multiply}.music{background:#fff4cf;color:#2a1f1b;border:3px solid #2a1f1b;border-radius:12px;box-shadow:5px 5px 0 #2a1f1b;backdrop-filter:none}.wrap{max-width:1050px}.eyebrow{background:#fff4cf;color:#2a1f1b;border:3px solid #2a1f1b;box-shadow:4px 4px 0 #2a1f1b;border-radius:12px;font-weight:900}.hero h1{color:#2a1f1b;text-shadow:5px 5px 0 #ffcf5a,8px 8px 0 #2a1f1b;letter-spacing:.12em}.hero p,.meta{color:#3e3029;font-weight:800}.grid{gap:22px}.game{background:#fff4cf;border:4px solid #2a1f1b;border-radius:20px;color:#2a1f1b;box-shadow:8px 8px 0 #2a1f1b;transform:rotate(var(--tilt,-1deg));min-height:350px}.game:nth-child(2){--tilt:1.2deg}.game:nth-child(3){--tilt:-.6deg}.game:hover{transform:translateY(-4px) rotate(var(--tilt,-1deg));box-shadow:12px 12px 0 #2a1f1b}.game:before{opacity:1;background:var(--poster)}.fish{--poster:linear-gradient(160deg,#79d5d0 0 58%,#f7d15b 58% 66%,#ff8d54 66%)}.arcana{--poster:linear-gradient(160deg,#40253e 0 55%,#f0c16d 55% 63%,#fff4cf 63%)}.bullet{--poster:linear-gradient(160deg,#253068 0 54%,#ff72a5 54% 62%,#9be7ff 62%)}.orbit{--poster:linear-gradient(160deg,#07121f 0 52%,#12395a 52% 62%,#35d9ff 62%)}.pocket{--poster:linear-gradient(160deg,#7ec7ff 0 43%,#83c965 43% 68%,#ffcf5a 68%)}.tag{background:#fff4cf;color:#2a1f1b;border:3px solid #2a1f1b;border-radius:10px;box-shadow:3px 3px 0 #2a1f1b}.game h2{color:#fff4cf;text-shadow:3px 3px 0 #2a1f1b,-1px -1px 0 #2a1f1b,1px -1px 0 #2a1f1b,-1px 1px 0 #2a1f1b;letter-spacing:.14em}.game p{max-width:62%;color:#fff4cf;text-shadow:2px 2px 0 rgba(42,31,27,.85);font-weight:900}.art{filter:drop-shadow(5px 5px 0 #2a1f1b);opacity:1}.btn{background:#fff4cf;color:#2a1f1b;border:3px solid #2a1f1b;border-radius:12px;box-shadow:4px 4px 0 #2a1f1b}
 .toolbar{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;margin:4px 0 18px}.search{display:flex;align-items:center;gap:10px;background:#fff4cf;border:4px solid #2a1f1b;border-radius:16px;box-shadow:5px 5px 0 #2a1f1b;padding:10px 13px}.search span{font-size:20px}.search input{width:100%;border:0;outline:0;background:transparent;color:#2a1f1b;font:900 16px "Trebuchet MS","PingFang SC","Microsoft YaHei",sans-serif}.search input::placeholder{color:#7c6048}.filters{display:flex;gap:9px;flex-wrap:wrap;justify-content:flex-end}.filter{border:3px solid #2a1f1b;border-radius:12px;background:#fff4cf;color:#2a1f1b;box-shadow:4px 4px 0 #2a1f1b;padding:10px 12px;font-weight:900;cursor:pointer}.filter.active{background:#ffcf5a;transform:translate(2px,2px);box-shadow:2px 2px 0 #2a1f1b}.game.hidden{display:none}.empty{display:none;margin-top:22px;padding:22px;text-align:center;background:#fff4cf;border:4px solid #2a1f1b;border-radius:18px;box-shadow:7px 7px 0 #2a1f1b;color:#2a1f1b;font-weight:900}.empty.show{display:block}.count{display:inline-flex;margin-left:10px;padding:4px 9px;border:3px solid #2a1f1b;border-radius:999px;background:#fff4cf;color:#2a1f1b;font-size:14px;vertical-align:middle;box-shadow:3px 3px 0 #2a1f1b}.pocket{border:0;border-radius:0;box-shadow:none;background:transparent;background-image:url("pocket/ui/panel.png");background-size:100% 100%;padding:34px}.pocket:before{inset:24px;background:linear-gradient(#72ccff 0 44%,#95db65 44% 68%,#f7d45a 68%);border-radius:18px;opacity:.96}.pocket:after{content:"";position:absolute;right:20px;top:26px;width:128px;height:64px;background:url("pocket/ui/grass_spirit.png") center/contain no-repeat;z-index:1;filter:drop-shadow(0 5px 0 rgba(65,90,30,.3))}.pocket .tag,.pocket .btn{border:0;box-shadow:none;background:transparent;background-image:url("pocket/ui/btn.png");background-size:100% 100%;color:#623a16;text-shadow:0 2px 0 rgba(255,255,255,.55)}.pocket .tag{padding:12px 22px}.pocket .btn{padding:15px 24px}.pocket .art{right:28px;bottom:34px}.pocket h2{color:#ffe56a;text-shadow:0 4px 0 #8d4c16,0 7px 0 rgba(0,0,0,.24)}.pocket p{color:#fffbe0;text-shadow:2px 2px 0 #43772b}@media (max-width:760px){.hero h1{text-shadow:4px 4px 0 #ffcf5a,6px 6px 0 #2a1f1b}.game p{max-width:72%}.game{min-height:330px}.toolbar{grid-template-columns:1fr}.filters{justify-content:flex-start}.filter{padding:9px 10px}.count{margin-top:10px;margin-left:0}.pocket{padding:25px}.pocket:before{inset:16px}.pocket:after{width:96px;height:48px;right:14px;top:18px}}
 /* 方块萌宠入口第二版：降低素材堆叠，统一为清爽卡片 */
 .pocket{border:4px solid #2a1f1b;border-radius:20px;box-shadow:8px 8px 0 #2a1f1b;background:#fff4cf;background-image:none;padding:24px}.pocket:before{inset:0;background:linear-gradient(160deg,#7ec7ff 0 46%,#8bd365 46% 70%,#ffcf5a 70%);border-radius:16px;opacity:1}.pocket:after{right:18px;top:18px;width:96px;height:48px;opacity:.9}.pocket .tag,.pocket .btn{background:#fff4cf;border:3px solid #2a1f1b;box-shadow:4px 4px 0 #2a1f1b;color:#2a1f1b}.pocket .tag{padding:7px 11px}.pocket .btn{padding:12px 16px}.pocket h2{color:#fff4cf;text-shadow:3px 3px 0 #2a1f1b,-1px -1px 0 #2a1f1b,1px -1px 0 #2a1f1b,-1px 1px 0 #2a1f1b}.pocket p{color:#fff4cf;text-shadow:2px 2px 0 rgba(42,31,27,.85)}
@@ -27,16 +27,17 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;background:rep
 <main class="wrap">
   <section class="hero">
     <div class="eyebrow">✦ CZH-BEEP H5 Arcade</div>
-    <h1>小游戏合集 <span class="count" id="count">3 款</span></h1>
-    <p>这里保留原来的贪吃鱼，也加入卡牌和弹幕射击。手机和电脑都能直接打开玩。</p>
+    <h1>小游戏合集 <span class="count" id="count">4 款</span></h1>
+    <p>这里保留原来的贪吃鱼，也加入卡牌、弹幕射击和轨道生存建造。手机和电脑都能直接打开玩。</p>
   </section>
   <section class="toolbar" aria-label="搜索和筛选">
-    <label class="search"><span>⌕</span><input id="search" type="search" placeholder="搜索：鱼、卡牌、弹幕、射击..." autocomplete="off"></label>
+    <label class="search"><span>⌕</span><input id="search" type="search" placeholder="搜索：鱼、卡牌、弹幕、射击、建造、太空..." autocomplete="off"></label>
     <div class="filters" id="filters">
       <button class="filter active" type="button" data-filter="all">全部</button>
       <button class="filter" type="button" data-filter="动作">动作</button>
       <button class="filter" type="button" data-filter="卡牌">卡牌</button>
       <button class="filter" type="button" data-filter="射击">射击</button>
+      <button class="filter" type="button" data-filter="建造">建造</button>
     </div>
   </section>
   <section class="grid" id="gameGrid" aria-label="游戏列表">
@@ -61,8 +62,15 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;background:rep
       <svg class="art" viewBox="0 0 180 180" aria-hidden="true"><circle cx="90" cy="90" r="72" fill="rgba(255,255,255,.12)"/><path d="M90 22l22 78 39 22-41 8-20 34-20-34-41-8 39-22z" fill="#fff" opacity=".9"/><path d="M90 42l13 55 24 14-28 4-9 22-9-22-28-4 24-14z" fill="#ff6fb1"/><circle cx="47" cy="52" r="5" fill="#f7d99b"/><circle cx="138" cy="66" r="4" fill="#9bf6ff"/><circle cx="130" cy="135" r="6" fill="#f7d99b"/></svg>
       <span class="btn">开始游戏 →</span>
     </a>
+    <a class="game orbit" href="./orbit/" data-tags="建造 生存 太空 轨道 残骸 拾荒 加工 扩张 氧气 水 电力 合金 食物 信用点 乘员 航线">
+      <span class="tag">轨道建造</span>
+      <h2>轨 道 残 骸 站</h2>
+      <p>在地球轨道碎片带拾荒、建造功能舱、加工资源、管理乘员状态，并推进 3 章航线。</p>
+      <svg class="art" viewBox="0 0 180 180" aria-hidden="true"><defs><radialGradient id="orb" cx="50%" cy="50%" r="60%"><stop stop-color="#35d9ff"/><stop offset="1" stop-color="#102337"/></radialGradient></defs><circle cx="90" cy="90" r="72" fill="rgba(255,255,255,.08)"/><circle cx="90" cy="90" r="38" fill="url(#orb)" stroke="#e9fbff" stroke-width="6"/><circle cx="90" cy="90" r="64" fill="none" stroke="#35d9ff" stroke-width="5" stroke-dasharray="12 8"/><rect x="22" y="75" width="34" height="22" rx="8" fill="#ff9f38" stroke="#fff" stroke-width="4"/><rect x="124" y="80" width="38" height="24" rx="8" fill="#36d8ff" stroke="#fff" stroke-width="4"/><rect x="72" y="24" width="36" height="24" rx="8" fill="#ff465f" stroke="#fff" stroke-width="4"/><path d="M38 138l18-13 20 10 22-16 30 12" fill="none" stroke="#ffd25a" stroke-width="7" stroke-linecap="round"/></svg>
+      <span class="btn">开始游戏 →</span>
+    </a>
   </section>
-  <div class="empty" id="empty">没找到这个游戏。换个关键词试试，比如“鱼”“卡牌”“射击”。</div>
+  <div class="empty" id="empty">没找到这个游戏。换个关键词试试，比如“鱼”“卡牌”“射击”“建造”。</div>
   <p class="meta">提示：如果 GitHub Pages 缓存未刷新，可以稍等后强制刷新页面。</p>
 </main>
 <script>
