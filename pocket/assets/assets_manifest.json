@@ -1,0 +1,363 @@
+﻿{
+    "version":  "0.1.0",
+    "builtAt":  "2026-11-13T13:08:49",
+    "style":  "pipeline/style_spec.json",
+    "assets":  [
+                   {
+                       "id":  "ani_yufahuo",
+                       "kind":  "effect",
+                       "source":  "C:\\Users\\admin\\Downloads\\miniworld\\miniworld\\ani_yufahuo.png",
+                       "layout":  "horizontal",
+                       "fps":  14,
+                       "canvas":  [
+                                      96,
+                                      96
+                                  ],
+                       "frameCount":  4,
+                       "frames":  [
+                                      {
+                                          "file":  "assets/effects/ani_yufahuo/frame_000.png",
+                                          "sourceBox":  {
+                                                            "x":  14,
+                                                            "y":  25,
+                                                            "w":  498,
+                                                            "h":  476,
+                                                            "count":  145171
+                                                        },
+                                          "draw":  {
+                                                       "drawX":  4,
+                                                       "drawY":  6,
+                                                       "drawW":  88,
+                                                       "drawH":  84,
+                                                       "scale":  0.17670682730923695
+                                                   }
+                                      },
+                                      {
+                                          "file":  "assets/effects/ani_yufahuo/frame_001.png",
+                                          "sourceBox":  {
+                                                            "x":  0,
+                                                            "y":  22,
+                                                            "w":  512,
+                                                            "h":  478,
+                                                            "count":  160774
+                                                        },
+                                          "draw":  {
+                                                       "drawX":  4,
+                                                       "drawY":  7,
+                                                       "drawW":  88,
+                                                       "drawH":  82,
+                                                       "scale":  0.171875
+                                                   }
+                                      },
+                                      {
+                                          "file":  "assets/effects/ani_yufahuo/frame_002.png",
+                                          "sourceBox":  {
+                                                            "x":  0,
+                                                            "y":  18,
+                                                            "w":  512,
+                                                            "h":  482,
+                                                            "count":  163916
+                                                        },
+                                          "draw":  {
+                                                       "drawX":  4,
+                                                       "drawY":  6,
+                                                       "drawW":  88,
+                                                       "drawH":  83,
+                                                       "scale":  0.171875
+                                                   }
+                                      },
+                                      {
+                                          "file":  "assets/effects/ani_yufahuo/frame_003.png",
+                                          "sourceBox":  {
+                                                            "x":  0,
+                                                            "y":  6,
+                                                            "w":  494,
+                                                            "h":  494,
+                                                            "count":  130746
+                                                        },
+                                          "draw":  {
+                                                       "drawX":  4,
+                                                       "drawY":  4,
+                                                       "drawW":  88,
+                                                       "drawH":  88,
+                                                       "scale":  0.17813765182186234
+                                                   }
+                                      }
+                                  ]
+                   },
+                   {
+                       "id":  "ani_suipian3",
+                       "kind":  "effect",
+                       "source":  "C:\\Users\\admin\\Downloads\\miniworld\\miniworld\\ani_suipian3.png",
+                       "layout":  "horizontal",
+                       "fps":  12,
+                       "canvas":  [
+                                      96,
+                                      96
+                                  ],
+                       "frameCount":  4,
+                       "frames":  [
+                                      {
+                                          "file":  "assets/effects/ani_suipian3/frame_000.png",
+                                          "sourceBox":  {
+                                                            "x":  2,
+                                                            "y":  5,
+                                                            "w":  510,
+                                                            "h":  506,
+                                                            "count":  122711
+                                                        },
+                                          "draw":  {
+                                                       "drawX":  4,
+                                                       "drawY":  4,
+                                                       "drawW":  88,
+                                                       "drawH":  87,
+                                                       "scale":  0.17254901960784313
+                                                   }
+                                      },
+                                      {
+                                          "file":  "assets/effects/ani_suipian3/frame_001.png",
+                                          "sourceBox":  {
+                                                            "x":  0,
+                                                            "y":  4,
+                                                            "w":  512,
+                                                            "h":  503,
+                                                            "count":  140536
+                                                        },
+                                          "draw":  {
+                                                       "drawX":  4,
+                                                       "drawY":  5,
+                                                       "drawW":  88,
+                                                       "drawH":  86,
+                                                       "scale":  0.171875
+                                                   }
+                                      },
+                                      {
+                                          "file":  "assets/effects/ani_suipian3/frame_002.png",
+                                          "sourceBox":  {
+                                                            "x":  0,
+                                                            "y":  2,
+                                                            "w":  512,
+                                                            "h":  506,
+                                                            "count":  136477
+                                                        },
+                                          "draw":  {
+                                                       "drawX":  4,
+                                                       "drawY":  4,
+                                                       "drawW":  88,
+                                                       "drawH":  87,
+                                                       "scale":  0.171875
+                                                   }
+                                      },
+                                      {
+                                          "file":  "assets/effects/ani_suipian3/frame_003.png",
+                                          "sourceBox":  {
+                                                            "x":  0,
+                                                            "y":  6,
+                                                            "w":  507,
+                                                            "h":  502,
+                                                            "count":  81504
+                                                        },
+                                          "draw":  {
+                                                       "drawX":  4,
+                                                       "drawY":  4,
+                                                       "drawW":  88,
+                                                       "drawH":  87,
+                                                       "scale":  0.17357001972386588
+                                                   }
+                                      }
+                                  ]
+                   },
+                   {
+                       "id":  "actct94_ani_btn_guang",
+                       "kind":  "ui",
+                       "source":  "C:\\Users\\admin\\Downloads\\miniworld\\miniworld\\actct94_ani_btn_guang.png",
+                       "layout":  "vertical",
+                       "fps":  10,
+                       "canvas":  [
+                                      96,
+                                      48
+                                  ],
+                       "frameCount":  2,
+                       "frames":  [
+                                      {
+                                          "file":  "assets/ui/actct94_ani_btn_guang/frame_000.png",
+                                          "sourceBox":  {
+                                                            "x":  3,
+                                                            "y":  4,
+                                                            "w":  1014,
+                                                            "h":  508,
+                                                            "count":  142023
+                                                        },
+                                          "draw":  {
+                                                       "drawX":  0,
+                                                       "drawY":  0,
+                                                       "drawW":  96,
+                                                       "drawH":  48,
+                                                       "scale":  0.094488188976377951
+                                                   }
+                                      },
+                                      {
+                                          "file":  "assets/ui/actct94_ani_btn_guang/frame_001.png",
+                                          "sourceBox":  {
+                                                            "x":  2,
+                                                            "y":  0,
+                                                            "w":  1020,
+                                                            "h":  511,
+                                                            "count":  216853
+                                                        },
+                                          "draw":  {
+                                                       "drawX":  0,
+                                                       "drawY":  0,
+                                                       "drawW":  96,
+                                                       "drawH":  48,
+                                                       "scale":  0.09393346379647749
+                                                   }
+                                      }
+                                  ]
+                   },
+                   {
+                       "id":  "0730_ani_shouye_men",
+                       "kind":  "ui",
+                       "source":  "C:\\Users\\admin\\Downloads\\miniworld\\miniworld\\0730_ani_shouye_men.png",
+                       "layout":  "vertical",
+                       "fps":  8,
+                       "canvas":  [
+                                      160,
+                                      80
+                                  ],
+                       "frameCount":  2,
+                       "frames":  [
+                                      {
+                                          "file":  "assets/ui/0730_ani_shouye_men/frame_000.png",
+                                          "sourceBox":  {
+                                                            "x":  3,
+                                                            "y":  1,
+                                                            "w":  1019,
+                                                            "h":  511,
+                                                            "count":  212949
+                                                        },
+                                          "draw":  {
+                                                       "drawX":  8,
+                                                       "drawY":  4,
+                                                       "drawW":  144,
+                                                       "drawH":  72,
+                                                       "scale":  0.14090019569471623
+                                                   }
+                                      },
+                                      {
+                                          "file":  "assets/ui/0730_ani_shouye_men/frame_001.png",
+                                          "sourceBox":  {
+                                                            "x":  1,
+                                                            "y":  0,
+                                                            "w":  1022,
+                                                            "h":  512,
+                                                            "count":  353647
+                                                        },
+                                          "draw":  {
+                                                       "drawX":  8,
+                                                       "drawY":  4,
+                                                       "drawW":  144,
+                                                       "drawH":  72,
+                                                       "scale":  0.140625
+                                                   }
+                                      }
+                                  ]
+                   },
+                   {
+                       "id":  "act_shanguang_ani",
+                       "kind":  "effect",
+                       "source":  "C:\\Users\\admin\\Downloads\\miniworld\\miniworld\\act_shanguang_ani.png",
+                       "layout":  "horizontal",
+                       "fps":  14,
+                       "canvas":  [
+                                      96,
+                                      96
+                                  ],
+                       "frameCount":  2,
+                       "frames":  [
+                                      {
+                                          "file":  "assets/effects/act_shanguang_ani/frame_000.png",
+                                          "sourceBox":  {
+                                                            "x":  9,
+                                                            "y":  20,
+                                                            "w":  1015,
+                                                            "h":  984,
+                                                            "count":  525152
+                                                        },
+                                          "draw":  {
+                                                       "drawX":  0,
+                                                       "drawY":  1,
+                                                       "drawW":  96,
+                                                       "drawH":  93,
+                                                       "scale":  0.094581280788177347
+                                                   }
+                                      },
+                                      {
+                                          "file":  "assets/effects/act_shanguang_ani/frame_001.png",
+                                          "sourceBox":  {
+                                                            "x":  0,
+                                                            "y":  19,
+                                                            "w":  1005,
+                                                            "h":  985,
+                                                            "count":  394401
+                                                        },
+                                          "draw":  {
+                                                       "drawX":  0,
+                                                       "drawY":  1,
+                                                       "drawW":  96,
+                                                       "drawH":  94,
+                                                       "scale":  0.0955223880597015
+                                                   }
+                                      }
+                                  ]
+                   },
+                   {
+                       "id":  "actct97_ani_qiuqiu",
+                       "kind":  "effect",
+                       "source":  "C:\\Users\\admin\\Downloads\\miniworld\\miniworld\\actct97_ani_qiuqiu.png",
+                       "layout":  "horizontal",
+                       "fps":  12,
+                       "canvas":  [
+                                      96,
+                                      96
+                                  ],
+                       "frameCount":  2,
+                       "frames":  [
+                                      {
+                                          "file":  "assets/effects/actct97_ani_qiuqiu/frame_000.png",
+                                          "sourceBox":  {
+                                                            "x":  3,
+                                                            "y":  4,
+                                                            "w":  509,
+                                                            "h":  505,
+                                                            "count":  183537
+                                                        },
+                                          "draw":  {
+                                                       "drawX":  4,
+                                                       "drawY":  4,
+                                                       "drawW":  88,
+                                                       "drawH":  87,
+                                                       "scale":  0.17288801571709234
+                                                   }
+                                      },
+                                      {
+                                          "file":  "assets/effects/actct97_ani_qiuqiu/frame_001.png",
+                                          "sourceBox":  {
+                                                            "x":  0,
+                                                            "y":  7,
+                                                            "w":  505,
+                                                            "h":  502,
+                                                            "count":  161995
+                                                        },
+                                          "draw":  {
+                                                       "drawX":  4,
+                                                       "drawY":  4,
+                                                       "drawW":  88,
+                                                       "drawH":  87,
+                                                       "scale":  0.17425742574257425
+                                                   }
+                                      }
+                                  ]
+                   }
+               ]
+}

@@ -1,0 +1,52 @@
+{
+  "project": "迷你方可梦",
+  "version": "0.1.0",
+  "goal": "16-bit GBA 风格像素捉宠 RPG，移动端优先，资源数据驱动。",
+  "pixelGrid": {
+    "baseTile": 16,
+    "renderTile": 32,
+    "characterCanvas": [32, 32],
+    "creatureCanvas": [64, 64],
+    "effectCanvas": [96, 96],
+    "uiIconCanvas": [32, 32]
+  },
+  "palette16": [
+    "#1b2b34",
+    "#2b5b46",
+    "#4b8f4a",
+    "#79c25a",
+    "#b8e06f",
+    "#f8e8a8",
+    "#d99b45",
+    "#8a5120",
+    "#412715",
+    "#6c6f7d",
+    "#9aa4a5",
+    "#d8edf0",
+    "#4aa3c7",
+    "#2d5b9a",
+    "#b84949",
+    "#fff7d6"
+  ],
+  "visualRules": {
+    "outline": "深棕 #412715 或近黑 #1b2b34，重要角色必须有 1-2px 描边。",
+    "shadow": "角色和生物脚下统一椭圆软阴影，颜色 rgba(0,0,0,.25)。",
+    "scaling": "所有像素图使用 nearest-neighbor，不使用模糊缩放。",
+    "ui": "面板米黄色底 + 深棕粗边 + 4px 下投影，按钮必须有按下态。",
+    "animation": "地图行走 4方向×4帧；普通 UI 动效 8-12fps；技能特效 12-16fps。"
+  },
+  "assetKinds": {
+    "tiles": "草地、高草、泥土路、水、树、岩石、花、栅栏、门、宝箱、告示牌、果树。",
+    "characters": "玩家、NPC，4方向4帧，32x32。",
+    "creatures": "方狼、野人、迅猛龙、企鹅等，64x64 或 96x96 战斗立绘。",
+    "effects": "技能命中、捕捉成功、捕捉失败、按钮闪光、遭遇切入。",
+    "ui": "按钮、面板、图标、提示框、队伍卡片、背包卡片。"
+  },
+  "pipelineRules": {
+    "source": "原始素材只放入 pocket/pipeline/source，不直接在游戏中引用。",
+    "trim": "所有 PNG 先按 alpha 裁透明边，记录原始 bounding box。",
+    "normalize": "输出到固定画布尺寸，居中对齐，保留透明背景。",
+    "manifest": "所有可用资源必须写入 assets_manifest.json，游戏只读 manifest。",
+    "naming": "frame_000.png 起，动画目录名使用 lower_snake_case。"
+  }
+}
