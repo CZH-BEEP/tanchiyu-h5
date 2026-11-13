@@ -1,0 +1,42 @@
+﻿[
+    {
+        "source":  "C:\\Users\\admin\\Downloads\\miniworld\\miniworld\\ani_yufahuo.png",
+        "name":  "ani_yufahuo",
+        "frameDir":  "effects/ani_yufahuo",
+        "frames":  4,
+        "frameWidth":  512,
+        "frameHeight":  512,
+        "layout":  "horizontal",
+        "suggestedFps":  12
+    },
+    {
+        "source":  "C:\\Users\\admin\\Downloads\\miniworld\\miniworld\\0730_ani_shouye_men.png",
+        "name":  "0730_ani_shouye_men",
+        "frameDir":  "effects/0730_ani_shouye_men",
+        "frames":  2,
+        "frameWidth":  1024,
+        "frameHeight":  512,
+        "layout":  "vertical",
+        "suggestedFps":  12
+    },
+    {
+        "source":  "C:\\Users\\admin\\Downloads\\miniworld\\miniworld\\actct94_ani_btn_guang.png",
+        "name":  "actct94_ani_btn_guang",
+        "frameDir":  "effects/actct94_ani_btn_guang",
+        "frames":  2,
+        "frameWidth":  1024,
+        "frameHeight":  512,
+        "layout":  "vertical",
+        "suggestedFps":  12
+    },
+    {
+        "source":  "C:\\Users\\admin\\Downloads\\miniworld\\miniworld\\ani_suipian3.png",
+        "name":  "ani_suipian3",
+        "frameDir":  "effects/ani_suipian3",
+        "frames":  4,
+        "frameWidth":  512,
+        "frameHeight":  512,
+        "layout":  "horizontal",
+        "suggestedFps":  12
+    }
+]
