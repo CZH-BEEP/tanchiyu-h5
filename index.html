@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#171225">
-<meta name="description" content="H5 小游戏合集：贪吃鱼、秘仪回响、星幕突围与轨道残骸站。">
+<meta name="description" content="H5 小游戏合集：贪吃鱼、秘仪回响、星幕突围与灾害生存岛 3D。">
 <title>小游戏合集</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
@@ -28,16 +28,16 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;background:rep
   <section class="hero">
     <div class="eyebrow">✦ CZH-BEEP H5 Arcade</div>
     <h1>小游戏合集 <span class="count" id="count">4 款</span></h1>
-    <p>这里保留原来的贪吃鱼，也加入卡牌、弹幕射击和轨道生存建造。手机和电脑都能直接打开玩。</p>
+    <p>这里保留原来的贪吃鱼，也加入卡牌、弹幕射击和 3D 灾害生存。手机和电脑都能直接打开玩。</p>
   </section>
   <section class="toolbar" aria-label="搜索和筛选">
-    <label class="search"><span>⌕</span><input id="search" type="search" placeholder="搜索：鱼、卡牌、弹幕、射击、建造、太空..." autocomplete="off"></label>
+    <label class="search"><span>⌕</span><input id="search" type="search" placeholder="搜索：鱼、卡牌、弹幕、射击、3D、灾害、生存..." autocomplete="off"></label>
     <div class="filters" id="filters">
       <button class="filter active" type="button" data-filter="all">全部</button>
       <button class="filter" type="button" data-filter="动作">动作</button>
       <button class="filter" type="button" data-filter="卡牌">卡牌</button>
       <button class="filter" type="button" data-filter="射击">射击</button>
-      <button class="filter" type="button" data-filter="建造">建造</button>
+      <button class="filter" type="button" data-filter="生存">生存</button>
     </div>
   </section>
   <section class="grid" id="gameGrid" aria-label="游戏列表">
@@ -62,15 +62,15 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;background:rep
       <svg class="art" viewBox="0 0 180 180" aria-hidden="true"><circle cx="90" cy="90" r="72" fill="rgba(255,255,255,.12)"/><path d="M90 22l22 78 39 22-41 8-20 34-20-34-41-8 39-22z" fill="#fff" opacity=".9"/><path d="M90 42l13 55 24 14-28 4-9 22-9-22-28-4 24-14z" fill="#ff6fb1"/><circle cx="47" cy="52" r="5" fill="#f7d99b"/><circle cx="138" cy="66" r="4" fill="#9bf6ff"/><circle cx="130" cy="135" r="6" fill="#f7d99b"/></svg>
       <span class="btn">开始游戏 →</span>
     </a>
-    <a class="game orbit" href="./orbit/" data-tags="建造 生存 太空 轨道 残骸 拾荒 加工 扩张 氧气 水 电力 合金 食物 信用点 乘员 航线">
-      <span class="tag">轨道建造</span>
-      <h2>轨 道 残 骸 站</h2>
-      <p>在地球轨道碎片带拾荒、建造功能舱、加工资源、管理乘员状态，并推进 3 章航线。</p>
-      <svg class="art" viewBox="0 0 180 180" aria-hidden="true"><defs><radialGradient id="orb" cx="50%" cy="50%" r="60%"><stop stop-color="#35d9ff"/><stop offset="1" stop-color="#102337"/></radialGradient></defs><circle cx="90" cy="90" r="72" fill="rgba(255,255,255,.08)"/><circle cx="90" cy="90" r="38" fill="url(#orb)" stroke="#e9fbff" stroke-width="6"/><circle cx="90" cy="90" r="64" fill="none" stroke="#35d9ff" stroke-width="5" stroke-dasharray="12 8"/><rect x="22" y="75" width="34" height="22" rx="8" fill="#ff9f38" stroke="#fff" stroke-width="4"/><rect x="124" y="80" width="38" height="24" rx="8" fill="#36d8ff" stroke="#fff" stroke-width="4"/><rect x="72" y="24" width="36" height="24" rx="8" fill="#ff465f" stroke="#fff" stroke-width="4"/><path d="M38 138l18-13 20 10 22-16 30 12" fill="none" stroke="#ffd25a" stroke-width="7" stroke-linecap="round"/></svg>
+    <a class="game orbit" href="./orbit/" data-tags="3D 生存 灾害 Roblox 海啸 雷暴 火灾 龙卷风 洪水 流星雨 酸雨 观战塔 跑酷 方块">
+      <span class="tag">3D 生存</span>
+      <h2>灾 害 生 存 岛</h2>
+      <p>方块风 3D 生存：从观战塔传送到随机海岛，在隐藏灾害揭晓前寻找高地和掩体。</p>
+      <svg class="art" viewBox="0 0 180 180" aria-hidden="true"><circle cx="90" cy="92" r="72" fill="rgba(255,255,255,.1)"/><rect x="38" y="94" width="104" height="34" rx="6" fill="#66b95a" stroke="#2a1f1b" stroke-width="5"/><rect x="60" y="58" width="38" height="40" fill="#f7e7b8" stroke="#2a1f1b" stroke-width="5"/><path d="M54 58h50L79 36z" fill="#e55d45" stroke="#2a1f1b" stroke-width="5"/><rect x="106" y="48" width="26" height="78" fill="#7eb8ff" stroke="#2a1f1b" stroke-width="5"/><path d="M28 33c18 9 24 24 13 44 19-7 36 2 42 22-2-35-18-56-55-66z" fill="#d9eef8" stroke="#2a1f1b" stroke-width="5"/><path d="M132 28l-12 34h18l-16 42 36-53h-19l13-23z" fill="#ffd25a" stroke="#2a1f1b" stroke-width="5"/></svg>
       <span class="btn">开始游戏 →</span>
     </a>
   </section>
-  <div class="empty" id="empty">没找到这个游戏。换个关键词试试，比如“鱼”“卡牌”“射击”“建造”。</div>
+  <div class="empty" id="empty">没找到这个游戏。换个关键词试试，比如“鱼”“卡牌”“射击”“灾害”。</div>
   <p class="meta">提示：如果 GitHub Pages 缓存未刷新，可以稍等后强制刷新页面。</p>
 </main>
 <script>
