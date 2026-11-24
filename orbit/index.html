@@ -146,7 +146,14 @@ const ISLAND_H  = 22;        // 主台地半径（44x44）
 const OUTER_H   = 28;        // 下层台地半径（56x56）
 const GRAV      = 15;
 const JUMP_V    = 10.5;
-const PREP_TIME = 25;        // 准备时间（秒）
+const PREP_TIME = 30;        // 准备时间（原版规格推理值30s）
+const LOBBY_TIME = 10;       // 大厅等待时间（s）
+const RESULT_TIME = 5;       // 结算等待时间（s）
+const WARN_TIME = 15;        // 灾害警告显示时长（原版 warning_display_seconds=15）
+const WALK_SPEED = 7.2;      // 步行速度（原版 walk_speed=16 stud/s，换算约7.2m/s）
+const RUN_SPEED  = 11.5;     // 冲刺速度
+const THUNDER_INTERVAL = 2.0; // 雷击间隔（原版 strike_interval_seconds=2）
+const METEOR_INTERVAL  = 0.5; // 陨石生成间隔（原版 spawn_interval_seconds=0.5）
 const PLAYER_R  = 0.42;
 const PLAYER_H  = 1.85;
 
@@ -666,7 +673,7 @@ function die(reason){
   player.group.rotation.x = -Math.PI/2;
   player.group.position.y += 0.5;
   showCenter('你没能幸存', reason || '下一回合再试试');
-  setTip('你已死亡，进入观战视角。下一回合会自动重生。');
+  setTip('你已死亡，进入观战视角。下一回合自动重生。');
   flashRed();
   playSfx('death');
 }
@@ -744,7 +751,7 @@ function stormUpdate(s, dt){
 
   s.next -= dt;
   if (s.next <= 0 && s.strikes.length < 5){
-    s.next = rnd(0.42, 0.78);
+    s.next = THUNDER_INTERVAL + rnd(-0.3, 0.3);
     let x, z;
     if (Math.random() < 0.68){
       const a = rnd(0, Math.PI*2), r = rnd(3.5, 11);
@@ -785,7 +792,7 @@ function strikeHit(x, z){
   playSfx('thunder');
 
   const d = Math.hypot(player.pos.x - x, player.pos.z - z);
-  if (!player.dead && d < 3.5) damage(38);
+  if (!player.dead && d < 3.5) die('被雷电直击');  // direct_contact_lethal
 
   for (const n of npcs){
     if (n.dead) continue;
@@ -948,7 +955,7 @@ function makeFirePoint(o){
 }
 
 function fireInit(){
-  // 起火点：优先选树或房子，且离玩家不要太远
+  // does_spread_to_grass=false（原版规格）：草地不加入 flammables，只有树和房屋可燃
   let best = flammables[0], bestD = 1e9;
   for (const f of flammables){
     const d = Math.hypot(f.x - player.pos.x, f.z - player.pos.z);
@@ -1056,7 +1063,7 @@ function meteorUpdate(s,dt){
   s.next-=dt;
   const maxRocks = SETTINGS.quality === 'low' ? 12 : 22;
   if(s.next<=0 && s.rocks.length < maxRocks){
-    s.next=rnd(.28,.55);
+    s.next=METEOR_INTERVAL;
     const x=rnd(-24,24),z=rnd(-24,24);
     const r=meteorPool.get();
     scene.remove(r);
@@ -1075,6 +1082,7 @@ function meteorUpdate(s,dt){
     r.rotation.x+=dt*5;
     r.rotation.z+=dt*4;
     if(r.position.y<=.45){
+      // direct_contact_lethal — 陨石落地判定区域内致死
       strikeHit(u.tx,u.tz);
       s.group.remove(r);
       meteorPool.release(r);
@@ -1104,13 +1112,13 @@ const DISASTER_TYPES = ['storm','tsunami','fire','tornado','flood','meteor','aci
 const DISASTER_NAME = {storm:'雷暴', tsunami:'海啸', fire:'火灾', tornado:'龙卷风', flood:'洪水', meteor:'流星雨', acid:'酸雨'};
 
 const DISASTER_TIPS = {
-  storm:'雷暴来袭：离高处和开阔地远一点，别站在屋顶最高点。',
-  tsunami:'海啸来袭：马上往屋顶和高地跑，低处会被浪卷走。',
-  fire:'火灾蔓延：远离燃烧的树和房屋，别被困在角落。',
-  tornado:'龙卷风接近：远离旋转风柱，躲到结实建筑背后。',
-  flood:'洪水上涨：立刻去高地或屋顶，完全淹没会持续掉血。',
-  meteor:'流星雨来袭：观察地面红圈，别停在落点附近。',
-  acid:'酸雨降临：找屋檐或室内躲避，露天会持续受伤。'
+  storm:'⚡ 雷暴 — 避开高处和空旷地带！',
+  tsunami:'🌊 海啸 — 马上跑向高地！',
+  fire:'🔥 火灾 — 远离火源！',
+  tornado:'🌪 龙卷风 — 远离风柱路径！',
+  flood:'💧 洪水 — 寻找高地！',
+  meteor:'☄️ 流星雨 — 注意天空，找掩体！',
+  acid:'🌧 酸雨 — 躲进室内！'
 };
 
 function startDisaster(type){
@@ -1315,11 +1323,11 @@ function updateGame(dt){
   G.t += dt;
 
   if (G.state === 'lobby'){
-    if (G.t > 5) setState('prep');
+    if (G.t > LOBBY_TIME) setState('prep');
   }
   else if (G.state === 'prep'){
     const remain = PREP_TIME - G.t;
-    if (!G.warned && remain <= 4){
+    if (!G.warned && remain <= WARN_TIME){
       G.warned = true;
       showBanner('灾 害 预 警', 1300);
       setTip('警报响起：灾害即将开始，但类型仍然未知，立刻确认逃生路线。');
@@ -1343,7 +1351,7 @@ function updateGame(dt){
     }
   }
   else if (G.state === 'result'){
-    if (G.t > 5) setState('lobby');
+    if (G.t > RESULT_TIME) setState('lobby');
   }
 }
 
@@ -1364,7 +1372,7 @@ function updatePlayer(dt){
   if (keys['KeyD']) ix += 1;
 
   const running = keys['ShiftLeft'] || keys['ShiftRight'] || touchMove.run;
-  const speed = running ? 9.4 : 6.4;
+  const speed = running ? RUN_SPEED : WALK_SPEED;
 
   const fwd   = new THREE.Vector3(-Math.sin(camYaw), 0, -Math.cos(camYaw));
   const right = new THREE.Vector3( Math.cos(camYaw), 0, -Math.sin(camYaw));
@@ -1574,13 +1582,13 @@ function updateHUD(dt){
   elRed.style.opacity = String(player.hurtT > 0 ? Math.min(0.45, player.hurtT * 1.8) : 0);
 
   let phase = '—', remain = 0;
-  if (G.state === 'lobby')        { phase = '下一回合'; remain = Math.max(0, 5 - G.t); }
+  if (G.state === 'lobby')        { phase = '下一回合'; remain = Math.max(0, LOBBY_TIME - G.t); }
   else if (G.state === 'prep')    { phase = '准备时间'; remain = Math.max(0, PREP_TIME - G.t); }
   else if (G.state === 'disaster'){
     phase = DISASTER_NAME[G.disasterType] || '灾害';
     remain = G.instance ? Math.max(0, G.instance.dur - G.instance.t) : 0;
   }
-  else if (G.state === 'result')  { phase = '回合结束'; remain = Math.max(0, 5 - G.t); }
+  else if (G.state === 'result')  { phase = '回合结束'; remain = Math.max(0, RESULT_TIME - G.t); }
 
   elPhase.textContent = phase;
   const ceilRemain = Math.ceil(remain);
