@@ -1106,10 +1106,160 @@ function acidUpdate(s,dt){
 }
 
 /* ============================================================
+   灾害：雪崩 / 暴风雪 / 病毒 / 地震 / 沙尘暴 / 火山爆发
+   ============================================================ */
+function avalancheInit(){
+  scene.background.setHex(0xc8d4de);scene.fog.color.setHex(0xd0dde6);scene.fog.near=10;scene.fog.far=70;sun.intensity=.55;hemi.intensity=.7;
+  const group=new THREE.Group();scene.add(group);
+  return{kind:'avalanche',t:0,dur:14,group,blocks:[],next:.15,dir:Math.random()<.5?'x':'z'};
+}
+function avalancheUpdate(s,dt){
+  s.next-=dt;
+  if(s.next<=0&&s.blocks.length<28){
+    s.next=.3;
+    const geo=new THREE.BoxGeometry(rnd(1.2,2.5),rnd(1,2),rnd(1.2,2.5));
+    const mesh=new THREE.Mesh(geo,mat(0xd8e8f0));
+    const spd=rnd(14,22);
+    let sx,sz,vx,vz;
+    if(s.dir==='x'){sx=rnd(-18,18);sz=-28;vx=0;vz=spd;}
+    else{sx=-28;sz=rnd(-18,18);vx=spd;vz=0;}
+    mesh.position.set(sx,rnd(2,10),sz);
+    mesh.userData={vx,vz,life:4};
+    s.group.add(mesh);
+    s.blocks.push(mesh);
+  }
+  for(let i=s.blocks.length-1;i>=0;i--){
+    const b=s.blocks[i],u=b.userData;
+    b.position.x+=u.vx*dt;b.position.z+=u.vz*dt;
+    b.position.y=Math.max(.6,b.position.y-9*dt);
+    u.life-=dt;
+    const d=Math.hypot(player.pos.x-b.position.x,player.pos.z-b.position.z);
+    if(!player.dead&&d<2.5){damage(60*dt);player.vel.x+=u.vx*.03;player.vel.z+=u.vz*.03;}
+    if(u.life<=0||Math.abs(b.position.x)>32||Math.abs(b.position.z)>32){s.group.remove(b);s.blocks.splice(i,1);}
+  }
+}
+function blizzardInit(){
+  scene.background.setHex(0xe8edf2);scene.fog.color.setHex(0xdde3ea);scene.fog.near=5;scene.fog.far=55;sun.intensity=.45;hemi.intensity=.65;
+  const group=new THREE.Group(),N=280,geo=new THREE.BoxGeometry(.07,.07,.07),matr=new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:.82}),snow=new THREE.InstancedMesh(geo,matr,N),flakes=[],dummy=new THREE.Object3D();
+  for(let i=0;i<N;i++)flakes.push({x:rnd(-45,45),y:rnd(0,38),z:rnd(-45,45),v:rnd(4,9),dx:rnd(-2,2)});
+  group.add(snow);scene.add(group);
+  return{kind:'blizzard',t:0,dur:14,group,snow,flakes,dummy};
+}
+function blizzardUpdate(s,dt){
+  for(let i=0;i<s.flakes.length;i++){const f=s.flakes[i];f.y-=f.v*dt;f.x+=f.dx*dt;if(f.y<-2){f.y+=40;f.x=rnd(-45,45);f.z=rnd(-45,45);}s.dummy.position.set(player.pos.x+f.x,f.y,player.pos.z+f.z);s.dummy.updateMatrix();s.snow.setMatrixAt(i,s.dummy.matrix);}s.snow.instanceMatrix.needsUpdate=true;
+  if(!player.dead&&!hasRoof())damage(8*dt);
+}
+function virusInit(){
+  scene.background.setHex(0x5a4a6b);scene.fog.color.setHex(0x6b547e);scene.fog.near=20;scene.fog.far=120;sun.intensity=.5;hemi.intensity=.55;
+  const group=new THREE.Group();scene.add(group);
+  const infIdx=Math.floor(Math.random()*npcs.length);
+  const infLight=new THREE.PointLight(0xaa44ff,1.6,8);npcs[infIdx].group.add(infLight);
+  return{kind:'virus',t:0,dur:13,group,infIdx,infLight,orbs:[],nextOrb:.4};
+}
+function virusUpdate(s,dt){
+  const inf=npcs[s.infIdx];
+  s.nextOrb-=dt;
+  if(s.nextOrb<=0&&!inf.dead){
+    s.nextOrb=.4;
+    const geo=new THREE.SphereGeometry(.32,6,6);
+    const orb=new THREE.Mesh(geo,new THREE.MeshBasicMaterial({color:0xcc44ff,transparent:true,opacity:.7}));
+    orb.position.copy(inf.pos);orb.userData={life:2};
+    s.group.add(orb);s.orbs.push(orb);
+  }
+  for(let i=s.orbs.length-1;i>=0;i--){
+    const o=s.orbs[i];o.userData.life-=dt;
+    if(!player.dead&&o.position.distanceTo(player.pos)<2.5)damage(6*dt);
+    for(const n of npcs){if(!n.dead&&n!==inf&&o.position.distanceTo(n.pos)<2.5){n.hp-=6*dt;if(n.hp<=0)npcDie(n);}}
+    if(o.userData.life<=0){s.group.remove(o);s.orbs.splice(i,1);}
+  }
+}
+function earthquakeInit(){
+  scene.background.setHex(0x9e9070);scene.fog.color.setHex(0xa89878);scene.fog.near=25;scene.fog.far=160;sun.intensity=.72;hemi.intensity=.75;
+  const group=new THREE.Group();scene.add(group);
+  return{kind:'earthquake',t:0,dur:13,group,shakeT:0,nextPush:.6};
+}
+function earthquakeUpdate(s,dt){
+  s.shakeT+=dt;
+  camYaw+=Math.sin(s.shakeT*18)*.008;
+  s.nextPush-=dt;
+  if(s.nextPush<=0){
+    s.nextPush=.6;
+    if(!player.dead){player.vel.x+=rnd(-8,8);player.vel.z+=rnd(-8,8);}
+  }
+  if(!player.dead){
+    const px=player.pos.x,pz=player.pos.z,py=player.pos.y+PLAYER_H*.5;
+    const near=colliders.some(c=>px>c.minX-1.2&&px<c.maxX+1.2&&pz>c.minZ-1.2&&pz<c.maxZ+1.2&&py<c.maxY+2);
+    if(near)damage(12*dt);
+  }
+}
+function sandstormInit(){
+  scene.background.setHex(0xb89040);scene.fog.color.setHex(0xc09848);scene.fog.near=5;scene.fog.far=45;sun.intensity=.48;hemi.intensity=.55;
+  const group=new THREE.Group(),N=400,geo=new THREE.BoxGeometry(.055,.055,.055),matr=new THREE.MeshBasicMaterial({color:0xe8b84a,transparent:true,opacity:.7}),dust=new THREE.InstancedMesh(geo,matr,N),particles=[],dummy=new THREE.Object3D();
+  for(let i=0;i<N;i++)particles.push({x:rnd(-50,50),y:rnd(.5,16),z:rnd(-50,50),v:rnd(12,24)});
+  group.add(dust);
+  const chunks=[],chunkGeo=new THREE.BoxGeometry(.6,.6,.6);
+  for(let i=0;i<6;i++){const c=new THREE.Mesh(chunkGeo,mat(0xa07838));c.position.set(rnd(-25,25),rnd(1,4),rnd(-25,25));c.userData={vx:rnd(8,18),vy:rnd(2,5),vz:rnd(-3,3),life:rnd(2,4)};group.add(c);chunks.push(c);}
+  scene.add(group);
+  return{kind:'sandstorm',t:0,dur:13,group,dust,particles,dummy,chunks,nextChunk:2};
+}
+function sandstormUpdate(s,dt){
+  for(let i=0;i<s.particles.length;i++){const p=s.particles[i];p.x-=p.v*dt;p.y+=Math.sin(p.x*.3)*.4*dt;if(p.x<-50){p.x+=100;p.y=rnd(.5,16);p.z=rnd(-50,50);}s.dummy.position.set(player.pos.x+p.x,p.y,player.pos.z+p.z);s.dummy.updateMatrix();s.dust.setMatrixAt(i,s.dummy.matrix);}s.dust.instanceMatrix.needsUpdate=true;
+  if(!player.dead)damage((hasRoof()?2:4)*dt);
+  for(let i=s.chunks.length-1;i>=0;i--){
+    const c=s.chunks[i],u=c.userData;
+    c.position.x+=u.vx*dt;c.position.y+=u.vy*dt-4.9*dt*dt;u.vy-=9.8*dt;c.position.z+=u.vz*dt;u.life-=dt;
+    const d=Math.hypot(player.pos.x-c.position.x,player.pos.z-c.position.z);
+    if(!player.dead&&d<1.2&&Math.abs(player.pos.y-c.position.y)<1.5)damage(20);
+    if(u.life<=0||c.position.y<-5){c.position.set(rnd(-25,25),rnd(1,4),rnd(-25,25));u.vx=rnd(8,18);u.vy=rnd(2,5);u.vz=rnd(-3,3);u.life=rnd(2,4);}
+  }
+}
+let _volcanoMesh = null;
+function volcanoInit(){
+  scene.background.setHex(0x9e4820);scene.fog.color.setHex(0xa85028);scene.fog.near=18;scene.fog.far=140;sun.intensity=.6;sun.color.setHex(0xff9933);hemi.intensity=.5;
+  if(!_volcanoMesh){
+    const coneGeo=new THREE.ConeGeometry(7,18,12);
+    _volcanoMesh=new THREE.Mesh(coneGeo,mat(0x3d2a1a));
+    _volcanoMesh.position.set(18,9,18);
+    scene.add(_volcanoMesh);
+  }
+  _volcanoMesh.visible=true;
+  const group=new THREE.Group();scene.add(group);
+  return{kind:'volcano',t:0,dur:14,group,lavas:[],nextLava:.4};
+}
+function volcanoUpdate(s,dt){
+  s.nextLava-=dt;
+  if(s.nextLava<=0&&s.lavas.length<18){
+    s.nextLava=.4;
+    const geo=new THREE.SphereGeometry(rnd(.4,.75),6,6);
+    const lava=new THREE.Mesh(geo,new THREE.MeshBasicMaterial({color:0xff6600}));
+    lava.position.set(18,18,18);
+    const angle=rnd(0,Math.PI*2),dist=rnd(4,22);
+    lava.userData={tx:18+Math.cos(angle)*dist,tz:18+Math.sin(angle)*dist,vy:rnd(12,18),life:6,cooled:false};
+    s.group.add(lava);s.lavas.push(lava);
+  }
+  for(let i=s.lavas.length-1;i>=0;i--){
+    const l=s.lavas[i],u=l.userData;
+    if(!u.landed){
+      u.vy-=14*dt;l.position.y+=u.vy*dt;
+      l.position.x+=(u.tx-l.position.x)*dt*2.2;l.position.z+=(u.tz-l.position.z)*dt*2.2;
+      if(l.position.y<=.5){l.position.y=.5;l.position.x=u.tx;l.position.z=u.tz;u.landed=true;}
+    } else {
+      u.life-=dt;
+      if(u.life<1.5&&!u.cooled){u.cooled=true;l.material.color.setHex(0x1a1a1a);}
+      if(u.life<=0){s.group.remove(l);s.lavas.splice(i,1);continue;}
+    }
+    if(!player.dead){
+      const d=Math.hypot(player.pos.x-l.position.x,player.pos.z-l.position.z);
+      if(d<2&&!u.cooled)damage(100*dt);
+    }
+  }
+}
+
+/* ============================================================
    灾害调度
    ============================================================ */
-const DISASTER_TYPES = ['storm','tsunami','fire','tornado','flood','meteor','acid'];
-const DISASTER_NAME = {storm:'雷暴', tsunami:'海啸', fire:'火灾', tornado:'龙卷风', flood:'洪水', meteor:'流星雨', acid:'酸雨'};
+const DISASTER_TYPES = ['storm','tsunami','fire','tornado','flood','meteor','acid','avalanche','blizzard','virus','earthquake','sandstorm','volcano'];
+const DISASTER_NAME = {storm:'雷暴', tsunami:'海啸', fire:'火灾', tornado:'龙卷风', flood:'洪水', meteor:'流星雨', acid:'酸雨', avalanche:'雪崩', blizzard:'暴风雪', virus:'病毒', earthquake:'地震', sandstorm:'沙尘暴', volcano:'火山爆发'};
 
 const DISASTER_TIPS = {
   storm:'⚡ 雷暴 — 避开高处和空旷地带！',
@@ -1118,7 +1268,13 @@ const DISASTER_TIPS = {
   tornado:'🌪 龙卷风 — 远离风柱路径！',
   flood:'💧 洪水 — 寻找高地！',
   meteor:'☄️ 流星雨 — 注意天空，找掩体！',
-  acid:'🌧 酸雨 — 躲进室内！'
+  acid:'🌧 酸雨 — 躲进室内！',
+  avalanche:'🏔 雪崩 — 避开雪流路径！',
+  blizzard:'❄️ 暴风雪 — 找掩体保暖！',
+  virus:'🦠 病毒 — 避开人群！',
+  earthquake:'🌍 地震 — 离建筑远一点！',
+  sandstorm:'🌪 沙尘暴 — 躲避飞来的碎块！',
+  volcano:'🌋 火山爆发 — 远离火山！'
 };
 
 function startDisaster(type){
@@ -1129,6 +1285,12 @@ function startDisaster(type){
   if (type === 'flood')   G.instance = floodInit();
   if (type === 'meteor')  G.instance = meteorInit();
   if (type === 'acid')    G.instance = acidInit();
+  if (type === 'avalanche')  G.instance = avalancheInit();
+  if (type === 'blizzard')   G.instance = blizzardInit();
+  if (type === 'virus')      G.instance = virusInit();
+  if (type === 'earthquake') G.instance = earthquakeInit();
+  if (type === 'sandstorm')  G.instance = sandstormInit();
+  if (type === 'volcano')    G.instance = volcanoInit();
   setTip(DISASTER_TIPS[type] || '灾害开始：保持移动，寻找掩体。');
 }
 
@@ -1136,6 +1298,8 @@ function clearDisaster(){
   if (G.instance && G.instance.rocks) G.instance.rocks.forEach(r=>meteorPool.release(r));
   if (G.instance && G.instance.strikes) G.instance.strikes.forEach(st=>st.ring && ringPool.release(st.ring));
   if (G.instance && G.instance.pts) G.instance.pts.forEach(p=>{ if (p.src) p.src._burning = false; firePool.release(p.g); });
+  if (G.instance && G.instance.kind === 'virus' && G.instance.infLight) npcs[G.instance.infIdx].group.remove(G.instance.infLight);
+  if (G.instance && G.instance.kind === 'volcano' && _volcanoMesh) _volcanoMesh.visible = false;
   if (G.instance && G.instance.group) scene.remove(G.instance.group);
   G.instance = null;
   clearTransientEffects();
@@ -1161,6 +1325,12 @@ function updateDisaster(dt){
   if (s.kind === 'flood')   floodUpdate(s, dt);
   if (s.kind === 'meteor')  meteorUpdate(s, dt);
   if (s.kind === 'acid')    acidUpdate(s, dt);
+  if (s.kind === 'avalanche')  avalancheUpdate(s, dt);
+  if (s.kind === 'blizzard')   blizzardUpdate(s, dt);
+  if (s.kind === 'virus')      virusUpdate(s, dt);
+  if (s.kind === 'earthquake') earthquakeUpdate(s, dt);
+  if (s.kind === 'sandstorm')  sandstormUpdate(s, dt);
+  if (s.kind === 'volcano')    volcanoUpdate(s, dt);
 }
 
 /* ============================================================
