@@ -63,14 +63,42 @@
     transition:opacity .09s;z-index:5}
   #flashRed{position:fixed;inset:0;pointer-events:none;z-index:6;
     box-shadow:inset 0 0 90px 18px rgba(210,30,30,.85);opacity:0}
-  #start{position:fixed;inset:0;z-index:20;cursor:pointer;display:flex;
+  #start{position:fixed;inset:0;z-index:20;display:flex;
     flex-direction:column;align-items:center;justify-content:center;color:#fff;
-    background:radial-gradient(circle at 50% 38%,#16405c,#06101a 72%)}
-  #start h1{font-size:clamp(24px,4vw,42px);letter-spacing:3px;text-align:center}
-  #start p{margin-top:16px;opacity:.72;font-size:13px;line-height:2.1;text-align:center}
-  #start .btn{margin-top:30px;padding:13px 44px;border:1px solid rgba(255,255,255,.32);
-    border-radius:40px;font-size:15px;letter-spacing:3px;background:rgba(255,255,255,.07)}
-  #start .note{margin-top:26px;font-size:11px;opacity:.42;line-height:1.9}
+    background:rgba(4,12,22,.52);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+  #start h1{font-size:clamp(28px,5vw,52px);font-weight:900;letter-spacing:4px;text-align:center;
+    text-shadow:0 2px 24px rgba(80,180,255,.55),0 4px 8px rgba(0,0,0,.7)}
+  #start .sub{margin-top:14px;opacity:.7;font-size:13px;line-height:2;text-align:center;letter-spacing:.5px}
+  #startBtns{margin-top:40px;display:flex;flex-direction:column;align-items:center;gap:14px;width:100%;max-width:280px}
+  #startBtns .sbtn{width:100%;padding:15px 0;border-radius:14px;font-size:16px;font-weight:900;
+    letter-spacing:3px;cursor:pointer;border:1px solid rgba(255,255,255,.28);transition:transform .12s,box-shadow .12s}
+  #startBtns .sbtn:active{transform:scale(.96)}
+  #startBtns .sbtn-solo{background:linear-gradient(135deg,#1e6fa8,#0d3a5c);
+    box-shadow:0 8px 28px rgba(30,111,168,.45)}
+  #startBtns .sbtn-solo:hover{box-shadow:0 10px 36px rgba(30,111,168,.7)}
+  #startBtns .sbtn-team{background:rgba(255,255,255,.08);
+    box-shadow:0 4px 16px rgba(0,0,0,.3)}
+  #startBtns .sbtn-team:hover{background:rgba(255,255,255,.14);box-shadow:0 6px 22px rgba(0,0,0,.4)}
+  #start .note{margin-top:28px;font-size:11px;opacity:.38;line-height:1.9;text-align:center}
+  /* 组队邀请码面板 */
+  #teamPanel{position:fixed;inset:0;z-index:25;display:none;align-items:center;justify-content:center;
+    background:rgba(2,8,16,.72);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+  #teamPanel .tpanel{width:min(360px,calc(100% - 32px));padding:28px 24px;border-radius:22px;
+    background:linear-gradient(180deg,rgba(14,35,55,.97),rgba(6,16,28,.98));
+    border:1px solid rgba(255,255,255,.2);box-shadow:0 32px 80px rgba(0,0,0,.5);color:#fff;text-align:center}
+  #teamPanel h3{font-size:18px;font-weight:900;letter-spacing:.12em;margin-bottom:8px}
+  #teamPanel .tdesc{font-size:12px;opacity:.6;margin-bottom:20px;line-height:1.7}
+  #teamCode{font-size:28px;font-weight:900;letter-spacing:8px;color:#62d4ff;
+    background:rgba(255,255,255,.07);border-radius:10px;padding:12px 20px;
+    display:inline-block;margin-bottom:8px;font-variant-numeric:tabular-nums}
+  #teamCodeHint{font-size:11px;opacity:.45;margin-bottom:20px}
+  #teamPanel .tbtns{display:flex;gap:10px;justify-content:center}
+  #teamPanel .tbtns button{flex:1;padding:12px 0;border-radius:12px;border:1px solid rgba(255,255,255,.25);
+    background:rgba(255,255,255,.1);color:#fff;font-size:14px;font-weight:900;cursor:pointer;
+    letter-spacing:1px;transition:background .12s}
+  #teamPanel .tbtns button:hover{background:rgba(255,255,255,.18)}
+  #teamPanel .tbtns .tstart{background:linear-gradient(135deg,#1e6fa8,#0d3a5c);border:none;
+    box-shadow:0 4px 16px rgba(30,111,168,.4)}
   #loading{position:fixed;inset:0;z-index:30;display:none;align-items:center;
     justify-content:center;color:#9fb;background:#06101a;font-size:13px;letter-spacing:2px}
   #hud:before{content:"";position:absolute;left:14px;right:155px;top:12px;height:62px;border-radius:22px;background:linear-gradient(180deg,rgba(8,20,34,.64),rgba(8,20,34,.18));border:1px solid rgba(255,255,255,.16);box-shadow:0 16px 44px rgba(0,0,0,.28);z-index:-1}
@@ -166,9 +194,26 @@
 
 <div id="start">
   <h1>灾害生存岛 3D</h1>
-  <p>出生塔观战 · 随机地图 · 随机灾害 · 活到最后</p>
-  <div class="btn">点 击 开 始</div>
+  <div class="sub">出生塔观战 · 随机地图 · 随机灾害 · 活到最后</div>
+  <div id="startBtns">
+    <button class="sbtn sbtn-solo" id="btnSolo" type="button">⚔ 单 人 游 玩</button>
+    <button class="sbtn sbtn-team" id="btnTeam" type="button">👥 组 队 游 玩</button>
+  </div>
   <div class="note">灾害开始前不会告诉你是什么<br>先观察地形：高地、屋顶和掩体都可能救命</div>
+</div>
+
+<!-- 组队邀请码面板 -->
+<div id="teamPanel">
+  <div class="tpanel">
+    <h3>🏝 邀请好友同服</h3>
+    <div class="tdesc">将以下房间码发给朋友<br>大家进入同一局游戏后即可一起游玩</div>
+    <div id="teamCode">------</div>
+    <div id="teamCodeHint">点击复制链接</div>
+    <div class="tbtns">
+      <button id="btnTeamBack" type="button">返 回</button>
+      <button class="tstart" id="btnTeamStart" type="button">开 始 游 戏</button>
+    </div>
+  </div>
 </div>
 
 <div id="loading">正在加载三维引擎…</div>
@@ -2531,10 +2576,15 @@ function loop(now){
 }
 
 const startEl = document.getElementById('start');
-startEl.addEventListener('click', () => {
+const teamPanelEl = document.getElementById('teamPanel');
+const teamCodeEl = document.getElementById('teamCode');
+const teamCodeHintEl = document.getElementById('teamCodeHint');
+
+function doStartGame() {
   ensureAudio();
   playSfx('start');
   startEl.style.display = 'none';
+  teamPanelEl.style.display = 'none';
   started = true;
   setState('lobby');
   if (isTouchDevice) {
@@ -2547,6 +2597,40 @@ startEl.addEventListener('click', () => {
   if (!isTouchDevice && renderer.domElement.requestPointerLock) {
     try { renderer.domElement.requestPointerLock(); } catch(e){}
   }
+}
+
+document.getElementById('btnSolo').addEventListener('click', e => {
+  e.stopPropagation();
+  doStartGame();
+});
+
+document.getElementById('btnTeam').addEventListener('click', e => {
+  e.stopPropagation();
+  // 生成随机6位房间码
+  const code = Math.random().toString(36).slice(2,8).toUpperCase();
+  teamCodeEl.textContent = code;
+  teamCodeHintEl.textContent = '点击复制链接';
+  teamPanelEl.style.display = 'flex';
+});
+
+teamCodeEl.addEventListener('click', () => {
+  const url = location.href.split('#')[0] + '#room=' + teamCodeEl.textContent;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(url).then(() => {
+      teamCodeHintEl.textContent = '✅ 链接已复制！';
+      setTimeout(() => { teamCodeHintEl.textContent = '点击复制链接'; }, 2000);
+    }).catch(() => { teamCodeHintEl.textContent = url; });
+  } else {
+    teamCodeHintEl.textContent = url;
+  }
+});
+
+document.getElementById('btnTeamBack').addEventListener('click', () => {
+  teamPanelEl.style.display = 'none';
+});
+
+document.getElementById('btnTeamStart').addEventListener('click', () => {
+  doStartGame();
 });
 
 renderer.domElement.addEventListener('click', () => {
