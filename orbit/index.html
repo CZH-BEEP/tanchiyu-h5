@@ -157,6 +157,13 @@ const METEOR_INTERVAL  = 0.5; // 陨石生成间隔（原版 spawn_interval_seco
 const PLAYER_R  = 0.42;
 const PLAYER_H  = 1.85;
 
+// MGSP 大厅：位于灾害岛西北方向
+const LOBBY_X = -120;    // 大厅中心 X（相对灾害岛偏移 -120）
+const LOBBY_Z = 0;       // 大厅中心 Z
+const LOBBY_FLOOR_Y = 0; // 大厅地面高度
+// 大厅观光塔（原版 PLACE-LOBBY-TOWER 在大厅中心）
+const TOWER = {x: LOBBY_X, z: LOBBY_Z, y: 28};  // 塔顶 y=28
+
 const isTouchDevice = matchMedia('(pointer:coarse)').matches || navigator.maxTouchPoints > 0 || 'ontouchstart' in window;
 const SETTINGS = {
   quality: isTouchDevice ? 'low' : 'high',
@@ -259,6 +266,65 @@ sea.rotation.x = -Math.PI/2;
 sea.position.y = WATER_Y;
 sea.receiveShadow = true;
 scene.add(sea);
+
+/* ============================================================
+   大厅区域（AREA-LOBBY） —— 位于灾害岛西北方
+   青蓝阶梯 · 观光高塔 · 12 个出生点
+   ============================================================ */
+// 大厅地基（连接两个区域的低矮平台）
+box(60, 4, 60, 0x6a6a7a, LOBBY_X, -2, LOBBY_Z);                // 主地面
+box(80, 2, 80, 0x5a5a6a, LOBBY_X, -4, LOBBY_Z, false);         // 下沿扩展
+
+// 青蓝阶梯（MGSP 标志性元素，从地面延伸向高塔方向）
+// 共 6 级，每级高 1.4m、深 2.4m，从 Z=-12 向 Z=0 递升
+(function buildLobbyStairs(){
+  const stairColor = 0x2a9bb8;  // 青蓝色
+  const W = 20; // 阶梯宽度
+  for (let i = 0; i < 6; i++){
+    const sx = LOBBY_X - 14 + i * 2.4;
+    const sy = i * 1.4;
+    const sz = LOBBY_Z;
+    box(2.4, 1.4 * (i+1), W, stairColor, sx, sy / 2 + 0.7, sz);
+    // 阶梯顶面（可站立）collider 已由 box 自动添加
+  }
+  // 阶梯平台（到达塔底）
+  box(14, 0.5, 20, 0x2a9bb8, LOBBY_X - 2, 8.5, LOBBY_Z);
+  // 两侧深灰地面分区
+  box(24, 0.5, 60, 0x484858, LOBBY_X + 18, 0, LOBBY_Z, false);
+  box(24, 0.5, 60, 0x484858, LOBBY_X - 18, 0, LOBBY_Z, false);
+})();
+
+// 大厅观光高塔（PLACE-LOBBY-TOWER）
+// 塔体：宽8、高30，底部从 y=-2 起
+box(8, 30, 8, 0x7a7a8a, LOBBY_X, 13, LOBBY_Z);
+// 塔顶观景台（y=28，可站立）
+box(14, 0.6, 14, 0x5a6a7a, LOBBY_X, 28, LOBBY_Z);
+// 四面栏杆（decorative，不影响碰撞）
+box(14, 1.2, 0.3, 0x8a9aaa, LOBBY_X, 28.9, LOBBY_Z - 7, false);
+box(14, 1.2, 0.3, 0x8a9aaa, LOBBY_X, 28.9, LOBBY_Z + 7, false);
+box(0.3, 1.2, 14, 0x8a9aaa, LOBBY_X - 7, 28.9, LOBBY_Z, false);
+box(0.3, 1.2, 14, 0x8a9aaa, LOBBY_X + 7, 28.9, LOBBY_Z, false);
+
+// 通往塔顶的楼梯（侧面阶梯，从 y=9 爬到 y=28）
+(function buildTowerStairs(){
+  const steps = 8;
+  for(let i=0;i<steps;i++){
+    const sy = 9 + i * 2.4;
+    const sx = LOBBY_X + 5 - i * 0.6;
+    box(3, 0.5, 2, 0x6a6a7a, sx, sy, LOBBY_Z + 6);
+  }
+})();
+
+// 大厅装饰建筑（BillboardWeatherMachine / BillboardBalloon 参考位置）
+// 天气机器（左侧）
+box(4, 6, 3, 0x2a4a6a, LOBBY_X - 22, 3, LOBBY_Z - 10);
+box(6, 1, 5, 0x1a3a5a, LOBBY_X - 22, 6, LOBBY_Z - 10, false);
+// 广告牌（后方）
+box(0.3, 8, 14, 0x4a4a4a, LOBBY_X, 4, LOBBY_Z + 24);
+box(0.3, 6, 12, 0x2a7ab8, LOBBY_X, 4, LOBBY_Z + 24, false);
+// 排行榜（右侧）
+box(0.3, 7, 10, 0x4a4a4a, LOBBY_X + 20, 3.5, LOBBY_Z + 16);
+box(0.3, 5, 8, 0x1a3a5a, LOBBY_X + 20, 3.5, LOBBY_Z + 16, false);
 
 // 下层台地（顶面 -2）
 box(56, 7, 56, 0x8a5a32, 0, -5.5, 0);
@@ -369,13 +435,185 @@ for (let i=0;i<16;i++){
 }
 
 /* ============================================================
-   出生塔（岛外观景台）
+   出生塔已移入大厅区域（AREA-LOBBY），见上方大厅地形代码
    ============================================================ */
-const TOWER = {x:0, z:-33, y:11.4};
-box(6, 34, 6, 0x8d8d80, TOWER.x, -6, TOWER.z);
-box(7.5, 0.4, 7.5, 0x6f7a86, TOWER.x, 11.2, TOWER.z);
-// 塔顶栏杆（装饰，不挡视线）
-box(7.5, 0.9, 0.25, 0x9aa4ad, TOWER.x, 12.0, TOWER.z - 3.6, false);
+
+// 记录基础碰撞体数量（地图切换时只清除此之后添加的碰撞体）
+let BASE_COLLIDER_COUNT = 0;
+let BASE_FLAMMABLE_COUNT = 0;
+// 在此处赋值：基础地形已全部添加完毕
+BASE_COLLIDER_COUNT = colliders.length;
+BASE_FLAMMABLE_COUNT = flammables.length;
+
+/* ============================================================
+   地图建造函数（每回合建造后追入 currentMapObjects 以便清除）
+   ============================================================ */
+let currentMapObjects = [];
+
+function clearMapObjects(){
+  for (const obj of currentMapObjects){
+    scene.remove(obj);
+    if (obj.geometry) obj.geometry.dispose();
+  }
+  currentMapObjects = [];
+  // 清除地图相关碰撞体（只清除 idx >= BASE_COLLIDER_COUNT 的）
+  colliders.splice(BASE_COLLIDER_COUNT);
+  // 清除可燃物
+  flammables.splice(BASE_FLAMMABLE_COUNT);
+}
+
+// 临时 box：记录到 currentMapObjects，碰撞体会在 BASE_COLLIDER_COUNT 之后
+function mapBox(w,h,d,color,x,y,z,collide){
+  const m = new THREE.Mesh(new THREE.BoxGeometry(w,h,d), mat(color));
+  m.position.set(x,y,z);
+  m.castShadow = true;
+  m.receiveShadow = true;
+  scene.add(m);
+  currentMapObjects.push(m);
+  if (collide !== false) addC(x,y,z,w,h,d);
+  return m;
+}
+function mapHouse(cx,cz,w,d,wallColor,roofColor){
+  const t=0.3,H=5.8,hw=w/2,hd=d/2,door=2.1;
+  mapBox(w,H,t,wallColor,cx,H/2,cz-hd);
+  const segW=(w-door)/2;
+  mapBox(segW,H,t,wallColor,cx-(door/2+segW/2),H/2,cz+hd);
+  mapBox(segW,H,t,wallColor,cx+(door/2+segW/2),H/2,cz+hd);
+  mapBox(door,H-3.1,t,wallColor,cx,3.1+(H-3.1)/2,cz+hd);
+  mapBox(t,H,d,wallColor,cx-hw,H/2,cz);
+  mapBox(t,H,d,wallColor,cx+hw,H/2,cz);
+  mapBox(w+1.4,0.4,d+1.4,roofColor,cx,H+0.2,cz);
+  addFlammable(cx,cz,5,'house');
+}
+function mapTree(x,z){
+  const g=new THREE.Group();
+  const trunk=new THREE.Mesh(new THREE.CylinderGeometry(0.22,0.32,2.2,6),mat(0x6b4a2f));
+  trunk.position.y=1.1;trunk.castShadow=true;g.add(trunk);
+  const c1=new THREE.Mesh(new THREE.ConeGeometry(1.5,2.8,8),mat(0x3f8f3a));
+  c1.position.y=3.1;c1.castShadow=true;g.add(c1);
+  const c2=new THREE.Mesh(new THREE.ConeGeometry(1.05,2.1,8),mat(0x357f30));
+  c2.position.y=4.5;c2.castShadow=true;g.add(c2);
+  g.position.set(x,0,z);
+  scene.add(g);
+  currentMapObjects.push(g);
+  addC(x,1.1,z,0.7,2.2,0.7);
+  addFlammable(x,z,2.4,'tree');
+}
+
+// === Sunny Ranch（农场地图）===
+function buildSunnyRanch(){
+  // 谷仓（大型红色建筑，可攀爬屋顶）
+  mapBox(18,10,12,0xc03030,0,5,0);            // 谷仓主体
+  mapBox(20,0.5,14,0x7a3020,0,10.3,0);        // 谷仓屋顶
+  mapBox(4,10,0.3,0xc03030,0,5,6.1);          // 谷仓门框
+  // 粮仓塔
+  mapBox(5,16,5,0xc8b060,8,8,-10);            // 粮仓塔1
+  mapBox(5,0.5,5,0xa89040,8,16.3,-10);        // 粮仓顶
+  mapBox(5,16,5,0xc8b060,-8,8,-10);           // 粮仓塔2
+  mapBox(5,0.5,5,0xa89040,-8,16.3,-10);
+  // 拖拉机（可挡灾的高台）
+  mapBox(5,2.4,8,0x608030,16,1.2,6);          // 车身
+  mapBox(6,0.6,9,0x506020,16,2.7,6);          // 车顶
+  // 干草堆
+  mapBox(4,3,4,0xe8c058,-14,1.5,10);
+  mapBox(4,3,4,0xe8c058,-14,1.5,16);
+  // 篱笆围栏
+  for(let i=-3;i<=3;i++) mapBox(0.3,1.6,0.3,0xc8a060,i*4,-0.2,20);
+  for(let i=-3;i<=3;i++) mapBox(0.3,0.3,0.3,0xc8a060,-14,0.9,i*3+9);
+  // 树
+  mapTree(-16,-6); mapTree(14,-14); mapTree(-4,-18); mapTree(18,-4);
+}
+
+// === Devastation Station（工业废墟地图）===
+function buildDevastationStation(){
+  // 废弃工厂主楼（双层，可爬屋顶）
+  mapBox(20,8,14,0x686060,-2,4,0);            // 一楼
+  mapBox(20,0.5,14,0x585050,-2,8.3,0);        // 一楼屋顶（平台）
+  mapBox(12,6,10,0x686060,-2,11,0);           // 二楼
+  mapBox(14,0.5,12,0x585050,-2,14.3,0);       // 二楼屋顶（高平台）
+  // 烟囱（高点）
+  mapBox(3,22,3,0x505050,8,11,-5);
+  mapBox(4,0.5,4,0x404040,8,22.3,-5);
+  // 废弃集装箱（多层堆叠，可爬）
+  mapBox(8,4,4,0x406080,-14,2,8);
+  mapBox(8,4,4,0x804040,-14,6,8);             // 叠一层
+  mapBox(8,0.4,4,0x303030,-14,8.2,8);         // 顶部可站
+  // 废弃铁路月台
+  mapBox(24,2,6,0x706858,0,1,-12);
+  mapBox(24,0.3,6,0x909080,0,2.15,-12);
+  // 钢架桥（连接月台和工厂）
+  mapBox(6,0.4,10,0x808080,8,8.2,-6);
+  // 破损墙体（掩体）
+  mapBox(0.5,5,8,0x787070,16,2.5,2);
+  mapBox(0.5,5,8,0x787070,-18,2.5,-4);
+}
+
+// === Launch Land（发射台地图）===
+function buildLaunchLand(){
+  // 火箭发射台（中央高台）
+  mapBox(12,4,12,0x909090,0,2,-4);            // 发射台基座
+  mapBox(10,0.5,10,0xa0a0a0,0,4.3,-4);        // 发射台顶面
+  // 火箭（装饰性高柱）
+  mapBox(3,18,3,0xe0e0e0,0,13,-4);            // 火箭主体
+  mapBox(5,0.5,5,0xc0c0c0,0,22.3,-4, false);  // 火箭头（装饰）
+  mapBox(2,4,0.5,0xd0d0d0,-2,4.5,-7, false);  // 支撑架
+  mapBox(2,4,0.5,0xd0d0d0,2,4.5,-7, false);
+  // 控制楼（双层）
+  mapBox(14,8,8,0x607090,-8,4,8);
+  mapBox(16,0.5,10,0x506080,-8,8.3,8);        // 屋顶
+  mapBox(8,6,6,0x607090,-8,11,8);             // 二楼
+  mapBox(10,0.5,8,0x506080,-8,14.3,8);        // 二楼顶
+  // 金属步道
+  mapBox(16,0.4,3,0x808090,4,4.3,4);
+  // 卫星天线塔
+  mapBox(2,14,2,0x808080,14,-0.2,-10);
+  mapBox(6,0.4,6,0x909090,14,13.9,-10);
+  // 储罐
+  mapBox(5,6,5,0x708080,14,3,8);
+  mapBox(5,0.5,5,0x809090,14,6.3,8);
+}
+
+// === Glass Office（玻璃办公楼地图）===
+function buildGlassOffice(){
+  // 主楼（高层，玻璃感：浅蓝灰）
+  mapBox(14,16,10,0x9ab8d0,0,8,0);            // 主楼
+  mapBox(16,0.5,12,0x7aa0bc,0,16.3,0);        // 主楼屋顶
+  // 玻璃外墙装饰条（稍深一点）
+  for(let i=0;i<4;i++) mapBox(14,0.3,0.3,0x6090b0,0,4+i*4,5.1, false);
+  // 附楼
+  mapBox(10,10,8,0x9ab8d0,14,5,2);
+  mapBox(12,0.5,10,0x7aa0bc,14,10.3,2);
+  // 停车场（低矮平台）
+  mapBox(20,2,10,0x808080,-12,1,-6);
+  mapBox(20,0.3,10,0x909090,-12,2.15,-6);
+  // 树池（装饰性绿化）
+  mapBox(3,1,3,0x60903c,10,0.5,10);
+  mapBox(3,1,3,0x60903c,-10,0.5,10);
+  mapTree(10,10); mapTree(-10,10); mapTree(-16,-8);
+  // 入口台阶
+  for(let i=0;i<4;i++) mapBox(8,0.4+i*0.4,1.2,0xb0b8c0,-i*1.2,0.2+i*0.4,-5.1-i*1.2);
+}
+
+// === Happy Home（彩色住宅区地图）===
+function buildHappyHome(){
+  // 3栋彩色住宅
+  mapHouse(-10, 8, 9, 8, 0xf07050, 0x9a3020);  // 橙红色
+  mapHouse(  2,-14, 9, 8, 0x60c080, 0x208040);  // 绿色
+  mapHouse( 14,  4, 8, 7, 0x60a0e0, 0x204880);  // 蓝色
+  // 中央喷泉广场
+  mapBox(10,0.4,10,0xd0c8b0,0,0.2,0, false);    // 广场地面
+  mapBox(4,0.6,4,0xb0a890,0,0.3,0);             // 喷泉底座
+  mapBox(1.4,2.4,1.4,0xa0a8c0,0,1.5,0);         // 喷泉柱
+  // 路灯
+  for(const [lx,lz] of [[6,6],[-6,6],[6,-6],[-6,-6]]){
+    mapBox(0.3,6,0.3,0x808080,lx,3,lz);
+    mapBox(1.6,0.2,0.2,0x808080,lx,6.1,lz, false);
+  }
+  // 树与灌木
+  mapTree(18, 6); mapTree(-18,-6); mapTree(10,-16); mapTree(-16,14);
+  // 围栏
+  for(let i=-3;i<=3;i++) mapBox(0.2,1.4,0.2,0xd0d0a0,i*4+2,0.7,20);
+}
 
 /* ============================================================
    角色模型
@@ -446,8 +684,13 @@ for (let i=0;i<4;i++){
    物理查询
    ============================================================ */
 function baseHeight(x, z){
+  // 灾害岛地面
   if (Math.abs(x) <= ISLAND_H && Math.abs(z) <= ISLAND_H) return 0;
   if (Math.abs(x) <= OUTER_H  && Math.abs(z) <= OUTER_H ) return -2;
+  // 大厅地面（AREA-LOBBY）
+  const lx = x - LOBBY_X, lz = z - LOBBY_Z;
+  if (Math.abs(lx) <= 30 && Math.abs(lz) <= 30) return 0;
+  if (Math.abs(lx) <= 40 && Math.abs(lz) <= 40) return -2;
   return -999;
 }
 
@@ -676,6 +919,14 @@ function die(reason){
   setTip('你已死亡，进入观战视角。下一回合自动重生。');
   flashRed();
   playSfx('death');
+  // 死亡后 2 秒自动传回大厅观光位置（观战）
+  setTimeout(()=>{
+    if (player.dead && G.state === 'disaster'){
+      player.pos.set(TOWER.x, TOWER.y, TOWER.z);
+      camYaw = Math.atan2(0 - LOBBY_X, 0 - LOBBY_Z);
+      camPitch = 0.42;
+    }
+  }, 2000);
 }
 
 function showCenter(title, sub){
@@ -1394,7 +1645,35 @@ const SPAWNS = [
   [-4, -16], [16, -6], [-18, -2], [2, 16], [10, 2], [-8, 16], [0, -8], [16, 18]
 ];
 
-const MAPS = ['海岛小镇','玻璃办公楼','彩虹游乐场','山顶农庄'];
+// MGSP 原版地图列表（23张，此处实现代表性5张）
+const MAP_DEFS = [
+  {
+    name: 'Sunny Ranch',
+    build: buildSunnyRanch,
+    spawns: [[8,0,8],[8,0,-8],[-8,0,8],[-8,0,-8],[0,0,12],[12,0,0],[-12,0,0],[0,0,-12]]
+  },
+  {
+    name: 'Devastation Station',
+    build: buildDevastationStation,
+    spawns: [[10,0,6],[10,0,-6],[-10,0,6],[-10,0,-6],[6,0,10],[-6,0,10],[6,0,-10],[-6,0,-10]]
+  },
+  {
+    name: 'Launch Land',
+    build: buildLaunchLand,
+    spawns: [[14,0,0],[10,0,8],[10,0,-8],[-10,0,8],[-10,0,-8],[-14,0,0],[0,0,14],[0,0,-14]]
+  },
+  {
+    name: 'Glass Office',
+    build: buildGlassOffice,
+    spawns: [[8,0,8],[8,0,-8],[-8,0,8],[-8,0,-8],[0,0,10],[10,0,0],[-10,0,0],[0,0,-10]]
+  },
+  {
+    name: 'Happy Home',
+    build: buildHappyHome,
+    spawns: [[10,0,6],[10,0,-6],[-10,0,6],[-10,0,-6],[6,0,10],[-6,0,10],[6,0,-10],[-6,0,-10]]
+  }
+];
+const MAPS = MAP_DEFS.map(m => m.name);
 const BOT_NAMES = ['Mia','Noah','Luna','Kai'];
 
 const G = {
@@ -1449,23 +1728,30 @@ function setState(s){
     G.disasterType = null;
     G.warned = false;
     resetPlayer();
+    // 传送到大厅观光塔顶
     player.pos.set(TOWER.x, TOWER.y, TOWER.z);
-    camYaw = Math.PI * 0.97;
-    camPitch = 0.58;
+    camYaw = Math.atan2(0 - LOBBY_X, 0 - LOBBY_Z);  // 朝向灾害岛
+    camPitch = 0.52;
   }
 
   if (s === 'prep'){
     clearDisaster();
+    // 清除上一张地图，建造本回合地图
+    clearMapObjects();
+    const mapDef = MAP_DEFS[(G.round - 1) % MAP_DEFS.length];
+    mapDef.build();
     G.disasterType = null;
     G.warned = false;
     resetPlayer();
     resetNpcs();
-    const sp = SPAWNS[rndi(0, SPAWNS.length - 1)];
-    player.pos.set(sp[0], 0.1, sp[1]);
+    // 传送到灾害岛的随机 spawn
+    const spawns = mapDef.spawns;
+    const sp = spawns[rndi(0, spawns.length - 1)];
+    player.pos.set(sp[0], 0.1, sp[2] !== undefined ? sp[2] : sp[1]);
     camYaw = Math.PI;
     camPitch = 0.1;
     showBanner('准 备', 1200);
-    setTip('准备阶段｜灾害未知，找高地/掩体');
+    setTip('准备阶段｜【' + mapDef.name + '】灾害未知，找高地/掩体');
   }
 
   if (s === 'disaster'){
