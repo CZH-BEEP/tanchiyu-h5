@@ -29,6 +29,12 @@
   #center .big{font-size:clamp(30px,5vw,52px);font-weight:800;letter-spacing:3px}
   #center .sub{margin-top:12px;font-size:14px;opacity:.8;letter-spacing:1px}
   #hint{position:absolute;left:22px;bottom:74px;font-size:11px;line-height:1.9;opacity:.55}
+  #tipBox{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);max-width:min(620px,calc(100% - 280px));padding:12px 18px;border-radius:18px;background:rgba(7,18,31,.72);border:1px solid rgba(255,255,255,.2);box-shadow:0 14px 36px rgba(0,0,0,.28);font-size:14px;font-weight:800;letter-spacing:.06em;text-align:center;color:#e9f8ff}
+  #settingsBtn{position:absolute;right:18px;bottom:20px;pointer-events:auto;height:38px;padding:0 14px;border-radius:12px;border:1px solid rgba(255,255,255,.26);background:rgba(7,18,31,.74);color:#fff;font-weight:900;font-size:13px;letter-spacing:.08em;box-shadow:0 10px 28px rgba(0,0,0,.28);cursor:pointer}
+  #warningFrame{position:fixed;inset:0;pointer-events:none;z-index:7;box-shadow:inset 0 0 0 6px #ef4444,inset 0 0 0 10px rgba(239,68,68,.22);opacity:0;transition:opacity .18s}
+  @keyframes warnPulse{0%,100%{opacity:0}50%{opacity:1}}
+  #warningFrame.active{animation:warnPulse .6s ease-in-out 4}
+  #settings{position:fixed;inset:0;z-index:26;display:none;align-items:center;justify-content:center;background:rgba(2,8,14,.58);color:#fff}.panel{width:min(420px,calc(100% - 28px));padding:22px;border-radius:24px;background:linear-gradient(180deg,rgba(14,35,55,.96),rgba(8,18,31,.98));border:1px solid rgba(255,255,255,.22);box-shadow:0 30px 80px rgba(0,0,0,.42)}.panel h2{font-size:22px;margin-bottom:16px;letter-spacing:.12em}.row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:13px 0;font-size:14px}.row select,.row button,.row input{pointer-events:auto}.row select,.row button{border:1px solid rgba(255,255,255,.28);border-radius:12px;background:rgba(255,255,255,.12);color:#fff;padding:9px 11px;font-weight:800}.row option{color:#0b1a26}.panel .help{margin-top:12px;font-size:12px;line-height:1.8;color:#cbe8ff;opacity:.82}.closeSet{width:100%;margin-top:14px}
   #flash{position:fixed;inset:0;background:#fff;opacity:0;pointer-events:none;
     transition:opacity .09s;z-index:5}
   #flashRed{position:fixed;inset:0;pointer-events:none;z-index:6;
@@ -47,8 +53,9 @@
   #roundInfo{position:absolute;left:18px;top:18px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
   .chip{display:inline-flex;align-items:center;gap:7px;height:34px;padding:0 11px;border-radius:999px;background:rgba(7,18,31,.62);border:1px solid rgba(255,255,255,.18);box-shadow:inset 0 0 18px rgba(255,255,255,.05);font-size:12px;font-weight:800;letter-spacing:.06em}.chip b{font-variant-numeric:tabular-nums}.ico{width:18px;height:18px;border-radius:6px;display:inline-grid;place-items:center;background:linear-gradient(135deg,#fff,#98d7ff);box-shadow:0 0 12px rgba(120,210,255,.45);color:#0d2941;text-shadow:none;font-size:12px}
   #survivors{position:absolute;right:18px;top:18px;min-width:172px;padding:10px 12px;border-radius:18px;background:rgba(7,18,31,.62);border:1px solid rgba(255,255,255,.18);box-shadow:0 14px 40px rgba(0,0,0,.22)}#survivors h3{font-size:12px;letter-spacing:.12em;margin-bottom:6px;opacity:.8}#survivors div{font-size:12px;line-height:1.55;color:#d7f1ff}
-  #mobile{position:fixed;inset:0;z-index:12;pointer-events:none;display:none}.joy{position:absolute;left:22px;bottom:26px;width:132px;height:132px;border-radius:50%;background:rgba(8,20,34,.42);border:1px solid rgba(255,255,255,.22);box-shadow:0 10px 28px rgba(0,0,0,.25);pointer-events:auto;touch-action:none}.knob{position:absolute;left:43px;top:43px;width:46px;height:46px;border-radius:50%;background:linear-gradient(180deg,#e7f8ff,#62c8ff);box-shadow:0 6px 18px rgba(0,0,0,.32)}.ab{position:absolute;right:20px;bottom:28px;display:grid;grid-template-columns:repeat(2,64px);gap:12px;pointer-events:auto}.ab button{width:64px;height:64px;border-radius:50%;border:1px solid rgba(255,255,255,.28);background:linear-gradient(180deg,rgba(255,255,255,.92),rgba(94,195,255,.88));color:#0d2941;font-weight:900;box-shadow:0 8px 0 rgba(0,0,0,.22);touch-action:none}.ab button:active{transform:translateY(5px);box-shadow:0 3px 0 rgba(0,0,0,.25)}
-  @media(max-width:760px),(pointer:coarse){#mobile{display:block}#hint{display:none}#survivors{right:10px;top:84px;min-width:128px;padding:8px 9px}#roundInfo{left:10px;right:10px;top:82px}.chip{height:30px;padding:0 8px;font-size:11px}#top{top:14px}#hpwrap{left:14px;bottom:174px;width:168px}#banner{top:24%}}
+  #mobile{position:fixed;inset:0;z-index:12;pointer-events:none;display:none}.joy{position:absolute;left:22px;bottom:26px;width:132px;height:132px;border-radius:50%;background:rgba(8,20,34,.42);border:1px solid rgba(255,255,255,.22);box-shadow:0 10px 28px rgba(0,0,0,.25);pointer-events:auto;touch-action:none}.knob{position:absolute;left:43px;top:43px;width:46px;height:46px;border-radius:50%;background:linear-gradient(180deg,#e7f8ff,#62c8ff);box-shadow:0 6px 18px rgba(0,0,0,.32)}.lookPad{position:absolute;right:0;top:0;width:55vw;height:calc(100% - 150px);border-radius:0;border:none;background:rgba(8,20,34,.04);pointer-events:auto;touch-action:none;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.18);font-size:11px;font-weight:900;letter-spacing:.12em}.lookPad:before{content:"← 滑动旋转视角 →"}.ab{position:absolute;right:20px;bottom:28px;display:grid;grid-template-columns:repeat(2,80px);gap:14px;pointer-events:auto}.ab button{width:80px;height:80px;border-radius:50%;border:2px solid rgba(255,255,255,.32);background:linear-gradient(180deg,rgba(255,255,255,.95),rgba(94,195,255,.92));color:#0d2941;font-weight:900;box-shadow:0 8px 0 rgba(0,0,0,.26);touch-action:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;font-size:18px;letter-spacing:.04em}.ab button:active{transform:translateY(5px);box-shadow:0 3px 0 rgba(0,0,0,.25)}
+  .touch-device #mobile{display:block}
+  @media(max-width:760px),(pointer:coarse){#mobile{display:block}#hint{display:none}#survivors{right:10px;top:84px;min-width:128px;padding:8px 9px}#roundInfo{left:10px;right:10px;top:82px}.chip{height:30px;padding:0 8px;font-size:11px}#top{top:14px}#hpwrap{left:14px;bottom:184px;width:168px}#banner{top:24%}#tipBox{bottom:122px;max-width:calc(100% - 34px);font-size:12px;padding:10px 12px}#settingsBtn{right:14px;bottom:184px}.joy{width:142px;height:142px}.ab{grid-template-columns:repeat(2,80px)}.ab button{width:80px;height:80px}}
 </style>
 </head>
 <body>
@@ -68,11 +75,14 @@
   </div>
   <div id="banner"></div>
   <div id="center"><div class="big"></div><div class="sub"></div></div>
+  <div id="tipBox">点击开始后先观察地形：高地、屋顶和掩体都可能救命</div>
+  <button id="settingsBtn" type="button" aria-label="设置">设 置</button>
   <div id="hint">WASD 移动 · Shift 加速 · 空格 跳跃<br>鼠标 视角 · N 跳过等待 · ESC 释放鼠标</div>
 </div>
 
 <div id="flash"></div>
 <div id="flashRed"></div>
+<div id="warningFrame"></div>
 
 <div id="start">
   <h1>灾害生存岛 3D</h1>
@@ -82,7 +92,19 @@
 </div>
 
 <div id="loading">正在加载三维引擎…</div>
-<div id="mobile"><div class="joy" id="joy"><div class="knob" id="knob"></div></div><div class="ab"><button id="btnJump" type="button">A</button><button id="btnRun" type="button">B</button></div></div>
+<div id="settings">
+  <div class="panel">
+    <h2>游戏设置</h2>
+    <div class="row"><span>画质档位</span><select id="qualitySel"><option value="low">低端手机</option><option value="mid">中等</option><option value="high">高画质</option></select></div>
+    <div class="row"><span>音效</span><button id="soundToggle" type="button">开启</button></div>
+    <div class="row"><span>镜头灵敏度</span><input id="sensRange" type="range" min="0.5" max="1.5" step="0.05" value="1"></div>
+    <div class="row"><span>常用操作</span><button id="fullscreenBtn" type="button">全屏</button></div>
+    <div class="row"><span>镜头</span><button id="resetCamBtn" type="button">重置镜头</button></div>
+    <div class="help">电脑：WASD 移动、Shift 加速、空格跳跃、鼠标转视角。手机：左摇杆移动，右侧“滑动视角”区域转视角，“跳跃”按钮起跳，“加速”按钮奔跑。</div>
+    <button class="closeSet" id="closeSettings" type="button">关闭</button>
+  </div>
+</div>
+<div id="mobile"><div class="joy" id="joy"><div class="knob" id="knob"></div></div><div class="lookPad" id="lookPad"></div><div class="ab"><button id="btnJump" type="button" aria-label="跳跃">跳跃</button><button id="btnRun" type="button" aria-label="加速">加速</button></div></div>
 
 <script>
 window.addEventListener('error', function (e) {
@@ -118,6 +140,15 @@ const PREP_TIME = 25;        // 准备时间（秒）
 const PLAYER_R  = 0.42;
 const PLAYER_H  = 1.85;
 
+const isTouchDevice = matchMedia('(pointer:coarse)').matches || navigator.maxTouchPoints > 0 || 'ontouchstart' in window;
+const SETTINGS = {
+  quality: isTouchDevice ? 'low' : 'high',
+  sound: true,
+  volume: 0.72,
+  sensitivity: isTouchDevice ? 0.78 : 1
+};
+if (isTouchDevice) document.body.classList.add('touch-device');
+
 const clamp = (v,a,b)=>Math.max(a,Math.min(b,v));
 const rnd   = (a,b)=>a+Math.random()*(b-a);
 const rndi  = (a,b)=>Math.floor(rnd(a,b+1));
@@ -138,6 +169,18 @@ renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 if ('outputColorSpace' in renderer) renderer.outputColorSpace = THREE.SRGBColorSpace;
 document.body.appendChild(renderer.domElement);
 
+function applyQuality(){
+  const q = SETTINGS.quality;
+  const ratio = q === 'low' ? 0.72 : q === 'mid' ? 1 : Math.min(devicePixelRatio || 1, 2);
+  renderer.setPixelRatio(ratio);
+  renderer.shadowMap.enabled = q !== 'low';
+  if (sun){
+    sun.castShadow = q !== 'low';
+    const size = q === 'high' ? 2048 : 1024;
+    sun.shadow.mapSize.set(size, size);
+  }
+}
+
 const hemi = new THREE.HemisphereLight(0xcfe8ff, 0x50703f, 1.05);
 scene.add(hemi);
 
@@ -150,6 +193,7 @@ sc.left=-72; sc.right=72; sc.top=72; sc.bottom=-72; sc.near=1; sc.far=280;
 sun.shadow.bias = -0.0008;
 scene.add(sun);
 scene.add(sun.target);
+applyQuality();
 
 /* ============================================================
    通用构建工具
@@ -448,11 +492,58 @@ function cameraHitDistance(target, dir, maxDist){
 }
 
 /* ============================================================
-   临时特效管理
+   对象池 / 临时特效管理
    ============================================================ */
+function createPool(factory, reset){
+  const free = [], active = new Set();
+  return {
+    get(){
+      const obj = free.pop() || factory();
+      active.add(obj);
+      obj.visible = true;
+      if (!obj.parent) scene.add(obj);
+      if (reset) reset(obj);
+      return obj;
+    },
+    release(obj){
+      if (!obj || !active.has(obj)) return;
+      active.delete(obj);
+      obj.visible = false;
+      if (obj.parent) obj.parent.remove(obj);
+      free.push(obj);
+    },
+    releaseAll(){
+      [...active].forEach(obj=>this.release(obj));
+    }
+  };
+}
+
+const ringGeoCache = new Map();
+function ringGeo(inner, outer){
+  const key = inner + ':' + outer;
+  if (!ringGeoCache.has(key)) ringGeoCache.set(key, new THREE.RingGeometry(inner, outer, 28));
+  return ringGeoCache.get(key);
+}
+const ringPool = createPool(
+  () => new THREE.Mesh(ringGeo(1, 2), new THREE.MeshBasicMaterial({color:0xffffff, transparent:true, opacity:0.3, side:THREE.DoubleSide, depthWrite:false})),
+  obj => { obj.scale.setScalar(1); obj.rotation.x = -Math.PI/2; obj.material.opacity = 0.3; }
+);
+const boltPool = createPool(
+  () => new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.2, 28, 5), new THREE.MeshBasicMaterial({color:0xffffff, transparent:true, opacity:1})),
+  obj => { obj.scale.setScalar(1); obj.material.opacity = 1; }
+);
+const meteorPool = createPool(
+  () => { const m = new THREE.Mesh(new THREE.DodecahedronGeometry(0.75,0), mat(0x5b4739)); m.castShadow = true; return m; },
+  obj => { obj.scale.setScalar(1); obj.rotation.set(0,0,0); }
+);
+
 const fxs = [];
-function addFx(obj, life, mode){
-  fxs.push({obj, life, max:life, mode:mode||'fade'});
+function addFx(obj, life, mode, pool){
+  fxs.push({obj, life, max:life, mode:mode||'fade', pool});
+}
+function releaseFx(f){
+  if (f.pool) f.pool.release(f.obj);
+  else scene.remove(f.obj);
 }
 function updateFx(dt){
   for (let i=fxs.length-1;i>=0;i--){
@@ -464,12 +555,18 @@ function updateFx(dt){
       if (f.mode === 'expand') f.obj.scale.setScalar(1 + (1-k) * 5);
     }
     if (f.life <= 0){
-      scene.remove(f.obj);
-      if (f.obj.geometry) f.obj.geometry.dispose();
-      if (f.obj.material) f.obj.material.dispose();
+      releaseFx(f);
       fxs.splice(i,1);
     }
   }
+}
+function clearTransientEffects(){
+  for (let i=fxs.length-1;i>=0;i--) releaseFx(fxs[i]);
+  fxs.length = 0;
+  ringPool.releaseAll();
+  boltPool.releaseAll();
+  meteorPool.releaseAll();
+  firePool?.releaseAll();
 }
 
 function flashWhite(){
@@ -484,13 +581,63 @@ function flashRed(){
 }
 
 /* ============================================================
+   音效（用户点击后初始化，符合浏览器自动播放策略）
+   ============================================================ */
+let audioCtx = null;
+function ensureAudio(){
+  if (!SETTINGS.sound) return;
+  audioCtx ||= new (window.AudioContext || window.webkitAudioContext)();
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+}
+function tone(freq, dur, type='sine', gain=0.08, slide=1){
+  if (!audioCtx || !SETTINGS.sound) return;
+  const now = audioCtx.currentTime;
+  const o = audioCtx.createOscillator();
+  const g = audioCtx.createGain();
+  o.type = type;
+  o.frequency.setValueAtTime(freq, now);
+  o.frequency.exponentialRampToValueAtTime(Math.max(40, freq * slide), now + dur);
+  g.gain.setValueAtTime(gain * SETTINGS.volume, now);
+  g.gain.exponentialRampToValueAtTime(0.001, now + dur);
+  o.connect(g).connect(audioCtx.destination);
+  o.start(now); o.stop(now + dur);
+}
+function noise(dur, gain=0.04){
+  if (!audioCtx || !SETTINGS.sound) return;
+  const len = Math.floor(audioCtx.sampleRate * dur);
+  const buf = audioCtx.createBuffer(1, len, audioCtx.sampleRate);
+  const data = buf.getChannelData(0);
+  for (let i=0;i<len;i++) data[i] = Math.random()*2-1;
+  const src = audioCtx.createBufferSource();
+  const g = audioCtx.createGain();
+  g.gain.setValueAtTime(gain * SETTINGS.volume, audioCtx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
+  src.buffer = buf; src.connect(g).connect(audioCtx.destination); src.start();
+}
+function playSfx(name){
+  if (!SETTINGS.sound) return;
+  ensureAudio();
+  if (name === 'alarm'){ tone(720,.18,'sawtooth',.08); setTimeout(()=>tone(520,.18,'sawtooth',.07),190); }
+  if (name === 'thunder'){ noise(.38,.08); tone(90,.45,'sawtooth',.07,.55); }
+  if (name === 'boom'){ noise(.24,.1); tone(120,.28,'triangle',.09,.45); }
+  if (name === 'hurt'){ tone(260,.12,'square',.055,.75); }
+  if (name === 'death'){ tone(220,.42,'sawtooth',.07,.45); }
+  if (name === 'water'){ noise(.45,.035); tone(180,.35,'sine',.035,.7); }
+  if (name === 'fire'){ noise(.18,.025); }
+  if (name === 'start'){ tone(620,.11,'triangle',.05,1.2); setTimeout(()=>tone(820,.15,'triangle',.045,1.1),105); }
+}
+
+/* ============================================================
    伤害 / 死亡
    ============================================================ */
+let lastHurtSfx = 0;
 function damage(n){
   if (player.dead) return;
-  player.hp -= n;
+  player.hp = Math.max(0, player.hp - n);
   player.hurtT = 0.25;
-  if (player.hp <= 0){ player.hp = 0; die(); }
+  const now = performance.now();
+  if (now - lastHurtSfx > 520){ playSfx('hurt'); lastHurtSfx = now; }
+  if (player.hp <= 0) die();
 }
 
 function die(reason){
@@ -500,7 +647,9 @@ function die(reason){
   player.group.rotation.x = -Math.PI/2;
   player.group.position.y += 0.5;
   showCenter('你没能幸存', reason || '下一回合再试试');
+  setTip('你已死亡，进入观战视角。下一回合会自动重生。');
   flashRed();
+  playSfx('death');
 }
 
 function showCenter(title, sub){
@@ -521,19 +670,21 @@ function showBanner(txt, ms){
   clearTimeout(bannerTimer);
   bannerTimer = setTimeout(()=>{ el.style.opacity = 0; }, ms || 1800);
 }
+function setTip(txt){
+  const el = document.getElementById('tipBox');
+  if (el) el.textContent = txt;
+}
 
 /* ============================================================
    灾害：雷暴
    ============================================================ */
 function makeRing(x, z, inner, outer, color){
-  const m = new THREE.Mesh(
-    new THREE.RingGeometry(inner, outer, 28),
-    new THREE.MeshBasicMaterial({color, transparent:true, opacity:0.3,
-      side:THREE.DoubleSide, depthWrite:false})
-  );
+  const m = ringPool.get();
+  m.geometry = ringGeo(inner, outer);
+  m.material.color.setHex(color);
+  m.material.opacity = 0.3;
   m.rotation.x = -Math.PI/2;
   m.position.set(x, 0.06, z);
-  scene.add(m);
   return m;
 }
 
@@ -596,30 +747,23 @@ function stormUpdate(s, dt){
     }
     if (st.timer <= 0){
       strikeHit(st.x, st.z);
-      if (st.ring){
-        scene.remove(st.ring);
-        st.ring.geometry.dispose();
-        st.ring.material.dispose();
-      }
+      if (st.ring) ringPool.release(st.ring);
       s.strikes.splice(i,1);
     }
   }
 }
 
 function strikeHit(x, z){
-  const bolt = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.06, 0.2, 28, 5),
-    new THREE.MeshBasicMaterial({color:0xffffff, transparent:true, opacity:1})
-  );
+  const bolt = boltPool.get();
   bolt.position.set(x, 13, z);
-  scene.add(bolt);
-  addFx(bolt, 0.3, 'fade');
+  addFx(bolt, 0.3, 'fade', boltPool);
 
   const ring = makeRing(x, z, 0.4, 1.1, 0xffffff);
   ring.material.opacity = 0.95;
-  addFx(ring, 0.45, 'expand');
+  addFx(ring, 0.45, 'expand', ringPool);
 
   flashWhite();
+  playSfx('thunder');
 
   const d = Math.hypot(player.pos.x - x, player.pos.z - z);
   if (!player.dead && d < 3.5) damage(38);
@@ -752,25 +896,35 @@ function makeFlameSprite(sx, sy, y, color, opacity){
     map: flameTexture(), color, transparent:true, opacity,
     blending: THREE.AdditiveBlending, depthWrite:false
   }));
+  sp.userData.base = {sx, sy, opacity};
   sp.scale.set(sx, sy, 1);
   sp.position.y = y;
   return sp;
 }
 
+const firePool = createPool(
+  () => {
+    const g = new THREE.Group();
+    const s1 = makeFlameSprite(4.4, 6.8, 3.1, 0xff6a12, 0.85);
+    const s2 = makeFlameSprite(3.0, 4.8, 2.5, 0xffb648, 0.95);
+    const s3 = makeFlameSprite(1.7, 2.8, 1.9, 0xfff0c0, 0.9);
+    const light = new THREE.PointLight(0xff7a1a, 2.8, 26);
+    light.position.y = 3.4;
+    g.add(s1, s2, s3, light);
+    g.userData = {s1, s2, s3, light};
+    return g;
+  },
+  g => {
+    const {s1, s2, s3, light} = g.userData;
+    for (const s of [s1,s2,s3]) s.material.opacity = s.userData.base.opacity;
+    light.intensity = 2.8;
+  }
+);
+
 function makeFirePoint(o){
-  const g = new THREE.Group();
+  const g = firePool.get();
   g.position.set(o.x, 0, o.z);
-
-  const s1 = makeFlameSprite(4.4, 6.8, 3.1, 0xff6a12, 0.85);
-  const s2 = makeFlameSprite(3.0, 4.8, 2.5, 0xffb648, 0.95);
-  const s3 = makeFlameSprite(1.7, 2.8, 1.9, 0xfff0c0, 0.9);
-  g.add(s1, s2, s3);
-
-  const light = new THREE.PointLight(0xff7a1a, 2.8, 26);
-  light.position.y = 3.4;
-  g.add(light);
-
-  scene.add(g);
+  const {s1, s2, s3, light} = g.userData;
   return { x:o.x, z:o.z, g, s1, s2, s3, light, life:13, seed:Math.random()*10, src:o };
 }
 
@@ -826,7 +980,7 @@ function fireUpdate(s, dt){
       p.light.intensity = 2.8 * o;
     }
     if (p.life <= 0){
-      scene.remove(p.g);
+      firePool.release(p.g);
       if (p.src) p.src._burning = false;
       s.pts.splice(i,1);
     }
@@ -871,7 +1025,7 @@ function floodInit(){
 }
 function floodUpdate(s,dt){
   const k=clamp(s.t/s.dur,0,1);const y=WATER_Y+s.peak*Math.sin(k*Math.PI);s.group.position.y=y-.5;
-  if(!player.dead&&player.pos.y<y+.25){damage(30*dt);player.vel.y+=5*dt;}
+  if(!player.dead&&player.pos.y+PLAYER_H*.55<y){damage(30*dt);player.vel.y+=5*dt;if(Math.random()<.05)playSfx('water');}
   for(const n of npcs){if(!n.dead&&n.pos.y<y+.25){n.hp-=35*dt;if(n.hp<=0)npcDie(n)}}
 }
 function meteorInit(){
@@ -879,8 +1033,36 @@ function meteorInit(){
   return{kind:'meteor',t:0,dur:13,next:.25,rocks:[],group:new THREE.Group()};
 }
 function meteorUpdate(s,dt){
-  if(!s.group.parent)scene.add(s.group);s.next-=dt;if(s.next<=0){s.next=rnd(.28,.55);const x=rnd(-24,24),z=rnd(-24,24);const r=new THREE.Mesh(new THREE.DodecahedronGeometry(rnd(.45,.9),0),mat(0x5b4739));r.position.set(x+rnd(-8,8),32,z+rnd(-8,8));r.userData={tx:x,tz:z,v:rnd(20,28)};r.castShadow=true;s.group.add(r);s.rocks.push(r);addFx(makeRing(x,z,1.6,2.4,0xff9f38),.8,'expand')}
-  for(let i=s.rocks.length-1;i>=0;i--){const r=s.rocks[i],u=r.userData;r.position.x+=(u.tx-r.position.x)*dt*1.4;r.position.z+=(u.tz-r.position.z)*dt*1.4;r.position.y-=u.v*dt;r.rotation.x+=dt*5;r.rotation.z+=dt*4;if(r.position.y<=.45){strikeHit(u.tx,u.tz);s.group.remove(r);s.rocks.splice(i,1)}}
+  if(!s.group.parent)scene.add(s.group);
+  s.next-=dt;
+  const maxRocks = SETTINGS.quality === 'low' ? 12 : 22;
+  if(s.next<=0 && s.rocks.length < maxRocks){
+    s.next=rnd(.28,.55);
+    const x=rnd(-24,24),z=rnd(-24,24);
+    const r=meteorPool.get();
+    scene.remove(r);
+    s.group.add(r);
+    r.scale.setScalar(rnd(.75,1.2));
+    r.position.set(x+rnd(-8,8),32,z+rnd(-8,8));
+    r.userData={tx:x,tz:z,v:rnd(20,28)};
+    s.rocks.push(r);
+    addFx(makeRing(x,z,1.6,2.4,0xff9f38),.8,'expand',ringPool);
+  }
+  for(let i=s.rocks.length-1;i>=0;i--){
+    const r=s.rocks[i],u=r.userData;
+    r.position.x+=(u.tx-r.position.x)*dt*1.4;
+    r.position.z+=(u.tz-r.position.z)*dt*1.4;
+    r.position.y-=u.v*dt;
+    r.rotation.x+=dt*5;
+    r.rotation.z+=dt*4;
+    if(r.position.y<=.45){
+      strikeHit(u.tx,u.tz);
+      s.group.remove(r);
+      meteorPool.release(r);
+      s.rocks.splice(i,1);
+      playSfx('boom');
+    }
+  }
 }
 function hasRoof(){
   const x=player.pos.x,z=player.pos.z,y=player.pos.y+PLAYER_H;
@@ -902,6 +1084,16 @@ function acidUpdate(s,dt){
 const DISASTER_TYPES = ['storm','tsunami','fire','tornado','flood','meteor','acid'];
 const DISASTER_NAME = {storm:'雷暴', tsunami:'海啸', fire:'火灾', tornado:'龙卷风', flood:'洪水', meteor:'流星雨', acid:'酸雨'};
 
+const DISASTER_TIPS = {
+  storm:'雷暴来袭：离高处和开阔地远一点，别站在屋顶最高点。',
+  tsunami:'海啸来袭：马上往屋顶和高地跑，低处会被浪卷走。',
+  fire:'火灾蔓延：远离燃烧的树和房屋，别被困在角落。',
+  tornado:'龙卷风接近：远离旋转风柱，躲到结实建筑背后。',
+  flood:'洪水上涨：立刻去高地或屋顶，完全淹没会持续掉血。',
+  meteor:'流星雨来袭：观察地面红圈，别停在落点附近。',
+  acid:'酸雨降临：找屋檐或室内躲避，露天会持续受伤。'
+};
+
 function startDisaster(type){
   if (type === 'storm')   G.instance = stormInit();
   if (type === 'tsunami') G.instance = tsunamiInit();
@@ -910,12 +1102,16 @@ function startDisaster(type){
   if (type === 'flood')   G.instance = floodInit();
   if (type === 'meteor')  G.instance = meteorInit();
   if (type === 'acid')    G.instance = acidInit();
+  setTip(DISASTER_TIPS[type] || '灾害开始：保持移动，寻找掩体。');
 }
 
 function clearDisaster(){
+  if (G.instance && G.instance.rocks) G.instance.rocks.forEach(r=>meteorPool.release(r));
+  if (G.instance && G.instance.strikes) G.instance.strikes.forEach(st=>st.ring && ringPool.release(st.ring));
+  if (G.instance && G.instance.pts) G.instance.pts.forEach(p=>{ if (p.src) p.src._burning = false; firePool.release(p.g); });
   if (G.instance && G.instance.group) scene.remove(G.instance.group);
-  if (G.instance && G.instance.pts) G.instance.pts.forEach(p=>scene.remove(p.g));
   G.instance = null;
+  clearTransientEffects();
 
   scene.background.setHex(0x8fcbe8);
   scene.fog.color.setHex(0x9ed3ee);
@@ -933,7 +1129,7 @@ function updateDisaster(dt){
   s.t += dt;
   if (s.kind === 'storm')   stormUpdate(s, dt);
   if (s.kind === 'tsunami') tsunamiUpdate(s, dt);
-  if (s.kind === 'fire')    fireUpdate(s, dt);
+  if (s.kind === 'fire')  { fireUpdate(s, dt); if (Math.random() < 0.04) playSfx('fire'); }
   if (s.kind === 'tornado') tornadoUpdate(s, dt);
   if (s.kind === 'flood')   floodUpdate(s, dt);
   if (s.kind === 'meteor')  meteorUpdate(s, dt);
@@ -1012,7 +1208,8 @@ const G = {
   disasterType: null,
   mapName: MAPS[0],
   survivors: [],
-  survives: false
+  survives: false,
+  warned: false
 };
 
 let camYaw = Math.PI, camPitch = 0.2;
@@ -1047,10 +1244,13 @@ function setState(s){
 
   if (s === 'lobby'){
     clearDisaster();
+    camera.position.set(0, 20, -45);
+    setTip('观战塔待机中：下一回合即将开始。');
     G.round++;
     G.mapName = MAPS[(G.round-1)%MAPS.length];
     G.survivors = [];
     G.disasterType = null;
+    G.warned = false;
     resetPlayer();
     player.pos.set(TOWER.x, TOWER.y, TOWER.z);
     camYaw = Math.PI * 0.97;
@@ -1060,6 +1260,7 @@ function setState(s){
   if (s === 'prep'){
     clearDisaster();
     G.disasterType = null;
+    G.warned = false;
     resetPlayer();
     resetNpcs();
     const sp = SPAWNS[rndi(0, SPAWNS.length - 1)];
@@ -1067,16 +1268,19 @@ function setState(s){
     camYaw = Math.PI;
     camPitch = 0.1;
     showBanner('准 备', 1200);
+    setTip('准备阶段：灾害类型暂不公布，先观察地形，找高地、屋顶或掩体。');
   }
 
   if (s === 'disaster'){
     G.disasterType = DISASTER_TYPES[rndi(0,DISASTER_TYPES.length-1)];
+    playSfx('alarm');
     startDisaster(G.disasterType);
     showBanner(DISASTER_NAME[G.disasterType], 1600);
   }
 
   if (s === 'result'){
     clearDisaster();
+    setTip('结算阶段：查看幸存者，下一回合自动开始。');
     showBanner('回合结束', 1200);
   }
 }
@@ -1095,6 +1299,17 @@ function updateGame(dt){
     if (G.t > 5) setState('prep');
   }
   else if (G.state === 'prep'){
+    const remain = PREP_TIME - G.t;
+    if (!G.warned && remain <= 4){
+      G.warned = true;
+      showBanner('灾 害 预 警', 1300);
+      setTip('警报响起：灾害即将开始，但类型仍然未知，立刻确认逃生路线。');
+      playSfx('alarm');
+      const wf = document.getElementById('warningFrame');
+      wf.classList.remove('active');
+      void wf.offsetWidth;
+      wf.classList.add('active');
+    }
     if (G.t > PREP_TIME) setState('disaster');
   }
   else if (G.state === 'disaster'){
@@ -1206,9 +1421,23 @@ function updatePlayer(dt){
    ============================================================ */
 function updateCamera(dt){
   if (player.dead){
-    const want = new THREE.Vector3(0, 27, -40);
-    camera.position.lerp(want, Math.min(1, dt * 3));
-    camera.lookAt(0, 3, 0);
+    const sp = (keys['ShiftLeft'] || keys['ShiftRight'] || touchMove.run) ? 22 : 13;
+    let ix = touchMove.x, iz = touchMove.z;
+    if (keys['KeyW']) iz -= 1;
+    if (keys['KeyS']) iz += 1;
+    if (keys['KeyA']) ix -= 1;
+    if (keys['KeyD']) ix += 1;
+    const fwd = new THREE.Vector3(-Math.sin(camYaw), 0, -Math.cos(camYaw));
+    const right = new THREE.Vector3(Math.cos(camYaw), 0, -Math.sin(camYaw));
+    const move = new THREE.Vector3().addScaledVector(right, ix).addScaledVector(fwd, -iz);
+    if (move.lengthSq() > 0) camera.position.addScaledVector(move.normalize(), sp * dt);
+    if (keys['Space'] || touchMove.jump) camera.position.y += sp * dt;
+    if (keys['ControlLeft'] || keys['ControlRight']) camera.position.y -= sp * dt;
+    camera.position.x = clamp(camera.position.x, -58, 58);
+    camera.position.z = clamp(camera.position.z, -58, 58);
+    camera.position.y = clamp(camera.position.y, 4, 46);
+    const look = camera.position.clone().add(new THREE.Vector3(-Math.sin(camYaw), Math.sin(camPitch), -Math.cos(camYaw)).normalize());
+    camera.lookAt(look);
     return;
   }
 
@@ -1247,13 +1476,13 @@ addEventListener('keyup', e => { keys[e.code] = false; });
 
 document.addEventListener('mousemove', e => {
   if (document.pointerLockElement !== renderer.domElement) return;
-  camYaw -= e.movementX * 0.0024;
-  camPitch += e.movementY * 0.0018;
+  camYaw -= e.movementX * 0.0024 * SETTINGS.sensitivity;
+  camPitch += e.movementY * 0.0018 * SETTINGS.sensitivity;
   camPitch = clamp(camPitch, -0.14, 1.05);
   camYaw = camYaw % (Math.PI * 2);
 });
 
-const joy=document.getElementById('joy'),knob=document.getElementById('knob'),btnJump=document.getElementById('btnJump'),btnRun=document.getElementById('btnRun');
+const joy=document.getElementById('joy'),knob=document.getElementById('knob'),lookPad=document.getElementById('lookPad'),btnJump=document.getElementById('btnJump'),btnRun=document.getElementById('btnRun');
 let joyId=null;
 function setJoy(e){
   const r=joy.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;
@@ -1267,6 +1496,7 @@ joy.addEventListener('pointerdown',e=>{joyId=e.pointerId;joy.setPointerCapture(j
 joy.addEventListener('pointermove',e=>{if(e.pointerId===joyId)setJoy(e)});
 joy.addEventListener('pointerup',endJoy);joy.addEventListener('pointercancel',endJoy);
 btnJump.addEventListener('pointerdown',e=>{e.preventDefault();touchMove.jump=true});
+btnJump.addEventListener('pointerup',()=>touchMove.jump=false);btnJump.addEventListener('pointercancel',()=>touchMove.jump=false);
 btnRun.addEventListener('pointerdown',e=>{e.preventDefault();touchMove.run=true});
 btnRun.addEventListener('pointerup',()=>touchMove.run=false);btnRun.addEventListener('pointercancel',()=>touchMove.run=false);
 
@@ -1282,8 +1512,23 @@ const elMap    = document.getElementById('mapName');
 const elRound  = document.getElementById('roundNo');
 const elAlive  = document.getElementById('aliveCount');
 const elSurv   = document.getElementById('survivorList');
+const settingsEl = document.getElementById('settings');
+const qualitySel = document.getElementById('qualitySel');
+const soundToggle = document.getElementById('soundToggle');
+const sensRange = document.getElementById('sensRange');
+qualitySel.value = SETTINGS.quality;
+sensRange.value = SETTINGS.sensitivity;
+soundToggle.textContent = SETTINGS.sound ? '开启' : '关闭';
+document.getElementById('settingsBtn').addEventListener('click', e=>{ e.stopPropagation(); settingsEl.style.display='flex'; });
+document.getElementById('closeSettings').addEventListener('click', ()=>settingsEl.style.display='none');
+settingsEl.addEventListener('click', e=>{ if(e.target===settingsEl) settingsEl.style.display='none'; });
+qualitySel.addEventListener('change', ()=>{ SETTINGS.quality=qualitySel.value; applyQuality(); });
+soundToggle.addEventListener('click', ()=>{ SETTINGS.sound=!SETTINGS.sound; soundToggle.textContent=SETTINGS.sound?'开启':'关闭'; if(SETTINGS.sound){ ensureAudio(); playSfx('start'); } });
+sensRange.addEventListener('input', ()=>{ SETTINGS.sensitivity=parseFloat(sensRange.value); });
+document.getElementById('fullscreenBtn').addEventListener('click', ()=>{ if(!document.fullscreenElement) document.documentElement.requestFullscreen?.(); else document.exitFullscreen?.(); });
+document.getElementById('resetCamBtn').addEventListener('click', ()=>{ camYaw=Math.PI; camPitch=player.dead?0.25:0.1; });
 
-function updateHUD(dt){
+function updateHUD(dt){ 
   const hp = clamp(player.hp / player.maxHp, 0, 1);
   elHpFill.style.width = (hp * 100).toFixed(1) + '%';
   elHpFill.style.background = hp > 0.55
@@ -1342,20 +1587,46 @@ function loop(now){
 
 const startEl = document.getElementById('start');
 startEl.addEventListener('click', () => {
+  ensureAudio();
+  playSfx('start');
   startEl.style.display = 'none';
   started = true;
   setState('lobby');
   lastT = performance.now();
-  if (renderer.domElement.requestPointerLock) {
+  if (!isTouchDevice && renderer.domElement.requestPointerLock) {
     try { renderer.domElement.requestPointerLock(); } catch(e){}
   }
 });
 
 renderer.domElement.addEventListener('click', () => {
-  if (started && !document.pointerLockElement) {
+  if (started && !isTouchDevice && !document.pointerLockElement) {
     try { renderer.domElement.requestPointerLock(); } catch(e){}
   }
 });
+
+let lookId = null, lookLastX = 0, lookLastY = 0;
+function startLook(e){
+  if (!started || !isTouchDevice) return;
+  e.preventDefault();
+  lookId = e.pointerId;
+  lookLastX = e.clientX;
+  lookLastY = e.clientY;
+  lookPad.setPointerCapture(lookId);
+}
+function moveLook(e){
+  if (e.pointerId !== lookId) return;
+  e.preventDefault();
+  const dx = e.clientX - lookLastX, dy = e.clientY - lookLastY;
+  lookLastX = e.clientX; lookLastY = e.clientY;
+  camYaw -= dx * 0.009 * SETTINGS.sensitivity;
+  camPitch += dy * 0.0065 * SETTINGS.sensitivity;
+  camPitch = clamp(camPitch, -0.14, 1.05);
+}
+function endLook(){ lookId = null; }
+lookPad.addEventListener('pointerdown', startLook);
+lookPad.addEventListener('pointermove', moveLook);
+lookPad.addEventListener('pointerup', endLook);
+lookPad.addEventListener('pointercancel', endLook);
 
 addEventListener('resize', () => {
   camera.aspect = innerWidth / innerHeight;
