@@ -152,6 +152,20 @@
   /* 大厅电梯 */
   #elevatorBtn{position:fixed;z-index:14;display:none;bottom:90px;left:50%;transform:translateX(-50%);pointer-events:auto;border:0;border-radius:999px;background:linear-gradient(180deg,#4af,#06c);color:#fff;font-weight:900;padding:10px 24px;font-size:14px;box-shadow:0 6px 0 rgba(0,0,0,.3);letter-spacing:.08em}
   #elevatorBtn:active{transform:translateX(-50%) translateY(3px);box-shadow:0 2px 0 rgba(0,0,0,.22)}
+  /* 结算界面 */
+  #resultPanel{position:fixed;inset:0;z-index:19;display:none;align-items:center;justify-content:center;background:rgba(2,8,16,.55);pointer-events:none}
+  #resultCard{width:min(380px,calc(100% - 32px));padding:24px 20px;border-radius:22px;background:linear-gradient(180deg,rgba(12,28,48,.97),rgba(5,14,26,.98));border:1px solid rgba(255,255,255,.2);box-shadow:0 32px 80px rgba(0,0,0,.55);color:#fff;text-align:center;pointer-events:auto}
+  #resultCard .rc-title{font-size:22px;font-weight:900;letter-spacing:3px;margin-bottom:4px}
+  #resultCard .rc-sub{font-size:12px;opacity:.6;margin-bottom:18px}
+  .rc-row{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:10px;font-size:13px;margin-bottom:4px}
+  .rc-row.rc-me{background:rgba(74,158,255,.18);border:1px solid rgba(74,158,255,.35)}
+  .rc-row:not(.rc-me){background:rgba(255,255,255,.06)}
+  .rc-rank{width:24px;font-size:16px;text-align:center}
+  .rc-name{flex:1;font-weight:700}
+  .rc-status{font-size:11px;padding:2px 8px;border-radius:999px;font-weight:900}
+  .rc-alive{background:rgba(74,222,128,.2);color:#4ade80}
+  .rc-dead{background:rgba(255,100,100,.2);color:#f87171}
+  #resultCountdown{font-size:11px;opacity:.45;margin-top:14px}
 </style>
 </head>
 <body>
@@ -204,6 +218,16 @@
   <h2>🏆 累计排行榜</h2>
   <div id="sbList"></div>
   <button id="closeSb" style="width:100%;margin-top:10px;padding:8px;border:0;border-radius:10px;background:rgba(255,255,255,.12);color:#fff;font-weight:900;cursor:pointer;pointer-events:auto">关闭</button>
+</div>
+
+<!-- 结算面板 -->
+<div id="resultPanel">
+  <div id="resultCard">
+    <div class="rc-title" id="rcTitle">回合结束</div>
+    <div class="rc-sub" id="rcSub">第 1 回合</div>
+    <div id="rcList"></div>
+    <div id="resultCountdown">下一回合 <b id="rcCountdown">5</b> 秒后开始</div>
+  </div>
 </div>
 
 <!-- 大厅电梯按钮 -->
@@ -605,6 +629,8 @@ function clearMapObjects(){
   colliders.splice(BASE_COLLIDER_COUNT);
   // 清除可燃物
   flammables.splice(BASE_FLAMMABLE_COUNT);
+  // 清除道具箱
+  clearItemBoxes();
 }
 
 // 临时 box：记录到 currentMapObjects，碰撞体会在 BASE_COLLIDER_COUNT 之后
@@ -812,6 +838,49 @@ scene.add(player.group);
    假人（装饰，让岛上不那么空）
    ============================================================ */
 const npcs = [];
+const npcDeathParticles = [];
+
+/* 道具箱系统 */
+const itemBoxes = [];
+const itemBoxGeo = new THREE.BoxGeometry(0.7, 0.7, 0.7);
+
+function spawnItemBox(x, z) {
+  const colors = [0xffd700, 0x44aaff, 0xff6666];
+  const color = colors[rndi(0, 2)];
+  const mat2 = new THREE.MeshLambertMaterial({ color });
+  const mesh = new THREE.Mesh(itemBoxGeo, mat2);
+  const y = supportHeight(x, z, 2) + 0.4;
+  mesh.position.set(x, y < 0 ? 0.4 : y, z);
+  mesh.castShadow = true;
+  scene.add(mesh);
+  const type = rndi(0, 2);
+  itemBoxes.push({ mesh, x, y: mesh.position.y, z, type, rot: 0 });
+}
+
+function clearItemBoxes() {
+  itemBoxes.forEach(b => scene.remove(b.mesh));
+  itemBoxes.length = 0;
+}
+
+function updateItemBoxes(dt) {
+  for (let i = itemBoxes.length - 1; i >= 0; i--) {
+    const b = itemBoxes[i];
+    b.rot += dt * 1.5;
+    b.mesh.rotation.y = b.rot;
+    b.mesh.position.y = b.y + Math.sin(b.rot) * 0.12;
+    if (!player.dead && Math.hypot(player.pos.x - b.x, player.pos.z - b.z) < 1.1) {
+      if (itemCD[b.type] > 0) {
+        itemCD[b.type] = 0;
+        spawnFloatText('拾取 ' + ITEMS[b.type].icon + ITEMS[b.type].name, '#fbbf24');
+        playSfx('survive');
+      } else {
+        ITEMS[b.type].effect();
+      }
+      scene.remove(b.mesh);
+      itemBoxes.splice(i, 1);
+    }
+  }
+}
 const NPC_COLORS = [0xc85a4a, 0x4a9b6e, 0xd9a441, 0x8a5ab0];
 for (let i=0;i<4;i++){
   const spawn = [[-4,-2],[8,-6],[-8,4],[3,10]][i];
@@ -997,6 +1066,46 @@ function ensureAudio(){
   audioCtx ||= new (window.AudioContext || window.webkitAudioContext)();
   if (audioCtx.state === 'suspended') audioCtx.resume();
 }
+
+/* BGM 合成音乐 */
+let bgmTimer = null;
+let bgmPhase = 'none';
+
+const BGM_LOBBY  = [261,329,392,523,392,329,261,196];
+const BGM_PREP   = [220,247,261,220,196,220,247,196];
+const BGM_DISAS  = [110,146,110,130,110,98,110,130];
+
+function bgmStart(phase) {
+  if (bgmPhase === phase) return;
+  bgmStop();
+  bgmPhase = phase;
+  if (!SETTINGS.sound) return;
+  const notes = phase === 'lobby' ? BGM_LOBBY : phase === 'prep' ? BGM_PREP : BGM_DISAS;
+  const tempo = phase === 'disaster' ? 280 : 480;
+  let step = 0;
+  bgmTimer = setInterval(() => {
+    if (!SETTINGS.sound || document.hidden) return;
+    ensureAudio();
+    const f = notes[step++ % notes.length];
+    if (audioCtx) {
+      const o = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      o.type = phase === 'disaster' ? 'sawtooth' : 'triangle';
+      o.frequency.value = f;
+      const t = audioCtx.currentTime;
+      g.gain.setValueAtTime(0.001, t);
+      g.gain.exponentialRampToValueAtTime(0.045, t + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.001, t + (tempo / 1000) * 0.85);
+      o.connect(g); g.connect(audioCtx.destination);
+      o.start(t); o.stop(t + tempo / 1000);
+    }
+  }, tempo);
+}
+
+function bgmStop() {
+  if (bgmTimer) { clearInterval(bgmTimer); bgmTimer = null; }
+  bgmPhase = 'none';
+}
 function tone(freq, dur, type='sine', gain=0.08, slide=1){
   if (!audioCtx || !SETTINGS.sound) return;
   const now = audioCtx.currentTime;
@@ -1091,6 +1200,14 @@ function die(reason){
       player.pos.set(TOWER.x, TOWER.y, TOWER.z);
       camYaw = Math.atan2(0 - LOBBY_X, 0 - LOBBY_Z);
       camPitch = 0.42;
+      // 找第一个存活 NPC 并显示"正在观战 XXX"
+      const alive = npcs.filter(n => !n.dead);
+      if (alive.length > 0) {
+        const target = alive[Math.floor(Math.random() * alive.length)];
+        const idx = npcs.indexOf(target);
+        setTip('观战视角 · 正在观察 ' + BOT_NAMES[idx] + ' · 下一回合自动重生');
+        G._spectateTarget = idx;
+      }
     }
   }, 2000);
 }
@@ -1754,6 +1871,33 @@ function updateDisaster(dt){
 /* ============================================================
    假人行为
    ============================================================ */
+function npcFleeTarget(n) {
+  const dt = G.disasterType;
+  if (dt === 'flood' || dt === 'tsunami' || dt === 'storm' || dt === 'acid' || dt === 'blizzard') {
+    let best = null, bestY = -99;
+    for (const c of colliders) {
+      if (c.maxY > bestY && c.maxY > 1.5) {
+        const cx = (c.minX + c.maxX) / 2;
+        const cz = (c.minZ + c.maxZ) / 2;
+        if (Math.hypot(cx - n.pos.x, cz - n.pos.z) < 24) {
+          best = { x: cx, z: cz }; bestY = c.maxY;
+        }
+      }
+    }
+    if (best) return new THREE.Vector3(best.x, 0, best.z);
+  }
+  if (dt === 'tornado' && G.instance) {
+    const tx = G.instance.x || 0, tz = G.instance.z || 0;
+    const away = new THREE.Vector3(n.pos.x - tx, 0, n.pos.z - tz).normalize();
+    return new THREE.Vector3(n.pos.x + away.x * 14, 0, n.pos.z + away.z * 14);
+  }
+  if (dt === 'volcano' || dt === 'fire') {
+    const away = new THREE.Vector3(n.pos.x, 0, n.pos.z).normalize();
+    return new THREE.Vector3(away.x * 16, 0, away.z * 16);
+  }
+  return new THREE.Vector3(rnd(-16,16), 0, rnd(-16,16));
+}
+
 function npcDie(n){
   if (n.dead) return;
   n.dead = true;
@@ -1762,6 +1906,30 @@ function npcDie(n){
     n.group.position.y = n.pos.y + 0.4;
   } else {
     n.group.visible = false;
+  }
+  // 生成死亡粒子
+  for (let p = 0; p < 12; p++) {
+    const geo = new THREE.SphereGeometry(0.08 + Math.random() * 0.1, 4, 4);
+    const mat = new THREE.MeshBasicMaterial({ color: [0xff4444, 0xff8800, 0xffcc00][p % 3] });
+    const mesh = new THREE.Mesh(geo, mat);
+    mesh.position.set(n.pos.x, n.pos.y + 1, n.pos.z);
+    const vel = new THREE.Vector3(rnd(-4,4), rnd(3,8), rnd(-4,4));
+    scene.add(mesh);
+    npcDeathParticles.push({ mesh, vel, life: 1.0 });
+  }
+}
+
+function updateNpcDeathParticles(dt) {
+  for (let i = npcDeathParticles.length - 1; i >= 0; i--) {
+    const p = npcDeathParticles[i];
+    p.vel.y -= 12 * dt;
+    p.mesh.position.x += p.vel.x * dt;
+    p.mesh.position.y += p.vel.y * dt;
+    p.mesh.position.z += p.vel.z * dt;
+    p.life -= dt * 1.2;
+    p.mesh.material.opacity = Math.max(0, p.life);
+    p.mesh.material.transparent = true;
+    if (p.life <= 0) { scene.remove(p.mesh); npcDeathParticles.splice(i, 1); }
   }
 }
 
@@ -1776,14 +1944,17 @@ function updateNpcs(dt){
     if (dist < 1.2){
       n.wait -= dt;
       if (n.wait <= -1.5){
-        n.target.set(rnd(-16,16), 0, rnd(-16,16));
-        n.wait = 0;
+        const ft = G.state === 'disaster' ? npcFleeTarget(n) : new THREE.Vector3(rnd(-16,16), 0, rnd(-16,16));
+        n.target.set(ft.x, 0, ft.z);
+        n.wait = G.state === 'disaster' ? rnd(1.5, 3.5) : 0;
       }
     } else {
       to.normalize();
-      // 灾害中乱跑
+      // 灾害中智能逃跑
       let sp = 3.4;
-      if (G.state === 'disaster') sp = 5.6;
+      if (G.state === 'disaster') {
+        sp = (G.disasterType === 'meteor' || G.disasterType === 'sandstorm') ? 7 : 6.2;
+      }
       n.pos.x += to.x * sp * dt;
       n.pos.z += to.z * sp * dt;
       n.group.rotation.y = Math.atan2(to.x, to.z);
@@ -1879,6 +2050,7 @@ function resetPlayer(){
   const u = player.group.userData;
   u.legL.rotation.x = u.legR.rotation.x = 0;
   u.armL.rotation.x = u.armR.rotation.x = 0;
+  G._spectateTarget = undefined;
 }
 
 function resetNpcs(){
@@ -1897,6 +2069,8 @@ function setState(s){
   hideCenter();
 
   if (s === 'lobby'){
+    hideResultPanel();
+    bgmStart('lobby');
     clearDisaster();
     camera.position.set(0, 20, -45);
     G.round++;
@@ -1922,6 +2096,7 @@ function setState(s){
   }
 
   if (s === 'prep'){
+    bgmStart('prep');
     clearDisaster();
     // 地图已在 lobby 阶段建好，直接使用（无需重建）
     const mapDef = MAP_DEFS[G.mapIdx];
@@ -1937,9 +2112,15 @@ function setState(s){
     camPitch = 0.1;
     showBanner('准 备', 1200);
     setTip('准备阶段｜【' + mapDef.name + '】灾害未知，找高地/掩体');
+    // 随机生成道具箱
+    clearItemBoxes();
+    for (let b = 0; b < rndi(3, 5); b++) {
+      spawnItemBox(rnd(-16, 16), rnd(-16, 16));
+    }
   }
 
   if (s === 'disaster'){
+    bgmStart('disaster');
     G.disasterType = DISASTER_TYPES[rndi(0,DISASTER_TYPES.length-1)];
     playSfx('alarm');
     startDisaster(G.disasterType);
@@ -1961,11 +2142,13 @@ function setState(s){
   }
 
   if (s === 'result'){
+    bgmStop();
     clearDisaster();
     setTip('结算中，等待下一回合。');
     showBanner('回合结束', 1200);
     // 结算时显示投票面板
     setTimeout(() => { if(G.state === 'result') openVotePanel(); }, 1500);
+    setTimeout(() => showResultPanel(!player.dead), 400);
   }
 }
 
@@ -1997,6 +2180,18 @@ function updateGame(dt){
     if (G.t > PREP_TIME) setState('disaster');
   }
   else if (G.state === 'disaster'){
+    // 观战跟随逻辑
+    if (player.dead && G._spectateTarget !== undefined && G._spectateTarget >= 0) {
+      const tn = npcs[G._spectateTarget];
+      if (tn && !tn.dead) {
+        camera.position.lerp(new THREE.Vector3(tn.pos.x, tn.pos.y + 8, tn.pos.z + 10), 0.04);
+        camera.lookAt(tn.pos.x, tn.pos.y + 1, tn.pos.z);
+      } else {
+        const nextAlive = npcs.findIndex(n => !n.dead);
+        G._spectateTarget = nextAlive;
+        if (nextAlive < 0) G._spectateTarget = undefined;
+      }
+    }
     if (G.instance && G.instance.t > G.instance.dur){
       const survived = !player.dead;
       G.survivors = [];
@@ -2012,6 +2207,8 @@ function updateGame(dt){
     }
   }
   else if (G.state === 'result'){
+    const rcEl = document.getElementById('rcCountdown');
+    if (rcEl) rcEl.textContent = Math.max(0, Math.ceil(RESULT_TIME - G.t));
     if (G.t > RESULT_TIME) setState('lobby');
   }
 }
@@ -2266,6 +2463,37 @@ function showSurviveReward(survived){
   playSfx('survive');
 }
 
+function showResultPanel(survived) {
+  const panel = document.getElementById('resultPanel');
+  const title = document.getElementById('rcTitle');
+  const sub = document.getElementById('rcSub');
+  const list = document.getElementById('rcList');
+
+  title.textContent = survived ? '🏆 你幸存了！' : '💀 你没能幸存';
+  title.style.color = survived ? '#4ade80' : '#f87171';
+  sub.textContent = '第 ' + G.round + ' 回合 · ' + (G.mapName || '未知地图');
+
+  const all = [
+    { name: '你', alive: !player.dead, isMe: true },
+    ...npcs.map((n, i) => ({ name: BOT_NAMES[i], alive: !n.dead, isMe: false }))
+  ].sort((a, b) => (b.alive ? 1 : 0) - (a.alive ? 1 : 0));
+
+  list.innerHTML = all.map((p, i) => {
+    const ranks = ['🥇','🥈','🥉','4️⃣','5️⃣'];
+    return `<div class="rc-row${p.isMe ? ' rc-me' : ''}">
+      <span class="rc-rank">${p.alive ? ranks[i] || (i+1) : '💀'}</span>
+      <span class="rc-name">${p.name}</span>
+      <span class="rc-status ${p.alive ? 'rc-alive' : 'rc-dead'}">${p.alive ? '幸存' : '淘汰'}</span>
+    </div>`;
+  }).join('');
+
+  panel.style.display = 'flex';
+}
+
+function hideResultPanel() {
+  document.getElementById('resultPanel').style.display = 'none';
+}
+
 /* ============================================================
    地图投票系统
    ============================================================ */
@@ -2506,7 +2734,7 @@ document.getElementById('settingsBtn').addEventListener('click', e=>{ e.stopProp
 document.getElementById('closeSettings').addEventListener('click', ()=>settingsEl.style.display='none');
 settingsEl.addEventListener('click', e=>{ if(e.target===settingsEl) settingsEl.style.display='none'; });
 qualitySel.addEventListener('change', ()=>{ SETTINGS.quality=qualitySel.value; applyQuality(); });
-soundToggle.addEventListener('click', ()=>{ SETTINGS.sound=!SETTINGS.sound; soundToggle.textContent=SETTINGS.sound?'开启':'关闭'; if(SETTINGS.sound){ ensureAudio(); playSfx('start'); } });
+soundToggle.addEventListener('click', ()=>{ SETTINGS.sound=!SETTINGS.sound; soundToggle.textContent=SETTINGS.sound?'开启':'关闭'; if(SETTINGS.sound){ ensureAudio(); playSfx('start'); } else { bgmStop(); } });
 sensRange.addEventListener('input', ()=>{ SETTINGS.sensitivity=parseFloat(sensRange.value); });
 deadRange.addEventListener('input', ()=>{ SETTINGS.joyDead=parseFloat(deadRange.value); });
 lookModeBtn.addEventListener('click', ()=>{ SETTINGS.freeLook=!SETTINGS.freeLook; lookModeBtn.textContent=SETTINGS.freeLook?'自由拖拽':'固定视角'; });
@@ -2584,6 +2812,8 @@ function loop(now){
     updateElevator(dt);
     updateVoteCountdown(dt);
     updateItemCooldown(dt);
+    updateNpcDeathParticles(dt);
+    if (G.state === 'prep' || G.state === 'disaster') updateItemBoxes(dt);
   } else {
     updateCamera(dt);
     updateNpcs(dt);
