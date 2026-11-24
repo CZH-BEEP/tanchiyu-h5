@@ -14,15 +14,24 @@
   #top{position:absolute;top:16px;left:50%;transform:translateX(-50%);text-align:center}
   #phase{font-size:12px;letter-spacing:4px;opacity:.8}
   #timer{font-size:44px;font-weight:900;line-height:1.1;font-variant-numeric:tabular-nums;letter-spacing:-1px}
-  #hpwrap{position:absolute;left:22px;bottom:24px;width:210px}
-  #hplabel{font-size:11px;letter-spacing:2px;opacity:.7;margin-bottom:6px}
-  #hpbar{height:11px;background:rgba(0,0,0,.5);border-radius:6px;overflow:hidden;
-    box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
+  /* 血条移到右上角（原版位置），细长条 */
+  #hpwrap{position:absolute;right:12px;top:16px;width:130px}
+  #hplabel{display:none}
+  #hpbar{height:8px;background:rgba(0,0,0,.55);border-radius:4px;overflow:hidden;
+    box-shadow:0 1px 4px rgba(0,0,0,.4),inset 0 0 0 1px rgba(255,255,255,.1)}
   #hpfill{height:100%;width:100%;background:linear-gradient(90deg,#4ade80,#22c55e);
-    transition:width .12s linear}
-  @keyframes hpBlink{0%,100%{opacity:1}40%{opacity:.2;filter:hue-rotate(-60deg) brightness(1.4)}}
+    transition:width .12s linear;border-radius:4px}
+  @keyframes hpBlink{0%,100%{opacity:1}40%{opacity:.15;filter:hue-rotate(-60deg) brightness(1.6)}}
   #hpfill.hurt{animation:hpBlink .28s ease-in-out 2}
-  #hpnum{position:absolute;right:0;bottom:-18px;font-size:11px;opacity:.65}
+  #hpnum{position:absolute;right:0;bottom:-16px;font-size:10px;opacity:.7;color:#9ff}
+  /* 原版底部道具栏（3格） */
+  #itemBar{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);
+    display:flex;gap:4px;pointer-events:none}
+  .itemSlot{width:52px;height:52px;border-radius:6px;
+    background:rgba(10,20,35,.65);border:2px solid rgba(255,255,255,.28);
+    display:flex;align-items:center;justify-content:center;font-size:22px;
+    box-shadow:inset 0 0 12px rgba(0,0,0,.3)}
+  .itemSlot.selected{border-color:#4a9eff;box-shadow:0 0 10px rgba(74,158,255,.55),inset 0 0 12px rgba(0,0,0,.3)}
   #banner{position:absolute;top:30%;left:50%;transform:translate(-50%,-50%);
     font-size:clamp(28px,5vw,46px);font-weight:800;letter-spacing:6px;opacity:0;
     transition:opacity .35s;text-align:center;white-space:nowrap}
@@ -36,10 +45,19 @@
   #skipBtn:active{transform:translateY(3px);box-shadow:0 2px 0 rgba(0,0,0,.22)}
   #settingsBtn{position:absolute;right:18px;bottom:20px;pointer-events:auto;width:64px;height:64px;border-radius:20px;border:none;background:url('ui/btn_settings.png') no-repeat center/contain;box-shadow:0 8px 22px rgba(0,0,0,.32);cursor:pointer;-webkit-tap-highlight-color:transparent}
   #settingsBtn:active{transform:scale(.92);box-shadow:0 4px 10px rgba(0,0,0,.25)}
-  #warningFrame{position:fixed;inset:0;pointer-events:none;z-index:7;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .18s}
-  #warningFrame img{width:72%;max-width:720px;height:auto;filter:drop-shadow(0 0 18px rgba(239,68,68,.8))}
-  @keyframes warnPulse{0%,100%{opacity:0}50%{opacity:1}}
-  #warningFrame.active{animation:warnPulse .6s ease-in-out 4}
+  /* 原版双层灾害警告条 */
+  #disasterWarning{position:fixed;top:-80px;left:50%;transform:translateX(-50%);z-index:9;
+    min-width:360px;max-width:min(560px,calc(100% - 32px));display:flex;flex-direction:column;
+    border-radius:0 0 6px 6px;overflow:hidden;pointer-events:none;
+    box-shadow:0 6px 22px rgba(0,0,0,.45);transition:top .22s cubic-bezier(.22,1,.36,1)}
+  #disasterWarning.show{top:0}
+  #warnTitle{background:#c0392b;color:#fff;font-size:13px;font-weight:900;
+    letter-spacing:2px;text-align:center;padding:7px 24px;font-family:Arial,sans-serif;
+    text-shadow:0 1px 3px rgba(0,0,0,.3)}
+  #warnMsg{background:#f5c6c6;color:#7a1010;font-size:12px;font-weight:700;
+    letter-spacing:.5px;text-align:center;padding:5px 20px;line-height:1.4}
+  /* 兼容旧代码，warningFrame 保留但隐藏 */
+  #warningFrame{display:none!important}
   #settings{position:fixed;inset:0;z-index:26;display:none;align-items:center;justify-content:center;background:rgba(2,8,14,.58);color:#fff}.panel{width:min(420px,calc(100% - 28px));padding:22px;border-radius:24px;background:linear-gradient(180deg,rgba(14,35,55,.96),rgba(8,18,31,.98));border:1px solid rgba(255,255,255,.22);box-shadow:0 30px 80px rgba(0,0,0,.42)}.panel h2{font-size:22px;margin-bottom:16px;letter-spacing:.12em}.row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:13px 0;font-size:14px}.row select,.row button,.row input{pointer-events:auto}.row select,.row button{border:1px solid rgba(255,255,255,.28);border-radius:12px;background:rgba(255,255,255,.12);color:#fff;padding:9px 11px;font-weight:800}.row option{color:#0b1a26}.panel .help{margin-top:12px;font-size:12px;line-height:1.8;color:#cbe8ff;opacity:.82}.closeSet{width:100%;margin-top:14px}
   #flash{position:fixed;inset:0;background:#fff;opacity:0;pointer-events:none;
     transition:opacity .09s;z-index:5}
@@ -55,13 +73,13 @@
   #start .note{margin-top:26px;font-size:11px;opacity:.42;line-height:1.9}
   #loading{position:fixed;inset:0;z-index:30;display:none;align-items:center;
     justify-content:center;color:#9fb;background:#06101a;font-size:13px;letter-spacing:2px}
-  #hud:before{content:"";position:absolute;left:14px;right:14px;top:12px;height:62px;border-radius:22px;background:linear-gradient(180deg,rgba(8,20,34,.64),rgba(8,20,34,.18));border:1px solid rgba(255,255,255,.16);box-shadow:0 16px 44px rgba(0,0,0,.28);z-index:-1}
+  #hud:before{content:"";position:absolute;left:14px;right:155px;top:12px;height:62px;border-radius:22px;background:linear-gradient(180deg,rgba(8,20,34,.64),rgba(8,20,34,.18));border:1px solid rgba(255,255,255,.16);box-shadow:0 16px 44px rgba(0,0,0,.28);z-index:-1}
   #roundInfo{position:absolute;left:18px;top:18px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
   .chip{display:inline-flex;align-items:center;gap:7px;height:36px;padding:0 12px;border-radius:999px;background:rgba(7,18,31,.68);border:1px solid rgba(255,255,255,.18);box-shadow:inset 0 0 18px rgba(255,255,255,.05);font-size:12px;font-weight:900;letter-spacing:.04em}.chip b{font-variant-numeric:tabular-nums}.ico{width:22px;height:22px;border-radius:0;display:inline-block;background:no-repeat center/contain;flex-shrink:0;vertical-align:middle}
-  #survivors{position:absolute;right:18px;top:18px;min-width:172px;padding:10px 12px;border-radius:18px;background:rgba(7,18,31,.62);border:1px solid rgba(255,255,255,.18);box-shadow:0 14px 40px rgba(0,0,0,.22)}#survivors h3{font-size:12px;letter-spacing:.12em;margin-bottom:6px;opacity:.8}#survivors div{font-size:12px;line-height:1.55;color:#d7f1ff}
+  #survivors{position:absolute;right:12px;top:34px;min-width:172px;padding:10px 12px;border-radius:18px;background:rgba(7,18,31,.62);border:1px solid rgba(255,255,255,.18);box-shadow:0 14px 40px rgba(0,0,0,.22)}#survivors h3{font-size:12px;letter-spacing:.12em;margin-bottom:6px;opacity:.8}#survivors div{font-size:12px;line-height:1.55;color:#d7f1ff}
   #mobile{position:fixed;inset:0;z-index:12;pointer-events:none;display:none}.joy{position:absolute;left:22px;bottom:26px;width:132px;height:132px;border-radius:50%;background:rgba(8,20,34,.42);border:1px solid rgba(255,255,255,.22);box-shadow:0 10px 28px rgba(0,0,0,.25);pointer-events:auto;touch-action:none;transition:transform .12s,opacity .12s}.joy.active{transform:scale(1.08);opacity:.96}.knob{position:absolute;left:43px;top:43px;width:46px;height:46px;border-radius:50%;background:linear-gradient(180deg,#e7f8ff,#62c8ff);box-shadow:0 6px 18px rgba(0,0,0,.32)}.lookPad{position:absolute;right:0;top:0;width:55vw;height:calc(100% - 150px);border-radius:0;border:none;background:transparent;pointer-events:auto;touch-action:none}.lookGuide{position:absolute;right:14%;top:42%;width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,.86);box-shadow:0 0 24px rgba(99,200,255,.9);opacity:0;pointer-events:none}.lookGuide:after{content:"";position:absolute;left:20px;top:18px;width:24px;height:34px;border-radius:12px 12px 16px 16px;background:#4aa9ff;box-shadow:inset 0 -8px 0 rgba(0,0,0,.12)}.lookGuide.show{animation:dragGuide 2.2s ease-in-out 2}@keyframes dragGuide{0%{opacity:0;transform:translateX(-50px)}20%,75%{opacity:.9}55%{transform:translateX(46px)}100%{opacity:0;transform:translateX(70px)}}.ab{position:absolute;right:20px;bottom:28px;display:grid;grid-template-columns:repeat(2,80px);gap:14px;pointer-events:auto}.ab button{width:88px;height:88px;border-radius:50%;border:none;background:transparent;box-shadow:none;touch-action:none;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent;overflow:hidden;display:flex;align-items:center;justify-content:center}.ab button img{width:100%;height:100%;object-fit:contain;display:block;pointer-events:none}.ab button:active{transform:translateY(5px) scale(1.04);filter:brightness(.82)}
   .touch-device #mobile{display:block}
-  @media(max-width:760px),(pointer:coarse){#mobile{display:block}#hint{display:none}#survivors{right:10px;top:84px;min-width:128px;padding:8px 9px}#skipBtn{right:10px;top:220px;padding:7px 13px;font-size:12px}#roundInfo{left:10px;right:10px;top:82px}.chip{height:30px;padding:0 8px;font-size:11px}#top{top:14px}#hpwrap{left:14px;bottom:184px;width:168px}#banner{top:24%}#tipBox{bottom:122px;max-width:calc(100% - 34px);font-size:12px;padding:10px 12px}#settingsBtn{right:14px;bottom:184px}.joy{width:142px;height:142px}.ab{grid-template-columns:repeat(2,80px)}.ab button{width:80px;height:80px}}
+  @media(max-width:760px),(pointer:coarse){#mobile{display:block}#hint{display:none}#survivors{right:10px;top:84px;min-width:128px;padding:8px 9px}#skipBtn{right:10px;top:220px;padding:7px 13px;font-size:12px}#roundInfo{left:10px;right:10px;top:82px}.chip{height:30px;padding:0 8px;font-size:11px}#top{top:14px}#hpwrap{right:10px;top:14px;width:110px}#banner{top:24%}#tipBox{bottom:122px;max-width:calc(100% - 34px);font-size:12px;padding:10px 12px}#settingsBtn{right:14px;bottom:184px}.joy{width:142px;height:142px}.ab{grid-template-columns:repeat(2,80px)}.ab button{width:80px;height:80px}}
 </style>
 </head>
 <body>
@@ -69,13 +87,13 @@
 <div id="hud">
   <div id="top"><div id="phase">—</div><div id="timer">—</div></div>
   <div id="roundInfo">
-    <span class="chip"><img class="ico" src="ui/ico_map.png" alt="地图"><b id="mapName">海岛小镇</b></span>
-    <span class="chip"><img class="ico" src="ui/ico_round.png" alt="回合"><b id="roundNo">1</b></span>
-    <span class="chip"><img class="ico" src="ui/ico_alive.png" alt="存活"><b id="aliveCount">5/5</b></span>
+    <span class="chip"><span class="ico" style="font-size:16px">🗺</span><b id="mapName">海岛小镇</b></span>
+    <span class="chip"><span class="ico" style="font-size:16px">🔄</span><b id="roundNo">1</b></span>
+    <span class="chip"><span class="ico" style="font-size:16px">🧑</span><b id="aliveCount">5/5</b></span>
   </div>
   <div id="survivors"><h3>幸存者</h3><div id="survivorList">等待回合开始</div></div>
   <div id="hpwrap">
-    <div id="hplabel"><img class="ico" src="ui/ico_hp.png" alt="血量" style="width:16px;height:16px;vertical-align:-3px;margin-right:4px">生命值</div>
+    <div id="hplabel">生命值</div>
     <div id="hpbar"><div id="hpfill"></div></div>
     <div id="hpnum">100</div>
   </div>
@@ -85,11 +103,19 @@
   <button id="skipBtn" type="button">跳过等待</button>
   <button id="settingsBtn" type="button" aria-label="设置"></button>
   <div id="hint">WASD 移动 · Shift 加速 · 空格 跳跃<br>鼠标 视角 · N 跳过等待 · ESC 释放鼠标</div>
+  <div id="itemBar">
+    <div class="itemSlot selected"><span>🌿</span></div>
+    <div class="itemSlot"><span>🍎</span></div>
+    <div class="itemSlot"><span>🎈</span></div>
+  </div>
 </div>
 
 <div id="flash"></div>
 <div id="flashRed"></div>
-<div id="warningFrame"><img src="ui/warning_frame.png" alt="灾害预警"></div>
+<div id="disasterWarning">
+  <div id="warnTitle">▲ DISASTER WARNING ▲</div>
+  <div id="warnMsg">灾害即将来临，立刻寻找掩护！</div>
+</div>
 
 <div id="start">
   <h1>灾害生存岛 3D</h1>
@@ -1762,6 +1788,20 @@ function setState(s){
     playSfx('alarm');
     startDisaster(G.disasterType);
     showBanner(DISASTER_NAME[G.disasterType], 1600);
+    // 原版顶部双层警告条
+    const dw = document.getElementById('disasterWarning');
+    const tips = {
+      storm:'雷暴！远离高处和空旷地带！',tsunami:'海啸！迅速跑到高地！',
+      fire:'火灾！远离可燃物，跑上屋顶！',tornado:'龙卷风！躲进建筑物内！',
+      flood:'洪水！迅速爬到高处！',meteor:'陨石雨！寻找室内掩体！',
+      acid:'酸雨！躲进有屋顶的建筑！',avalanche:'雪崩！离开雪落方向！',
+      blizzard:'暴雪！找掩体抵御低温！',virus:'病毒！远离绿色雾气！',
+      earthquake:'地震！远离高大建筑！',sandstorm:'沙尘暴！找建筑躲避！',
+      volcano:'火山爆发！远离熔岩！'
+    };
+    dw.querySelector('#warnMsg').textContent = (DISASTER_NAME[G.disasterType]||'灾害') + '！' + (tips[G.disasterType]||'寻找掩体！');
+    dw.classList.add('show');
+    setTimeout(() => dw.classList.remove('show'), 5000);
   }
 
   if (s === 'result'){
@@ -1791,10 +1831,10 @@ function updateGame(dt){
       showBanner('灾 害 预 警', 1300);
       setTip('警报响起：灾害即将开始，但类型仍然未知，立刻确认逃生路线。');
       playSfx('alarm');
-      const wf = document.getElementById('warningFrame');
-      wf.classList.remove('active');
-      void wf.offsetWidth;
-      wf.classList.add('active');
+      const dw = document.getElementById('disasterWarning');
+      dw.querySelector('#warnMsg').textContent = '⚠ 灾害即将来临！寻找高地或掩体躲避';
+      dw.classList.add('show');
+      setTimeout(() => dw.classList.remove('show'), 4500);
     }
     if (G.t > PREP_TIME) setState('disaster');
   }
