@@ -1648,27 +1648,27 @@ const SPAWNS = [
 // MGSP 原版地图列表（23张，此处实现代表性5张）
 const MAP_DEFS = [
   {
-    name: 'Sunny Ranch',
+    name: '阳光农场',
     build: buildSunnyRanch,
     spawns: [[8,0,8],[8,0,-8],[-8,0,8],[-8,0,-8],[0,0,12],[12,0,0],[-12,0,0],[0,0,-12]]
   },
   {
-    name: 'Devastation Station',
+    name: '废弃工站',
     build: buildDevastationStation,
     spawns: [[10,0,6],[10,0,-6],[-10,0,6],[-10,0,-6],[6,0,10],[-6,0,10],[6,0,-10],[-6,0,-10]]
   },
   {
-    name: 'Launch Land',
+    name: '发射基地',
     build: buildLaunchLand,
     spawns: [[14,0,0],[10,0,8],[10,0,-8],[-10,0,8],[-10,0,-8],[-14,0,0],[0,0,14],[0,0,-14]]
   },
   {
-    name: 'Glass Office',
+    name: '玻璃办公楼',
     build: buildGlassOffice,
     spawns: [[8,0,8],[8,0,-8],[-8,0,8],[-8,0,-8],[0,0,10],[10,0,0],[-10,0,0],[0,0,-10]]
   },
   {
-    name: 'Happy Home',
+    name: '彩虹小镇',
     build: buildHappyHome,
     spawns: [[10,0,6],[10,0,-6],[-10,0,6],[-10,0,-6],[6,0,10],[-6,0,10],[6,0,-10],[-6,0,-10]]
   }
@@ -1721,13 +1721,16 @@ function setState(s){
   if (s === 'lobby'){
     clearDisaster();
     camera.position.set(0, 20, -45);
-    setTip('等待下一回合开始…');
     G.round++;
     G.mapName = MAPS[(G.round-1)%MAPS.length];
     G.survivors = [];
     G.disasterType = null;
     G.warned = false;
     resetPlayer();
+    // 大厅阶段预先建造本回合地图，让玩家在塔上远望
+    clearMapObjects();
+    MAP_DEFS[(G.round - 1) % MAP_DEFS.length].build();
+    setTip('大厅等待中，俯望【' + G.mapName + '】地图，' + LOBBY_TIME + '秒后传送');
     // 传送到大厅观光塔顶
     player.pos.set(TOWER.x, TOWER.y, TOWER.z);
     camYaw = Math.atan2(0 - LOBBY_X, 0 - LOBBY_Z);  // 朝向灾害岛
@@ -1736,10 +1739,8 @@ function setState(s){
 
   if (s === 'prep'){
     clearDisaster();
-    // 清除上一张地图，建造本回合地图
-    clearMapObjects();
+    // 地图已在 lobby 阶段建好，直接使用（无需重建）
     const mapDef = MAP_DEFS[(G.round - 1) % MAP_DEFS.length];
-    mapDef.build();
     G.disasterType = null;
     G.warned = false;
     resetPlayer();
