@@ -80,6 +80,33 @@
   #mobile{position:fixed;inset:0;z-index:12;pointer-events:none;display:none}.joy{position:absolute;left:22px;bottom:26px;width:132px;height:132px;border-radius:50%;background:rgba(8,20,34,.42);border:1px solid rgba(255,255,255,.22);box-shadow:0 10px 28px rgba(0,0,0,.25);pointer-events:auto;touch-action:none;transition:transform .12s,opacity .12s}.joy.active{transform:scale(1.08);opacity:.96}.knob{position:absolute;left:43px;top:43px;width:46px;height:46px;border-radius:50%;background:linear-gradient(180deg,#e7f8ff,#62c8ff);box-shadow:0 6px 18px rgba(0,0,0,.32)}.lookPad{position:absolute;right:0;top:0;width:55vw;height:calc(100% - 150px);border-radius:0;border:none;background:transparent;pointer-events:auto;touch-action:none}.lookGuide{position:absolute;right:14%;top:42%;width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,.86);box-shadow:0 0 24px rgba(99,200,255,.9);opacity:0;pointer-events:none}.lookGuide:after{content:"";position:absolute;left:20px;top:18px;width:24px;height:34px;border-radius:12px 12px 16px 16px;background:#4aa9ff;box-shadow:inset 0 -8px 0 rgba(0,0,0,.12)}.lookGuide.show{animation:dragGuide 2.2s ease-in-out 2}@keyframes dragGuide{0%{opacity:0;transform:translateX(-50px)}20%,75%{opacity:.9}55%{transform:translateX(46px)}100%{opacity:0;transform:translateX(70px)}}.ab{position:absolute;right:20px;bottom:28px;display:grid;grid-template-columns:repeat(2,80px);gap:14px;pointer-events:auto}.ab button{width:88px;height:88px;border-radius:50%;border:none;background:transparent;box-shadow:none;touch-action:none;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent;overflow:hidden;display:flex;align-items:center;justify-content:center}.ab button img{width:100%;height:100%;object-fit:contain;display:block;pointer-events:none}.ab button:active{transform:translateY(5px) scale(1.04);filter:brightness(.82)}
   .touch-device #mobile{display:block}
   @media(max-width:760px),(pointer:coarse){#mobile{display:block}#hint{display:none}#survivors{right:10px;top:84px;min-width:128px;padding:8px 9px}#skipBtn{right:10px;top:220px;padding:7px 13px;font-size:12px}#roundInfo{left:10px;right:10px;top:82px}.chip{height:30px;padding:0 8px;font-size:11px}#top{top:14px}#hpwrap{right:10px;top:14px;width:110px}#banner{top:24%}#tipBox{bottom:122px;max-width:calc(100% - 34px);font-size:12px;padding:10px 12px}#settingsBtn{right:14px;bottom:184px}.joy{width:142px;height:142px}.ab{grid-template-columns:repeat(2,80px)}.ab button{width:80px;height:80px}}
+  /* 地图投票面板 */
+  #votePanel{position:fixed;inset:0;z-index:18;display:none;align-items:center;justify-content:center;background:rgba(2,8,16,.62)}
+  #votePanel .vpanel{width:min(500px,calc(100% - 28px));padding:20px;border-radius:20px;background:linear-gradient(180deg,rgba(12,28,46,.97),rgba(6,14,26,.98));border:1px solid rgba(255,255,255,.2);box-shadow:0 28px 64px rgba(0,0,0,.44);color:#fff}
+  #votePanel h2{font-size:18px;letter-spacing:.12em;text-align:center;margin-bottom:4px}
+  #votePanel .vsub{font-size:11px;text-align:center;opacity:.6;margin-bottom:14px}
+  .voteGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+  .voteCard{padding:12px 8px;border-radius:12px;background:rgba(255,255,255,.07);border:2px solid rgba(255,255,255,.18);cursor:pointer;text-align:center;font-size:12px;font-weight:800;letter-spacing:.05em;transition:background .15s,border-color .15s;pointer-events:auto}
+  .voteCard:hover,.voteCard.voted{background:rgba(74,158,255,.2);border-color:#4a9eff}
+  .voteCard .vname{font-size:13px;margin-bottom:3px}
+  .voteCard .vbar{height:5px;border-radius:3px;background:rgba(74,158,255,.35);margin-top:5px;transition:width .3s}
+  .voteCard .vcnt{font-size:10px;opacity:.65;margin-top:2px}
+  #voteTimer{font-size:11px;text-align:center;opacity:.62;margin-top:10px}
+  /* 生存浮字特效 */
+  .floatText{position:fixed;pointer-events:none;font-weight:900;font-size:22px;letter-spacing:.08em;text-shadow:0 2px 8px rgba(0,0,0,.55);animation:floatUp 1.5s ease-out forwards;z-index:16}
+  @keyframes floatUp{0%{opacity:1;transform:translateY(0) scale(1)}60%{opacity:1;transform:translateY(-48px) scale(1.1)}100%{opacity:0;transform:translateY(-82px) scale(.9)}}
+  /* 排行榜面板 */
+  #scoreBoard{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:19;display:none;width:min(360px,calc(100% - 28px));padding:18px;border-radius:20px;background:linear-gradient(180deg,rgba(10,24,40,.97),rgba(5,12,22,.98));border:1px solid rgba(255,255,255,.2);box-shadow:0 24px 56px rgba(0,0,0,.44);color:#fff}
+  #scoreBoard h2{font-size:16px;letter-spacing:.14em;text-align:center;margin-bottom:12px}
+  .sbRow{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:10px;font-size:13px;margin-bottom:4px}
+  .sbRow.me{background:rgba(74,158,255,.18);border:1px solid rgba(74,158,255,.35)}
+  .sbRow:not(.me){background:rgba(255,255,255,.05)}
+  .sbRank{width:22px;text-align:center;font-weight:900;opacity:.7}
+  .sbName{flex:1;font-weight:700}
+  .sbScore{font-weight:900;font-variant-numeric:tabular-nums;color:#9ff}
+  /* 大厅电梯 */
+  #elevatorBtn{position:fixed;z-index:14;display:none;bottom:90px;left:50%;transform:translateX(-50%);pointer-events:auto;border:0;border-radius:999px;background:linear-gradient(180deg,#4af,#06c);color:#fff;font-weight:900;padding:10px 24px;font-size:14px;box-shadow:0 6px 0 rgba(0,0,0,.3);letter-spacing:.08em}
+  #elevatorBtn:active{transform:translateX(-50%) translateY(3px);box-shadow:0 2px 0 rgba(0,0,0,.22)}
 </style>
 </head>
 <body>
@@ -102,7 +129,7 @@
   <div id="tipBox">点击开始后先观察地形：高地、屋顶和掩体都可能救命</div>
   <button id="skipBtn" type="button">跳过等待</button>
   <button id="settingsBtn" type="button" aria-label="设置"></button>
-  <div id="hint">WASD 移动 · Shift 加速 · 空格 跳跃<br>鼠标 视角 · N 跳过等待 · ESC 释放鼠标</div>
+  <div id="hint">WASD 移动 · Shift 加速 · 空格 跳跃<br>鼠标 视角 · 滚轮 缩放 · 1/2/3 道具 · E 使用 · Tab 排行榜 · N 跳过等待 · ESC 释放鼠标</div>
   <div id="itemBar">
     <div class="itemSlot selected"><span>🌿</span></div>
     <div class="itemSlot"><span>🍎</span></div>
@@ -116,6 +143,26 @@
   <div id="warnTitle">▲ DISASTER WARNING ▲</div>
   <div id="warnMsg">灾害即将来临，立刻寻找掩护！</div>
 </div>
+
+<!-- 地图投票面板 -->
+<div id="votePanel">
+  <div class="vpanel">
+    <h2>🗳 地图投票</h2>
+    <div class="vsub">为下一回合选择地图（NPC也会投票）</div>
+    <div class="voteGrid" id="voteGrid"></div>
+    <div id="voteTimer">投票将在 <b id="voteCountdown">10</b> 秒后结束</div>
+  </div>
+</div>
+
+<!-- 排行榜面板 -->
+<div id="scoreBoard">
+  <h2>🏆 累计排行榜</h2>
+  <div id="sbList"></div>
+  <button id="closeSb" style="width:100%;margin-top:10px;padding:8px;border:0;border-radius:10px;background:rgba(255,255,255,.12);color:#fff;font-weight:900;cursor:pointer;pointer-events:auto">关闭</button>
+</div>
+
+<!-- 大厅电梯按钮 -->
+<button id="elevatorBtn" type="button">🛗 下楼梯</button>
 
 <div id="start">
   <h1>灾害生存岛 3D</h1>
@@ -351,6 +398,16 @@ box(0.3, 6, 12, 0x2a7ab8, LOBBY_X, 4, LOBBY_Z + 24, false);
 // 排行榜（右侧）
 box(0.3, 7, 10, 0x4a4a4a, LOBBY_X + 20, 3.5, LOBBY_Z + 16);
 box(0.3, 5, 8, 0x1a3a5a, LOBBY_X + 20, 3.5, LOBBY_Z + 16, false);
+
+// 大厅电梯井道（LOBBY-ELEVATOR）：塔体西侧，y=0~28
+// 电梯外框
+box(3.2, 29, 3.2, 0x5a6a7a, LOBBY_X + 5.5, 13.5, LOBBY_Z - 5, false); // 外壳（无碰撞，纯装饰）
+box(0.2, 29, 3.2, 0x4a5a6a, LOBBY_X + 7.0, 13.5, LOBBY_Z - 5, false);
+box(0.2, 29, 3.2, 0x4a5a6a, LOBBY_X + 4.0, 13.5, LOBBY_Z - 5, false);
+// 电梯底部平台（玩家站的地方）
+box(2.8, 0.3, 2.8, 0x9aaabb, LOBBY_X + 5.5, 0.15, LOBBY_Z - 5);       // 底部平台
+// 电梯顶部平台
+box(2.8, 0.3, 2.8, 0x9aaabb, LOBBY_X + 5.5, 28.15, LOBBY_Z - 5);     // 顶部平台
 
 // 下层台地（顶面 -2）
 box(56, 7, 56, 0x8a5a32, 0, -5.5, 0);
@@ -915,6 +972,22 @@ function playSfx(name){
   if (name === 'fire'){ noise(.18,.025); }
   if (name === 'start'){ tone(620,.11,'triangle',.05,1.2); setTimeout(()=>tone(820,.15,'triangle',.045,1.1),105); }
   if (name === 'tick'){ tone(1100,.06,'square',.04,1); }
+  if (name === 'survive'){ tone(880,.12,'triangle',.06,1.1); setTimeout(()=>tone(1100,.18,'triangle',.055,1.05),110); setTimeout(()=>tone(1320,.22,'triangle',.05,1.02),240); }
+  if (name === 'vote'){ tone(660,.1,'triangle',.04,1); }
+  // 12种灾害专属音效
+  if (name === 'sfx_storm'){ noise(.3,.06); tone(85,.6,'sawtooth',.07,.5); }
+  if (name === 'sfx_tsunami'){ noise(.5,.045); tone(160,.55,'sine',.04,.6); }
+  if (name === 'sfx_fire'){ noise(.22,.03); tone(200,.3,'sawtooth',.03,.7); }
+  if (name === 'sfx_tornado'){ noise(.4,.05); tone(110,.5,'sine',.05,.65); tone(220,.5,'sine',.03,.7); }
+  if (name === 'sfx_flood'){ noise(.5,.04); tone(140,.5,'sine',.04,.65); }
+  if (name === 'sfx_meteor'){ noise(.2,.09); tone(180,.35,'sawtooth',.08,.4); }
+  if (name === 'sfx_acid'){ noise(.35,.03); tone(600,.25,'square',.035,.8); }
+  if (name === 'sfx_avalanche'){ noise(.45,.07); tone(80,.5,'triangle',.06,.5); }
+  if (name === 'sfx_blizzard'){ noise(.4,.025); tone(900,.4,'sine',.025,1.2); }
+  if (name === 'sfx_virus'){ tone(300,.2,'square',.04,.9); tone(420,.25,'square',.03,.85); }
+  if (name === 'sfx_earthquake'){ noise(.35,.09); tone(55,.55,'sawtooth',.08,.45); }
+  if (name === 'sfx_sandstorm'){ noise(.4,.045); tone(130,.45,'sawtooth',.04,.6); }
+  if (name === 'sfx_volcano'){ noise(.28,.1); tone(90,.5,'sawtooth',.09,.42); tone(180,.35,'triangle',.06,.5); }
 }
 
 /* ============================================================
@@ -923,6 +996,11 @@ function playSfx(name){
 let lastHurtSfx = 0;
 function damage(n){
   if (player.dead) return;
+  if (n < 0){
+    // 治疗
+    player.hp = Math.min(player.maxHp, player.hp - n);
+    return;
+  }
   player.hp = Math.max(0, player.hp - n);
   player.hurtT = 0.25;
   const now = performance.now();
@@ -1568,6 +1646,7 @@ function startDisaster(type){
   if (type === 'earthquake') G.instance = earthquakeInit();
   if (type === 'sandstorm')  G.instance = sandstormInit();
   if (type === 'volcano')    G.instance = volcanoInit();
+  playSfx('sfx_' + type);
   setTip(DISASTER_TIPS[type] || '灾害开始：保持移动，寻找掩体。');
 }
 
@@ -1715,6 +1794,16 @@ const G = {
   warned: false
 };
 
+// 投票状态（提前声明，setState 会引用）
+const voteState = {
+  active: false,
+  options: [],
+  votes: [0, 0, 0],
+  myVote: -1,
+  t: 0,
+  dur: 10
+};
+
 let camYaw = Math.PI, camPitch = 0.2;
 
 function resetPlayer(){
@@ -1749,8 +1838,13 @@ function setState(s){
     clearDisaster();
     camera.position.set(0, 20, -45);
     G.round++;
-    G.mapIdx = rndi(0, MAP_DEFS.length - 1);   // 本回合随机抽一张地图
-    G.mapName = MAP_DEFS[G.mapIdx].name;
+    // 若投票已结束则使用投票结果，否则随机
+    if (!voteState.active && voteState.options.length > 0 && G.round > 1){
+      // already set by closeVotePanel
+    } else {
+      G.mapIdx = rndi(0, MAP_DEFS.length - 1);
+      G.mapName = MAP_DEFS[G.mapIdx].name;
+    }
     G.survivors = [];
     G.disasterType = null;
     G.warned = false;
@@ -1808,6 +1902,8 @@ function setState(s){
     clearDisaster();
     setTip('结算中，等待下一回合。');
     showBanner('回合结束', 1200);
+    // 结算时显示投票面板
+    setTimeout(() => { if(G.state === 'result') openVotePanel(); }, 1500);
   }
 }
 
@@ -1844,7 +1940,11 @@ function updateGame(dt){
       G.survivors = [];
       if (survived) G.survivors.push('你');
       npcs.forEach((n,i)=>{ if(!n.dead) G.survivors.push(BOT_NAMES[i]); });
+      // 加分
+      if (survived) addScore(true, -1, 50);
+      npcs.forEach((n,i)=>{ if(!n.dead) addScore(false, i, 50); });
       setState('result');
+      showSurviveReward(survived);
       if (survived) showCenter('你 活 下 来 了', '回合结束 · 下一回合即将开始');
       else showCenter('你 没 能 幸 存', '再试一次 · 下次早点找高点');
     }
@@ -1899,6 +1999,12 @@ function updatePlayer(dt){
   player.pos.y += player.vel.y * dt;
   const ground = supportHeight(player.pos.x, player.pos.z, prevY);
   if (player.pos.y <= ground){
+    // 坠落伤害：landing_velocity_threshold=24，max_fall_damage=100
+    const fallV = -player.vel.y;
+    if (fallV > 10 && !player.onGround){
+      const dmg = Math.min(100, (fallV - 10) * 4);
+      if (dmg > 2) damage(dmg);
+    }
     player.pos.y = ground;
     player.vel.y = 0;
     player.onGround = true;
@@ -1968,7 +2074,7 @@ function updateCamera(dt){
   }
 
   const target = new THREE.Vector3(player.pos.x, player.pos.y + 1.25, player.pos.z);
-  let dist = (G.state === 'lobby') ? 13 : 8.4;
+  let dist = (G.state === 'lobby') ? camZoomLobby : camZoomDist;
   const cp = Math.cos(camPitch), sp = Math.sin(camPitch);
   const dir = new THREE.Vector3(
     Math.sin(camYaw) * cp,
@@ -1986,6 +2092,286 @@ function updateCamera(dt){
   camera.position.copy(desired);
   camera.lookAt(target);
 }
+
+/* ============================================================
+   鼠标滚轮 / 双指缩放镜头
+   ============================================================ */
+let camZoomDist = 8.4;   // 当前目标拉远距离（会覆盖固定值）
+let camZoomLobby = 13;
+const CAM_ZOOM_MIN = 2.5, CAM_ZOOM_MAX = 22;
+
+addEventListener('wheel', e => {
+  e.preventDefault();
+  const delta = e.deltaY > 0 ? 1 : -1;
+  if (G.state === 'lobby') {
+    camZoomLobby = clamp(camZoomLobby + delta * 0.6, CAM_ZOOM_MIN, CAM_ZOOM_MAX);
+  } else {
+    camZoomDist = clamp(camZoomDist + delta * 0.5, CAM_ZOOM_MIN, CAM_ZOOM_MAX);
+  }
+}, { passive: false });
+
+// 双指缩放
+let pinchDist0 = null;
+renderer.domElement.addEventListener('touchstart', e => {
+  if (e.touches.length === 2) {
+    pinchDist0 = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+  }
+}, { passive: true });
+renderer.domElement.addEventListener('touchmove', e => {
+  if (e.touches.length === 2 && pinchDist0 !== null) {
+    const d = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+    const scale = pinchDist0 / d;
+    if (G.state === 'lobby') camZoomLobby = clamp(camZoomLobby * scale, CAM_ZOOM_MIN, CAM_ZOOM_MAX);
+    else camZoomDist = clamp(camZoomDist * scale, CAM_ZOOM_MIN, CAM_ZOOM_MAX);
+    pinchDist0 = d;
+  }
+}, { passive: true });
+renderer.domElement.addEventListener('touchend', () => { pinchDist0 = null; }, { passive: true });
+
+/* ============================================================
+   道具栏点击使用（INPUT-EQUIP/USE）
+   ============================================================ */
+const ITEMS = [
+  { icon:'🌿', name:'草药', key:'1', effect(){ damage(-30); showBanner('+30 HP', 900); playSfx('survive'); spawnFloatText('+30 HP', '#4ade80'); } },
+  { icon:'🍎', name:'苹果', key:'2', effect(){ damage(-15); showBanner('+15 HP', 900); playSfx('survive'); spawnFloatText('+15 HP', '#fbbf24'); } },
+  { icon:'🎈', name:'气球', key:'3', effect(){ player.vel.y = Math.max(player.vel.y, JUMP_V * 1.6); player.onGround = false; showBanner('飞升！', 900); spawnFloatText('🎈飞升', '#9ff'); } }
+];
+let selectedSlot = 0;
+const itemSlots = document.querySelectorAll('.itemSlot');
+// 道具冷却
+const itemCD = [0, 0, 0];
+const ITEM_CD = [25, 15, 30];   // 秒
+
+function updateItemCooldown(dt){
+  for(let i=0;i<3;i++){
+    if(itemCD[i]>0) itemCD[i] = Math.max(0, itemCD[i] - dt);
+    const slot = itemSlots[i];
+    if(itemCD[i]>0){
+      slot.style.opacity = '0.42';
+      slot.querySelector('span').textContent = Math.ceil(itemCD[i]) + '';
+    } else {
+      slot.style.opacity = '1';
+      slot.querySelector('span').textContent = ITEMS[i].icon;
+    }
+  }
+}
+
+function useItem(idx){
+  if(player.dead) return;
+  if(G.state !== 'disaster' && G.state !== 'prep') return;
+  if(itemCD[idx] > 0) return;
+  ITEMS[idx].effect();
+  itemCD[idx] = ITEM_CD[idx];
+}
+
+itemSlots.forEach((slot, i) => {
+  slot.style.cursor = 'pointer';
+  slot.style.pointerEvents = 'auto';
+  slot.addEventListener('click', e => { e.stopPropagation(); selectedSlot = i; updateSelectedSlot(); useItem(i); });
+});
+
+function updateSelectedSlot(){
+  itemSlots.forEach((s, i) => s.classList.toggle('selected', i === selectedSlot));
+}
+updateSelectedSlot();
+
+addEventListener('keydown', e => {
+  if (!started) return;
+  if (e.code === 'Digit1') { selectedSlot = 0; updateSelectedSlot(); useItem(0); }
+  if (e.code === 'Digit2') { selectedSlot = 1; updateSelectedSlot(); useItem(1); }
+  if (e.code === 'Digit3') { selectedSlot = 2; updateSelectedSlot(); useItem(2); }
+  if (e.code === 'KeyE')   { useItem(selectedSlot); }
+});
+
+/* ============================================================
+   生存奖励浮字 / 粒子特效
+   ============================================================ */
+function spawnFloatText(txt, color){
+  const el = document.createElement('div');
+  el.className = 'floatText';
+  el.textContent = txt;
+  el.style.color = color || '#fff';
+  el.style.left = (30 + Math.random() * 40) + 'vw';
+  el.style.top  = (40 + Math.random() * 20) + 'vh';
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 1600);
+}
+
+function showSurviveReward(survived){
+  if (!survived) return;
+  const msgs = ['+经验值 +50', '+金币 🪙 20', '🏆 生存奖励', '幸存者 ✓'];
+  msgs.forEach((m, i) => setTimeout(() => spawnFloatText(m, ['#4ade80','#fbbf24','#9ff','#f9f'][i]), i * 220));
+  playSfx('survive');
+}
+
+/* ============================================================
+   地图投票系统
+   ============================================================ */
+function openVotePanel(){
+  // 随机3个候选地图
+  const all = MAP_DEFS.map((_,i)=>i);
+  const opts = [];
+  while (opts.length < 3){
+    const r = rndi(0, all.length - 1);
+    if (!opts.includes(all[r])) opts.push(all[r]);
+  }
+  voteState.options = opts;
+  voteState.votes = [0, 0, 0];
+  voteState.myVote = -1;
+  voteState.t = 0;
+  voteState.active = true;
+  // NPC 随机投票
+  setTimeout(() => { for(let i=0;i<4;i++) { const v=rndi(0,2); voteState.votes[v]++; renderVotePanel(); } }, 1200 + Math.random()*1500);
+
+  const grid = document.getElementById('voteGrid');
+  grid.innerHTML = '';
+  opts.forEach((mapIdx, vi) => {
+    const card = document.createElement('div');
+    card.className = 'voteCard';
+    card.id = 'vcard' + vi;
+    card.innerHTML = `<div class="vname">${MAP_DEFS[mapIdx].name}</div><div class="vbar" id="vbar${vi}" style="width:0%"></div><div class="vcnt" id="vcnt${vi}">0 票</div>`;
+    card.addEventListener('click', () => {
+      if(voteState.myVote >= 0) return;
+      voteState.myVote = vi;
+      voteState.votes[vi]++;
+      playSfx('vote');
+      renderVotePanel();
+      document.querySelectorAll('.voteCard').forEach((c,j) => c.classList.toggle('voted', j === vi));
+    });
+    grid.appendChild(card);
+  });
+  document.getElementById('votePanel').style.display = 'flex';
+}
+
+function renderVotePanel(){
+  const total = voteState.votes.reduce((a,b)=>a+b,0) || 1;
+  voteState.votes.forEach((v, i) => {
+    const pct = Math.round(v / total * 100);
+    const bar = document.getElementById('vbar'+i);
+    const cnt = document.getElementById('vcnt'+i);
+    if(bar) bar.style.width = pct + '%';
+    if(cnt) cnt.textContent = v + ' 票';
+  });
+}
+
+function closeVotePanel(pickIdx){
+  voteState.active = false;
+  document.getElementById('votePanel').style.display = 'none';
+  // 选票最多的地图
+  const winner = voteState.votes.indexOf(Math.max(...voteState.votes));
+  G.mapIdx = voteState.options[winner !== -1 ? winner : 0];
+  G.mapName = MAP_DEFS[G.mapIdx].name;
+}
+
+function updateVoteCountdown(dt){
+  if (!voteState.active) return;
+  voteState.t += dt;
+  const left = Math.max(0, Math.ceil(voteState.dur - voteState.t));
+  const el = document.getElementById('voteCountdown');
+  if(el) el.textContent = left;
+  if (voteState.t >= voteState.dur) closeVotePanel();
+}
+
+/* ============================================================
+   排行榜
+   ============================================================ */
+const scoreData = {
+  me: { name:'你', score:0, rounds:0 },
+  bots: BOT_NAMES.map(n => ({ name:n, score:0, rounds:0 }))
+};
+
+function addScore(isPlayer, npcIdx, pts){
+  if(isPlayer) { scoreData.me.score += pts; scoreData.me.rounds++; }
+  else { scoreData.bots[npcIdx].score += pts; scoreData.bots[npcIdx].rounds++; }
+}
+
+function showScoreBoard(){
+  const all = [scoreData.me, ...scoreData.bots]
+    .sort((a,b)=>b.score-a.score);
+  const list = document.getElementById('sbList');
+  list.innerHTML = all.map((p,i) => {
+    const isMe = p.name === '你';
+    return `<div class="sbRow${isMe?' me':''}"><span class="sbRank">${['🥇','🥈','🥉','4','5'][i]}</span><span class="sbName">${p.name}</span><span class="sbScore">${p.score}</span></div>`;
+  }).join('');
+  document.getElementById('scoreBoard').style.display = 'block';
+}
+
+document.getElementById('closeSb').addEventListener('click', () => {
+  document.getElementById('scoreBoard').style.display = 'none';
+});
+// Tab 键打开排行榜
+addEventListener('keydown', e => {
+  if (e.code === 'Tab' && started){ e.preventDefault(); showScoreBoard(); }
+});
+
+/* ============================================================
+   大厅电梯逻辑
+   ============================================================ */
+// 电梯轿厢（移动平台）
+const elevCar = new THREE.Mesh(
+  new THREE.BoxGeometry(2.6, 0.3, 2.6),
+  new THREE.MeshLambertMaterial({color:0xaabccc})
+);
+elevCar.position.set(LOBBY_X + 5.5, 0.15, LOBBY_Z - 5);
+elevCar.castShadow = true;
+elevCar.receiveShadow = true;
+scene.add(elevCar);
+// 电梯轿厢碰撞体（动态，每帧更新）
+const elevCollider = {minX:0,maxX:0,minY:0,maxY:0,minZ:0,maxZ:0};
+colliders.push(elevCollider);
+
+const ELEV = {
+  y: 0,         // 当前高度
+  targetY: 0,   // 目标高度
+  speed: 7,     // m/s
+  floors: [0, 28],
+  going: false
+};
+function updateElevCollider(){
+  const ex = LOBBY_X + 5.5, ez = LOBBY_Z - 5, ew = 1.3;
+  elevCollider.minX = ex - ew; elevCollider.maxX = ex + ew;
+  elevCollider.minZ = ez - ew; elevCollider.maxZ = ez + ew;
+  elevCollider.minY = ELEV.y - 0.15; elevCollider.maxY = ELEV.y + 0.18;
+}
+updateElevCollider();
+
+function updateElevator(dt){
+  const diff = ELEV.targetY - ELEV.y;
+  if (Math.abs(diff) < 0.05){
+    ELEV.y = ELEV.targetY;
+    ELEV.going = false;
+  } else {
+    const step = Math.sign(diff) * Math.min(ELEV.speed * dt, Math.abs(diff));
+    ELEV.y += step;
+    ELEV.going = true;
+    // 如果玩家站在轿厢上，同步移动
+    const ex = LOBBY_X + 5.5, ez = LOBBY_Z - 5;
+    const onCar = !player.dead &&
+      player.pos.x > ex - 1.3 && player.pos.x < ex + 1.3 &&
+      player.pos.z > ez - 1.3 && player.pos.z < ez + 1.3 &&
+      Math.abs(player.pos.y - ELEV.y) < 0.5;
+    if(onCar) player.pos.y += step;
+  }
+  elevCar.position.y = ELEV.y + 0.15;
+  updateElevCollider();
+
+  // 距离提示 & 按钮显示
+  const ex2 = LOBBY_X + 5.5, ez2 = LOBBY_Z - 5;
+  const dist = Math.hypot(player.pos.x - ex2, player.pos.z - ez2);
+  const btn = document.getElementById('elevatorBtn');
+  if(G.state === 'lobby' && !player.dead && dist < 3.5 && !ELEV.going){
+    btn.style.display = 'block';
+    btn.textContent = ELEV.targetY === 0 ? '🛗 上顶层' : '🛗 下楼梯';
+  } else {
+    btn.style.display = 'none';
+  }
+}
+
+document.getElementById('elevatorBtn').addEventListener('click', e => {
+  e.stopPropagation();
+  ELEV.targetY = ELEV.targetY === 0 ? 28 : 0;
+  playSfx('tick');
+});
 
 /* ============================================================
    输入
@@ -2133,6 +2519,9 @@ function loop(now){
     updateFx(dt);
     updateHUD(dt);
     updateCamera(dt);
+    updateElevator(dt);
+    updateVoteCountdown(dt);
+    updateItemCooldown(dt);
   } else {
     updateCamera(dt);
     updateNpcs(dt);
