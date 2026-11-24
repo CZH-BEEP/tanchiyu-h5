@@ -21,17 +21,20 @@
     box-shadow:0 1px 4px rgba(0,0,0,.4),inset 0 0 0 1px rgba(255,255,255,.1)}
   #hpfill{height:100%;width:100%;background:linear-gradient(90deg,#4ade80,#22c55e);
     transition:width .12s linear;border-radius:4px}
-  @keyframes hpBlink{0%,100%{opacity:1}40%{opacity:.15;filter:hue-rotate(-60deg) brightness(1.6)}}
-  #hpfill.hurt{animation:hpBlink .28s ease-in-out 2}
+  @keyframes hpBlink{0%,100%{opacity:1;filter:none}40%{opacity:.2;filter:hue-rotate(-60deg) brightness(2) saturate(3)}}
+  #hpfill.hurt{animation:hpBlink .32s ease-in-out 3}
+  @keyframes hpWrap{0%,100%{box-shadow:none}40%{box-shadow:0 0 10px 2px rgba(220,30,30,.8)}}
+  #hpbar.hurt{animation:hpWrap .32s ease-in-out 3}
   #hpnum{position:absolute;right:0;bottom:-16px;font-size:10px;opacity:.7;color:#9ff}
   /* 原版底部道具栏（3格） */
-  #itemBar{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);
-    display:flex;gap:4px;pointer-events:none}
+  #itemBar{position:absolute;top:80px;right:12px;
+    display:flex;flex-direction:column;gap:6px;pointer-events:auto}
   .itemSlot{width:52px;height:52px;border-radius:6px;
     background:rgba(10,20,35,.65);border:2px solid rgba(255,255,255,.28);
     display:flex;align-items:center;justify-content:center;font-size:22px;
     box-shadow:inset 0 0 12px rgba(0,0,0,.3)}
-  .itemSlot.selected{border-color:#4a9eff;box-shadow:0 0 10px rgba(74,158,255,.55),inset 0 0 12px rgba(0,0,0,.3)}
+  .itemSlot.selected{border-color:#4a9eff;box-shadow:0 0 14px rgba(74,158,255,.8),0 0 4px #4a9eff,inset 0 0 12px rgba(0,0,0,.3);transform:scale(1.08)}
+  .itemTooltip{position:absolute;right:60px;background:rgba(5,14,24,.9);color:#9ff;font-size:11px;font-weight:700;padding:4px 8px;border-radius:6px;white-space:nowrap;pointer-events:none;border:1px solid rgba(255,255,255,.18);letter-spacing:.04em;display:none;line-height:1.4}
   #banner{position:absolute;top:30%;left:50%;transform:translate(-50%,-50%);
     font-size:clamp(28px,5vw,46px);font-weight:800;letter-spacing:6px;opacity:0;
     transition:opacity .35s;text-align:center;white-space:nowrap}
@@ -40,8 +43,8 @@
   #center .big{font-size:clamp(30px,5vw,52px);font-weight:800;letter-spacing:3px}
   #center .sub{margin-top:12px;font-size:14px;opacity:.8;letter-spacing:1px}
   #hint{position:absolute;left:22px;bottom:74px;font-size:11px;line-height:1.9;opacity:.55}
-  #tipBox{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);max-width:min(620px,calc(100% - 280px));padding:12px 18px;border-radius:18px;background:rgba(7,18,31,.72);border:1px solid rgba(255,255,255,.2);box-shadow:0 14px 36px rgba(0,0,0,.28);font-size:14px;font-weight:800;letter-spacing:.06em;text-align:center;color:#e9f8ff}
-  #skipBtn{position:absolute;right:18px;top:160px;display:none;pointer-events:auto;border:0;border-radius:999px;background:linear-gradient(180deg,#fff,#9be7ff);color:#0d2941;font-weight:900;padding:9px 16px;font-size:13px;box-shadow:0 6px 0 rgba(0,0,0,.26);letter-spacing:.08em}
+  #tipBox{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);max-width:min(380px,calc(100% - 200px));padding:10px 14px;border-radius:14px;background:rgba(7,18,31,.78);border:1px solid rgba(255,255,255,.2);box-shadow:0 10px 28px rgba(0,0,0,.28);font-size:13px;font-weight:800;letter-spacing:.04em;text-align:center;color:#e9f8ff;line-height:1.5;white-space:pre-wrap}
+  #skipBtn{position:absolute;right:18px;top:72px;display:none;pointer-events:auto;border:0;border-radius:999px;background:linear-gradient(180deg,#fff,#9be7ff);color:#0d2941;font-weight:900;padding:9px 16px;font-size:13px;box-shadow:0 6px 0 rgba(0,0,0,.26);letter-spacing:.08em}
   #skipBtn:active{transform:translateY(3px);box-shadow:0 2px 0 rgba(0,0,0,.22)}
   #settingsBtn{position:absolute;right:18px;bottom:20px;pointer-events:auto;width:64px;height:64px;border-radius:20px;border:none;background:url('ui/btn_settings.png') no-repeat center/contain;box-shadow:0 8px 22px rgba(0,0,0,.32);cursor:pointer;-webkit-tap-highlight-color:transparent}
   #settingsBtn:active{transform:scale(.92);box-shadow:0 4px 10px rgba(0,0,0,.25)}
@@ -105,9 +108,9 @@
   #roundInfo{position:absolute;left:18px;top:18px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
   .chip{display:inline-flex;align-items:center;gap:7px;height:36px;padding:0 12px;border-radius:999px;background:rgba(7,18,31,.68);border:1px solid rgba(255,255,255,.18);box-shadow:inset 0 0 18px rgba(255,255,255,.05);font-size:12px;font-weight:900;letter-spacing:.04em}.chip b{font-variant-numeric:tabular-nums}.ico{width:22px;height:22px;border-radius:0;display:inline-block;background:no-repeat center/contain;flex-shrink:0;vertical-align:middle}
   #survivors{position:absolute;right:12px;top:34px;min-width:172px;padding:10px 12px;border-radius:18px;background:rgba(7,18,31,.62);border:1px solid rgba(255,255,255,.18);box-shadow:0 14px 40px rgba(0,0,0,.22)}#survivors h3{font-size:12px;letter-spacing:.12em;margin-bottom:6px;opacity:.8}#survivors div{font-size:12px;line-height:1.55;color:#d7f1ff}
-  #mobile{position:fixed;inset:0;z-index:12;pointer-events:none;display:none}.joy{position:absolute;left:22px;bottom:26px;width:132px;height:132px;border-radius:50%;background:rgba(8,20,34,.42);border:1px solid rgba(255,255,255,.22);box-shadow:0 10px 28px rgba(0,0,0,.25);pointer-events:auto;touch-action:none;transition:transform .12s,opacity .12s}.joy.active{transform:scale(1.08);opacity:.96}.knob{position:absolute;left:43px;top:43px;width:46px;height:46px;border-radius:50%;background:linear-gradient(180deg,#e7f8ff,#62c8ff);box-shadow:0 6px 18px rgba(0,0,0,.32)}.lookPad{position:absolute;right:0;top:0;width:55vw;height:calc(100% - 150px);border-radius:0;border:none;background:transparent;pointer-events:auto;touch-action:none}.lookGuide{position:absolute;right:14%;top:42%;width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,.86);box-shadow:0 0 24px rgba(99,200,255,.9);opacity:0;pointer-events:none}.lookGuide:after{content:"";position:absolute;left:20px;top:18px;width:24px;height:34px;border-radius:12px 12px 16px 16px;background:#4aa9ff;box-shadow:inset 0 -8px 0 rgba(0,0,0,.12)}.lookGuide.show{animation:dragGuide 2.2s ease-in-out 2}@keyframes dragGuide{0%{opacity:0;transform:translateX(-50px)}20%,75%{opacity:.9}55%{transform:translateX(46px)}100%{opacity:0;transform:translateX(70px)}}.ab{position:absolute;right:20px;bottom:28px;display:grid;grid-template-columns:repeat(2,80px);gap:14px;pointer-events:auto}.ab button{width:88px;height:88px;border-radius:50%;border:none;background:transparent;box-shadow:none;touch-action:none;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent;overflow:hidden;display:flex;align-items:center;justify-content:center}.ab button img{width:100%;height:100%;object-fit:contain;display:block;pointer-events:none}.ab button:active{transform:translateY(5px) scale(1.04);filter:brightness(.82)}
+  #mobile{position:fixed;inset:0;z-index:12;pointer-events:none;display:none}.joy{position:absolute;left:22px;bottom:26px;width:132px;height:132px;border-radius:50%;background:rgba(8,20,34,.42);border:1px solid rgba(255,255,255,.22);box-shadow:0 10px 28px rgba(0,0,0,.25);pointer-events:auto;touch-action:none;transition:transform .12s,opacity .12s}.joy.active{transform:scale(1.08);opacity:.96}.knob{position:absolute;left:43px;top:43px;width:46px;height:46px;border-radius:50%;background:linear-gradient(180deg,#e7f8ff,#62c8ff);box-shadow:0 6px 18px rgba(0,0,0,.32)}.lookPad{position:absolute;right:0;top:0;width:55vw;height:calc(100% - 150px);border-radius:0;border:none;background:transparent;pointer-events:auto;touch-action:none}.lookGuide{position:absolute;right:14%;top:42%;width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,.86);box-shadow:0 0 24px rgba(99,200,255,.9);opacity:0;pointer-events:none}.lookGuide:after{content:"";position:absolute;left:20px;top:18px;width:24px;height:34px;border-radius:12px 12px 16px 16px;background:#4aa9ff;box-shadow:inset 0 -8px 0 rgba(0,0,0,.12)}.lookGuide.show{animation:dragGuide 2.2s ease-in-out 2}@keyframes dragGuide{0%{opacity:0;transform:translateX(-50px)}20%,75%{opacity:.9}55%{transform:translateX(46px)}100%{opacity:0;transform:translateX(70px)}}.ab{position:absolute;right:20px;bottom:28px;display:flex;flex-direction:column;gap:18px;align-items:center;pointer-events:auto}.ab button{width:88px;height:88px;border-radius:50%;border:none;background:transparent;box-shadow:none;touch-action:none;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent;overflow:hidden;display:flex;align-items:center;justify-content:center}.ab button img{width:100%;height:100%;object-fit:contain;display:block;pointer-events:none}.ab button:active{transform:translateY(5px) scale(1.04);filter:brightness(.82)}
   .touch-device #mobile{display:block}
-  @media(max-width:760px),(pointer:coarse){#mobile{display:block}#hint{display:none}#survivors{right:10px;top:84px;min-width:128px;padding:8px 9px}#skipBtn{right:10px;top:220px;padding:7px 13px;font-size:12px}#roundInfo{left:10px;right:10px;top:82px}.chip{height:30px;padding:0 8px;font-size:11px}#top{top:14px}#hpwrap{right:10px;top:14px;width:110px}#banner{top:24%}#tipBox{bottom:122px;max-width:calc(100% - 34px);font-size:12px;padding:10px 12px}#settingsBtn{right:14px;bottom:184px}.joy{width:142px;height:142px}.ab{grid-template-columns:repeat(2,80px)}.ab button{width:80px;height:80px}
+  @media(max-width:760px),(pointer:coarse){#mobile{display:block}#hint{display:none}#survivors{right:10px;top:84px;min-width:128px;padding:8px 9px}#skipBtn{right:10px;top:88px;padding:7px 13px;font-size:12px}#roundInfo{left:10px;right:10px;top:82px}.chip{height:30px;padding:0 8px;font-size:11px}#top{top:14px}#hpwrap{right:10px;top:14px;width:110px}#banner{top:24%}#tipBox{bottom:122px;max-width:calc(100% - 34px);font-size:12px;padding:10px 12px}#settingsBtn{right:14px;bottom:184px}.joy{width:142px;height:142px}#itemBar{top:88px;right:10px;}.ab{flex-direction:column;gap:18px}.ab button{width:80px;height:80px}
     /* 开始界面移动端适配 */
     #start h1{letter-spacing:2px}
     #start .sub{font-size:12px;line-height:1.8;padding:0 20px}
@@ -190,9 +193,9 @@
   <button id="settingsBtn" type="button" aria-label="设置"></button>
   <div id="hint">WASD 移动 · Shift 加速 · 空格 跳跃<br>鼠标 视角 · 滚轮 缩放 · 1/2/3 道具 · E 使用 · Tab 排行榜 · N 跳过等待 · ESC 释放鼠标</div>
   <div id="itemBar">
-    <div class="itemSlot selected"><span>🌿</span></div>
-    <div class="itemSlot"><span>🍎</span></div>
-    <div class="itemSlot"><span>🎈</span></div>
+    <div class="itemSlot selected" data-tip="草药：恢复30HP"><span>🌿</span><div class="itemTooltip">草药<br>+30 HP</div></div>
+    <div class="itemSlot" data-tip="苹果：恢复15HP"><span>🍎</span><div class="itemTooltip">苹果<br>+15 HP</div></div>
+    <div class="itemSlot" data-tip="气球：短暂漂浮"><span>🎈</span><div class="itemTooltip">气球<br>短暂漂浮</div></div>
   </div>
 </div>
 
@@ -266,6 +269,7 @@
     <div class="row"><span>镜头灵敏度</span><input id="sensRange" type="range" min="0.5" max="1.5" step="0.05" value="1"></div>
     <div class="row"><span>摇杆死区</span><input id="deadRange" type="range" min="0" max="0.35" step="0.01" value="0.12"></div>
     <div class="row"><span>视角模式</span><button id="lookModeBtn" type="button">自由拖拽</button></div>
+    <div class="row"><span>拖动区域</span><button id="lookAreaBtn" type="button">仅右侧</button></div>
     <div class="row"><span>加速模式</span><button id="sprintModeBtn" type="button">长按加速</button></div>
     <div class="row"><span>常用操作</span><button id="fullscreenBtn" type="button">全屏</button></div>
     <div class="row"><span>镜头</span><button id="resetCamBtn" type="button">重置镜头</button></div>
@@ -331,7 +335,8 @@ const SETTINGS = {
   sensitivity: isTouchDevice ? 0.78 : 1,
   joyDead: 0.12,
   freeLook: true,
-  sprintHold: true
+  sprintHold: true,
+  lookRightOnly: false
 };
 if (isTouchDevice) document.body.classList.add('touch-device');
 
@@ -693,6 +698,11 @@ function buildSunnyRanch(){
   for(let i=-3;i<=3;i++) mapBox(0.3,0.3,0.3,0xc8a060,-14,0.9,i*3+9);
   // 树
   mapTree(-16,-6); mapTree(14,-14); mapTree(-4,-18); mapTree(18,-4);
+  // 金色麦田地面贴片
+  mapBox(14,0.1,10,0xf0d040,-4,0.06,10,false);
+  mapBox(10,0.1,8,0xe8c820,10,0.06,-8,false);
+  // 蓝天感：地面草色
+  mapBox(44,0.08,44,0x5aab40,0,-0.04,0,false);
 }
 
 // === Devastation Station（工业废墟地图）===
@@ -717,6 +727,10 @@ function buildDevastationStation(){
   // 破损墙体（掩体）
   mapBox(0.5,5,8,0x787070,16,2.5,2);
   mapBox(0.5,5,8,0x787070,-18,2.5,-4);
+  // 工业地面（深灰）
+  mapBox(44,0.08,44,0x484040,0,-0.04,0,false);
+  // 橙色警示条地贴
+  for(let i=-3;i<=3;i++) mapBox(44,0.09,0.6,0xe07020,0,-0.02,i*6,false);
 }
 
 // === Launch Land（发射台地图）===
@@ -742,6 +756,10 @@ function buildLaunchLand(){
   // 储罐
   mapBox(5,6,5,0x708080,14,3,8);
   mapBox(5,0.5,5,0x809090,14,6.3,8);
+  // 发射基地地面（浅灰白）
+  mapBox(44,0.08,44,0xb8c0c8,0,-0.04,0,false);
+  // 蓝色发射圆形标记（用方块近似）
+  mapBox(14,0.09,14,0x2060b0,0,-0.02,-4,false);
 }
 
 // === Glass Office（玻璃办公楼地图）===
@@ -763,6 +781,11 @@ function buildGlassOffice(){
   mapTree(10,10); mapTree(-10,10); mapTree(-16,-8);
   // 入口台阶
   for(let i=0;i<4;i++) mapBox(8,0.4+i*0.4,1.2,0xb0b8c0,-i*1.2,0.2+i*0.4,-5.1-i*1.2);
+  // 城市地面（浅灰）
+  mapBox(44,0.08,44,0xc0c8cc,0,-0.04,0,false);
+  // 草坪绿化带
+  mapBox(14,0.09,6,0x50a030,4,0.0,12,false);
+  mapBox(8,0.09,8,0x50a030,-16,0.0,10,false);
 }
 
 // === Happy Home（彩色住宅区地图）===
@@ -784,6 +807,13 @@ function buildHappyHome(){
   mapTree(18, 6); mapTree(-18,-6); mapTree(10,-16); mapTree(-16,14);
   // 围栏
   for(let i=-3;i<=3;i++) mapBox(0.2,1.4,0.2,0xd0d0a0,i*4+2,0.7,20);
+  // 彩色小镇地面（暖米色）
+  mapBox(44,0.08,44,0xd4c8a0,0,-0.04,0,false);
+  // 中央广场地砖（浅砖色）
+  mapBox(12,0.09,12,0xe0c090,0,-0.02,0,false);
+  // 彩色路面条纹
+  mapBox(44,0.09,0.8,0xe07090,0,-0.01,-10,false);
+  mapBox(44,0.09,0.8,0x60b0e0,0,-0.01,10,false);
 }
 
 /* ============================================================
@@ -1178,9 +1208,11 @@ function damage(n){
   if (now - lastHurtSfx > 520){ playSfx('hurt'); lastHurtSfx = now; }
   // 血条闪烁
   const hpFill = document.getElementById('hpfill');
-  hpFill.classList.remove('hurt');
+  const hpBar = document.getElementById('hpbar');
+  hpFill.classList.remove('hurt'); hpBar.classList.remove('hurt');
   void hpFill.offsetWidth;
-  hpFill.classList.add('hurt');
+  hpFill.classList.add('hurt'); hpBar.classList.add('hurt');
+  setTimeout(()=>hpBar.classList.remove('hurt'), 1050);
   if (player.hp <= 0) die();
 }
 
@@ -1191,7 +1223,7 @@ function die(reason){
   player.group.rotation.x = -Math.PI/2;
   player.group.position.y += 0.5;
   showCenter('你没能幸存', reason || '下一回合再试试');
-  setTip('你已死亡，进入观战视角。下一回合自动重生。');
+  setTip('你已淘汰\n观战中 · 下回合重生');
   flashRed();
   playSfx('death');
   // 死亡后 2 秒自动传回大厅观光位置（观战）
@@ -1205,7 +1237,7 @@ function die(reason){
       if (alive.length > 0) {
         const target = alive[Math.floor(Math.random() * alive.length)];
         const idx = npcs.indexOf(target);
-        setTip('观战视角 · 正在观察 ' + BOT_NAMES[idx] + ' · 下一回合自动重生');
+        setTip('观战：' + BOT_NAMES[idx] + ' · 下回合重生');
         G._spectateTarget = idx;
       }
     }
@@ -2088,7 +2120,7 @@ function setState(s){
     // 大厅阶段预先建造本回合地图，让玩家在塔上远望
     clearMapObjects();
     MAP_DEFS[G.mapIdx].build();
-    setTip('大厅等待中，俯望【' + G.mapName + '】地图，' + LOBBY_TIME + '秒后传送');
+    setTip('大厅等待 · 【' + G.mapName + '】\n' + LOBBY_TIME + '秒后传送');
     // 传送到大厅观光塔顶
     player.pos.set(TOWER.x, TOWER.y, TOWER.z);
     camYaw = Math.atan2(0 - LOBBY_X, 0 - LOBBY_Z);  // 朝向灾害岛
@@ -2111,7 +2143,7 @@ function setState(s){
     camYaw = Math.PI;
     camPitch = 0.1;
     showBanner('准 备', 1200);
-    setTip('准备阶段｜【' + mapDef.name + '】灾害未知，找高地/掩体');
+    setTip('准备！【' + mapDef.name + '】\n灾害未知，找高地/掩体');
     // 随机生成道具箱
     clearItemBoxes();
     for (let b = 0; b < rndi(3, 5); b++) {
@@ -2144,7 +2176,7 @@ function setState(s){
   if (s === 'result'){
     bgmStop();
     clearDisaster();
-    setTip('结算中，等待下一回合。');
+    setTip('结算中，下一回合即将开始');
     showBanner('回合结束', 1200);
     // 结算时显示投票面板
     setTimeout(() => { if(G.state === 'result') openVotePanel(); }, 1500);
@@ -2170,7 +2202,7 @@ function updateGame(dt){
     if (!G.warned && remain <= WARN_TIME){
       G.warned = true;
       showBanner('灾 害 预 警', 1300);
-      setTip('警报响起：灾害即将开始，但类型仍然未知，立刻确认逃生路线。');
+      setTip('警报！灾害即将来袭\n类型未知，尽快找掩体');
       playSfx('alarm');
       const dw = document.getElementById('disasterWarning');
       dw.querySelector('#warnMsg').textContent = '⚠ 灾害即将来临！寻找高地或掩体躲避';
@@ -2666,6 +2698,8 @@ document.getElementById('elevatorBtn').addEventListener('click', e => {
 /* ============================================================
    输入
    ============================================================ */
+// 防止H5下拉滚动
+document.addEventListener('touchmove', e => { if(e.cancelable) e.preventDefault(); }, { passive: false });
 const keys = {};
 const touchMove = {x:0,z:0,run:false,jump:false};
 
@@ -2729,6 +2763,9 @@ sensRange.value = SETTINGS.sensitivity;
 deadRange.value = SETTINGS.joyDead;
 soundToggle.textContent = SETTINGS.sound ? '开启' : '关闭';
 lookModeBtn.textContent = SETTINGS.freeLook ? '自由拖拽' : '固定视角';
+const lookAreaBtn = document.getElementById('lookAreaBtn');
+lookAreaBtn.textContent = SETTINGS.lookRightOnly ? '仅右侧' : '全屏';
+lookAreaBtn.addEventListener('click', ()=>{ SETTINGS.lookRightOnly=!SETTINGS.lookRightOnly; lookAreaBtn.textContent=SETTINGS.lookRightOnly?'仅右侧':'全屏'; });
 sprintModeBtn.textContent = SETTINGS.sprintHold ? '长按加速' : '点击切换';
 document.getElementById('settingsBtn').addEventListener('click', e=>{ e.stopPropagation(); settingsEl.style.display='flex'; });
 document.getElementById('closeSettings').addEventListener('click', ()=>settingsEl.style.display='none');
@@ -2740,6 +2777,16 @@ deadRange.addEventListener('input', ()=>{ SETTINGS.joyDead=parseFloat(deadRange.
 lookModeBtn.addEventListener('click', ()=>{ SETTINGS.freeLook=!SETTINGS.freeLook; lookModeBtn.textContent=SETTINGS.freeLook?'自由拖拽':'固定视角'; });
 sprintModeBtn.addEventListener('click', ()=>{ SETTINGS.sprintHold=!SETTINGS.sprintHold; sprintModeBtn.textContent=SETTINGS.sprintHold?'长按加速':'点击切换'; touchMove.run=false; });
 skipBtn.addEventListener('click', e=>{ e.stopPropagation(); skipPhase(); });
+// 道具长按提示
+document.querySelectorAll('.itemSlot').forEach(slot => {
+  let tipTimer = null;
+  const tip = slot.querySelector('.itemTooltip');
+  slot.addEventListener('pointerdown', () => {
+    tipTimer = setTimeout(() => { if(tip) tip.style.display = 'block'; }, 400);
+  });
+  slot.addEventListener('pointerup', () => { clearTimeout(tipTimer); if(tip) tip.style.display = 'none'; });
+  slot.addEventListener('pointercancel', () => { clearTimeout(tipTimer); if(tip) tip.style.display = 'none'; });
+});
 document.getElementById('fullscreenBtn').addEventListener('click', ()=>{ if(!document.fullscreenElement) document.documentElement.requestFullscreen?.(); else document.exitFullscreen?.(); });
 document.getElementById('resetCamBtn').addEventListener('click', ()=>{ camYaw=Math.PI; camPitch=player.dead?0.25:0.1; });
 
@@ -2770,11 +2817,11 @@ function updateHUD(dt){
   elTimer.textContent = ceilRemain;
   // 最后5秒 tick
   if (!window._lastTick) window._lastTick = 0;
-  if (ceilRemain <= 5 && ceilRemain > 0 && ceilRemain !== window._lastTick) {
+  if (ceilRemain <= 6 && ceilRemain > 0 && ceilRemain !== window._lastTick) {
     window._lastTick = ceilRemain;
     playSfx('tick');
   }
-  if (ceilRemain > 5) window._lastTick = 0;
+  if (ceilRemain > 6) window._lastTick = 0;
   elMap.textContent = G.mapName;
   elRound.textContent = G.round || 1;
   const alive = (player.dead?0:1) + npcs.filter(n=>!n.dead).length;
@@ -2787,8 +2834,8 @@ function updateHUD(dt){
     document.getElementById('survivors').querySelector('h3').textContent = '状态';
   }
   skipBtn.style.display = (G.state === 'lobby' || G.state === 'prep' || G.state === 'result') ? 'block' : 'none';
-  if (G.state === 'result') setTip('结算中，' + Math.ceil(remain) + ' 秒后下一回合。');
-  if (G.state === 'lobby') setTip('等待下一回合，' + Math.ceil(remain) + ' 秒后开始。');
+  if (G.state === 'result') setTip('结算中 · ' + Math.ceil(remain) + 's 后下一回合');
+  if (G.state === 'lobby') setTip('大厅等待 · ' + Math.ceil(remain) + 's 后传送');
 }
 
 /* ============================================================
@@ -2889,6 +2936,7 @@ renderer.domElement.addEventListener('click', () => {
 let lookId = null, lookLastX = 0, lookLastY = 0;
 function startLook(e){
   if (!started || !isTouchDevice || !SETTINGS.freeLook) return;
+  if (SETTINGS.lookRightOnly && e.clientX < innerWidth * 0.45) return;
   e.preventDefault();
   lookId = e.pointerId;
   lookLastX = e.clientX;
