@@ -676,144 +676,298 @@ function mapTree(x,z){
   addFlammable(x,z,2.4,'tree');
 }
 
-// === Sunny Ranch（农场地图）===
+// === 阳光农场 · 晴天黄绿 ===
 function buildSunnyRanch(){
-  // 谷仓（大型红色建筑，可攀爬屋顶）
-  mapBox(18,10,12,0xc03030,0,5,0);            // 谷仓主体
-  mapBox(20,0.5,14,0x7a3020,0,10.3,0);        // 谷仓屋顶
-  mapBox(4,10,0.3,0xc03030,0,5,6.1);          // 谷仓门框
-  // 粮仓塔
-  mapBox(5,16,5,0xc8b060,8,8,-10);            // 粮仓塔1
-  mapBox(5,0.5,5,0xa89040,8,16.3,-10);        // 粮仓顶
-  mapBox(5,16,5,0xc8b060,-8,8,-10);           // 粮仓塔2
-  mapBox(5,0.5,5,0xa89040,-8,16.3,-10);
-  // 拖拉机（可挡灾的高台）
-  mapBox(5,2.4,8,0x608030,16,1.2,6);          // 车身
-  mapBox(6,0.6,9,0x506020,16,2.7,6);          // 车顶
-  // 干草堆
-  mapBox(4,3,4,0xe8c058,-14,1.5,10);
-  mapBox(4,3,4,0xe8c058,-14,1.5,16);
-  // 篱笆围栏
-  for(let i=-3;i<=3;i++) mapBox(0.3,1.6,0.3,0xc8a060,i*4,-0.2,20);
-  for(let i=-3;i<=3;i++) mapBox(0.3,0.3,0.3,0xc8a060,-14,0.9,i*3+9);
-  // 树
-  mapTree(-16,-6); mapTree(14,-14); mapTree(-4,-18); mapTree(18,-4);
-  // 金色麦田地面贴片
-  mapBox(14,0.1,10,0xf0d040,-4,0.06,10,false);
-  mapBox(10,0.1,8,0xe8c820,10,0.06,-8,false);
-  // 蓝天感：地面草色
-  mapBox(44,0.08,44,0x5aab40,0,-0.04,0,false);
-}
+  // 草地地面（大片绿色）
+  mapBox(44,0.1,44,0x68c048,0,-0.05,0,false);
+  // 麦田黄色区块
+  mapBox(16,0.12,10,0xf0cc30,-2,0.0,10,false);
+  mapBox(10,0.12,8,0xe8c020,12,0.0,-6,false);
 
-// === Devastation Station（工业废墟地图）===
-function buildDevastationStation(){
-  // 废弃工厂主楼（双层，可爬屋顶）
-  mapBox(20,8,14,0x686060,-2,4,0);            // 一楼
-  mapBox(20,0.5,14,0x585050,-2,8.3,0);        // 一楼屋顶（平台）
-  mapBox(12,6,10,0x686060,-2,11,0);           // 二楼
-  mapBox(14,0.5,12,0x585050,-2,14.3,0);       // 二楼屋顶（高平台）
-  // 烟囱（高点）
-  mapBox(3,22,3,0x505050,8,11,-5);
-  mapBox(4,0.5,4,0x404040,8,22.3,-5);
-  // 废弃集装箱（多层堆叠，可爬）
-  mapBox(8,4,4,0x406080,-14,2,8);
-  mapBox(8,4,4,0x804040,-14,6,8);             // 叠一层
-  mapBox(8,0.4,4,0x303030,-14,8.2,8);         // 顶部可站
-  // 废弃铁路月台
-  mapBox(24,2,6,0x706858,0,1,-12);
-  mapBox(24,0.3,6,0x909080,0,2.15,-12);
-  // 钢架桥（连接月台和工厂）
-  mapBox(6,0.4,10,0x808080,8,8.2,-6);
-  // 破损墙体（掩体）
-  mapBox(0.5,5,8,0x787070,16,2.5,2);
-  mapBox(0.5,5,8,0x787070,-18,2.5,-4);
-  // 工业地面（深灰）
-  mapBox(44,0.08,44,0x484040,0,-0.04,0,false);
-  // 橙色警示条地贴
-  for(let i=-3;i<=3;i++) mapBox(44,0.09,0.6,0xe07020,0,-0.02,i*6,false);
-}
+  // 大红谷仓（标志性建筑，宽扁形）
+  mapBox(22,9,14,0xc02820,0,4.5,0);           // 主体鲜红
+  mapBox(24,1,16,0x8a1810,0,9.3,0);           // 屋顶深红
+  mapBox(5,9,0.3,0xc02820,0,4.5,7.1);         // 正面门框
+  mapBox(3,5,0.3,0x8a1810,0,2.5,7.1,false);   // 门洞（装饰）
+  // 谷仓侧窗
+  mapBox(0.3,2,2,0xf0d060,-11,7,-0.1,false);
+  mapBox(0.3,2,2,0xf0d060, 11,7,-0.1,false);
 
-// === Launch Land（发射台地图）===
-function buildLaunchLand(){
-  // 火箭发射台（中央高台）
-  mapBox(12,4,12,0x909090,0,2,-4);            // 发射台基座
-  mapBox(10,0.5,10,0xa0a0a0,0,4.3,-4);        // 发射台顶面
-  // 火箭（装饰性高柱）
-  mapBox(3,18,3,0xe0e0e0,0,13,-4);            // 火箭主体
-  mapBox(5,0.5,5,0xc0c0c0,0,22.3,-4, false);  // 火箭头（装饰）
-  mapBox(2,4,0.5,0xd0d0d0,-2,4.5,-7, false);  // 支撑架
-  mapBox(2,4,0.5,0xd0d0d0,2,4.5,-7, false);
-  // 控制楼（双层）
-  mapBox(14,8,8,0x607090,-8,4,8);
-  mapBox(16,0.5,10,0x506080,-8,8.3,8);        // 屋顶
-  mapBox(8,6,6,0x607090,-8,11,8);             // 二楼
-  mapBox(10,0.5,8,0x506080,-8,14.3,8);        // 二楼顶
-  // 金属步道
-  mapBox(16,0.4,3,0x808090,4,4.3,4);
-  // 卫星天线塔
-  mapBox(2,14,2,0x808080,14,-0.2,-10);
-  mapBox(6,0.4,6,0x909090,14,13.9,-10);
-  // 储罐
-  mapBox(5,6,5,0x708080,14,3,8);
-  mapBox(5,0.5,5,0x809090,14,6.3,8);
-  // 发射基地地面（浅灰白）
-  mapBox(44,0.08,44,0xb8c0c8,0,-0.04,0,false);
-  // 蓝色发射圆形标记（用方块近似）
-  mapBox(14,0.09,14,0x2060b0,0,-0.02,-4,false);
-}
-
-// === Glass Office（玻璃办公楼地图）===
-function buildGlassOffice(){
-  // 主楼（高层，玻璃感：浅蓝灰）
-  mapBox(14,16,10,0x9ab8d0,0,8,0);            // 主楼
-  mapBox(16,0.5,12,0x7aa0bc,0,16.3,0);        // 主楼屋顶
-  // 玻璃外墙装饰条（稍深一点）
-  for(let i=0;i<4;i++) mapBox(14,0.3,0.3,0x6090b0,0,4+i*4,5.1, false);
-  // 附楼
-  mapBox(10,10,8,0x9ab8d0,14,5,2);
-  mapBox(12,0.5,10,0x7aa0bc,14,10.3,2);
-  // 停车场（低矮平台）
-  mapBox(20,2,10,0x808080,-12,1,-6);
-  mapBox(20,0.3,10,0x909090,-12,2.15,-6);
-  // 树池（装饰性绿化）
-  mapBox(3,1,3,0x60903c,10,0.5,10);
-  mapBox(3,1,3,0x60903c,-10,0.5,10);
-  mapTree(10,10); mapTree(-10,10); mapTree(-16,-8);
-  // 入口台阶
-  for(let i=0;i<4;i++) mapBox(8,0.4+i*0.4,1.2,0xb0b8c0,-i*1.2,0.2+i*0.4,-5.1-i*1.2);
-  // 城市地面（浅灰）
-  mapBox(44,0.08,44,0xc0c8cc,0,-0.04,0,false);
-  // 草坪绿化带
-  mapBox(14,0.09,6,0x50a030,4,0.0,12,false);
-  mapBox(8,0.09,8,0x50a030,-16,0.0,10,false);
-}
-
-// === Happy Home（彩色住宅区地图）===
-function buildHappyHome(){
-  // 3栋彩色住宅
-  mapHouse(-10, 8, 9, 8, 0xf07050, 0x9a3020);  // 橙红色
-  mapHouse(  2,-14, 9, 8, 0x60c080, 0x208040);  // 绿色
-  mapHouse( 14,  4, 8, 7, 0x60a0e0, 0x204880);  // 蓝色
-  // 中央喷泉广场
-  mapBox(10,0.4,10,0xd0c8b0,0,0.2,0, false);    // 广场地面
-  mapBox(4,0.6,4,0xb0a890,0,0.3,0);             // 喷泉底座
-  mapBox(1.4,2.4,1.4,0xa0a8c0,0,1.5,0);         // 喷泉柱
-  // 路灯
-  for(const [lx,lz] of [[6,6],[-6,6],[6,-6],[-6,-6]]){
-    mapBox(0.3,6,0.3,0x808080,lx,3,lz);
-    mapBox(1.6,0.2,0.2,0x808080,lx,6.1,lz, false);
+  // 圆柱粮仓×2（用六边形柱近似：CylinderGeometry）
+  const siloMat = new THREE.MeshLambertMaterial({color:0xd4b860});
+  const siloCap = new THREE.MeshLambertMaterial({color:0xa89040});
+  for(const sx of [-10,10]){
+    const silo = new THREE.Mesh(new THREE.CylinderGeometry(2.8,2.8,18,10),siloMat);
+    silo.position.set(sx,9,-12); silo.castShadow=true; scene.add(silo); currentMapObjects.push(silo); addC(sx,9,-12,5.6,18,5.6);
+    const cap = new THREE.Mesh(new THREE.ConeGeometry(3.1,3.5,10),siloCap);
+    cap.position.set(sx,19,-12); scene.add(cap); currentMapObjects.push(cap);
   }
-  // 树与灌木
-  mapTree(18, 6); mapTree(-18,-6); mapTree(10,-16); mapTree(-16,14);
-  // 围栏
-  for(let i=-3;i<=3;i++) mapBox(0.2,1.4,0.2,0xd0d0a0,i*4+2,0.7,20);
-  // 彩色小镇地面（暖米色）
-  mapBox(44,0.08,44,0xd4c8a0,0,-0.04,0,false);
-  // 中央广场地砖（浅砖色）
-  mapBox(12,0.09,12,0xe0c090,0,-0.02,0,false);
-  // 彩色路面条纹
-  mapBox(44,0.09,0.8,0xe07090,0,-0.01,-10,false);
-  mapBox(44,0.09,0.8,0x60b0e0,0,-0.01,10,false);
+
+  // 拖拉机（绿色车身可站）
+  mapBox(6,2.6,10,0x5a8828,16,1.3,4);         // 车身深绿
+  mapBox(7,0.7,11,0x4a7018,16,2.8,4);         // 车顶
+  mapBox(2.2,3,2.2,0x303030,13,1.5,2);        // 前轮
+  mapBox(2.2,3,2.2,0x303030,13,1.5,6);        // 后轮
+  mapBox(2.2,3,2.2,0x303030,19,1.5,2);
+  mapBox(2.2,3,2.2,0x303030,19,1.5,6);
+
+  // 干草堆（圆柱）
+  const hayM = new THREE.MeshLambertMaterial({color:0xe8c050});
+  for(const [hx,hz] of [[-15,8],[-15,14],[-15,20]]){
+    const hay = new THREE.Mesh(new THREE.CylinderGeometry(2,2,2.4,8),hayM);
+    hay.position.set(hx,1.2,hz); hay.castShadow=true; scene.add(hay); currentMapObjects.push(hay); addC(hx,1.2,hz,4,2.4,4);
+  }
+
+  // 木篱笆
+  for(let i=-5;i<=5;i++){
+    mapBox(0.25,1.6,0.25,0xb88840,i*4,0.8,21);
+    mapBox(4,0.3,0.25,0xc8a050,i*4-2,1.4,21,false);
+  }
+  for(let i=0;i<=8;i++) mapBox(0.25,1.6,0.25,0xb88840,-20,0.8,i*3-12);
+
+  // 水井
+  mapBox(2,1.6,2,0x8a6a40,10,0.8,14);
+  mapBox(2.4,0.3,2.4,0x6a4a20,10,1.75,14);
+
+  // 树（散落田间）
+  mapTree(-18,-4); mapTree(16,-12); mapTree(-6,-18); mapTree(20,-6); mapTree(-14,-16);
+  addFlammable(-14,20,4,'tree'); addFlammable(16,4,6,'hay');
+}
+
+// === 废弃工站 · 工业暗棕+锈红 ===
+function buildDevastationStation(){
+  // 工业地面（深灰碎石）
+  mapBox(44,0.1,44,0x4a4440,0,-0.05,0,false);
+  // 铁锈地面斑块
+  mapBox(16,0.11,10,0x704030,4,0.0,-4,false);
+  mapBox(10,0.11,8,0x604828,-12,0.0,8,false);
+
+  // 主工厂楼（L形，锈灰）
+  mapBox(22,10,16,0x5e5450,-2,5,0);           // 一楼主体
+  mapBox(22,0.6,16,0x4a403c,-2,10.3,0);       // 一楼屋顶平台
+  mapBox(14,8,10,0x5e5450,4,14,0);            // 二楼
+  mapBox(16,0.6,12,0x4a403c,4,18.3,0);        // 二楼屋顶
+  // 工厂侧面窗洞
+  mapBox(0.3,2.5,3,0x302828,-13,6,0,false);
+  mapBox(0.3,2.5,3,0x302828,-13,6,6,false);
+
+  // 大烟囱×2（标志性）
+  const chimneyM = new THREE.MeshLambertMaterial({color:0x484040});
+  const bandM    = new THREE.MeshLambertMaterial({color:0xd04020});
+  for(const [cx,cz] of [[10,-6],[14,-6]]){
+    const ch = new THREE.Mesh(new THREE.CylinderGeometry(1.4,1.8,26,8),chimneyM);
+    ch.position.set(cx,13,cz); ch.castShadow=true; scene.add(ch); currentMapObjects.push(ch); addC(cx,13,cz,3.6,26,3.6);
+    // 橙红警示环
+    for(const ry of [4,10,16]){
+      const band = new THREE.Mesh(new THREE.CylinderGeometry(1.9,1.9,0.8,8),bandM);
+      band.position.set(cx,ry,cz); scene.add(band); currentMapObjects.push(band);
+    }
+  }
+
+  // 集装箱堆（3色可爬）
+  mapBox(9,4.5,4.5,0x3a6080,-15,2.25,8);      // 蓝色
+  mapBox(9,4.5,4.5,0x904030,-15,6.75,8);      // 锈红叠一层
+  mapBox(9,0.5,4.5,0x282828,-15,9.3,8);       // 顶面站台
+  mapBox(9,4.5,4.5,0x388050,-4,2.25,16);      // 绿色单个
+  mapBox(9,0.5,4.5,0x282828,-4,4.75,16);      // 顶
+
+  // 铁路月台
+  mapBox(28,2.4,7,0x686050,0,1.2,-14);
+  mapBox(28,0.4,7,0x888870,0,2.5,-14);
+  // 轨道（装饰）
+  mapBox(28,0.2,0.4,0x505050,0,2.72,-12.4,false);
+  mapBox(28,0.2,0.4,0x505050,0,2.72,-15.6,false);
+  for(let i=-6;i<=6;i++) mapBox(1.6,0.2,3.4,0x706040,i*4,2.72,-14,false);
+
+  // 高架钢桥（连接月台与工厂屋顶）
+  mapBox(8,0.5,3,0x707878,8,10.5,-7);
+  mapBox(8,0.5,3,0x707878,8,10.5,-11);
+
+  // 破损墙掩体
+  mapBox(0.6,5.5,9,0x706860,18,2.75,2);
+  mapBox(0.6,5.5,9,0x706860,-19,2.75,-2);
+  mapBox(5,5.5,0.6,0x706860,0,2.75,20);
+
+  // 铁桶×多个（装饰）
+  for(const [bx,bz] of [[16,8],[-8,-8],[6,18],[-16,16]]){
+    const bar = new THREE.Mesh(new THREE.CylinderGeometry(0.6,0.6,1.4,8),
+      new THREE.MeshLambertMaterial({color:0xe07020}));
+    bar.position.set(bx,0.7,bz); scene.add(bar); currentMapObjects.push(bar);
+  }
+  addFlammable(-15,8,6,'container'); addFlammable(0,-14,8,'platform');
+}
+
+// === 发射基地 · 月夜银白蓝 ===
+function buildLaunchLand(){
+  // 基地地面（浅灰白混凝土）
+  mapBox(44,0.1,44,0xb0bcc8,0,-0.05,0,false);
+  // 蓝色发射圈标记
+  mapBox(16,0.11,16,0x1a50a0,0,0.0,-4,false);
+  mapBox(10,0.12,10,0x2868c0,0,0.0,-4,false);
+
+  // 发射台基座（厚重高台）
+  mapBox(14,5,14,0x888ea0,0,2.5,-4);
+  mapBox(16,0.8,16,0x9aa0b4,0,5.4,-4);        // 顶面平台
+
+  // 火箭主体（圆柱+圆锥尖顶，白色）
+  const rocketM = new THREE.MeshLambertMaterial({color:0xeeeef2});
+  const noseM   = new THREE.MeshLambertMaterial({color:0xd0304a}); // 红色鼻锥
+  const rocket  = new THREE.Mesh(new THREE.CylinderGeometry(2,2.4,20,12),rocketM);
+  rocket.position.set(0,16,-4); rocket.castShadow=true; scene.add(rocket); currentMapObjects.push(rocket); addC(0,16,-4,4.8,20,4.8);
+  const nose = new THREE.Mesh(new THREE.ConeGeometry(2,5,12),noseM);
+  nose.position.set(0,27.5,-4); scene.add(nose); currentMapObjects.push(nose);
+  // 火箭支撑臂
+  for(const angle of [0,Math.PI/2,Math.PI,Math.PI*1.5]){
+    const arm = new THREE.Mesh(new THREE.BoxGeometry(0.5,8,3), new THREE.MeshLambertMaterial({color:0x909098}));
+    arm.position.set(Math.sin(angle)*5, 5.8, -4+Math.cos(angle)*5);
+    arm.rotation.y = angle; arm.castShadow=true; scene.add(arm); currentMapObjects.push(arm);
+  }
+  // 喷射台尾焰底（装饰橙）
+  mapBox(6,1,6,0xe86020,0,5.1,-4,false);
+
+  // 控制中心（深蓝楼）
+  mapBox(16,10,10,0x2a4870,-10,5,8);
+  mapBox(18,0.7,12,0x1e3860,-10,10.35,8);
+  mapBox(10,8,8,0x2a4870,-10,14,8);           // 二楼
+  mapBox(12,0.7,10,0x1e3860,-10,18.35,8);
+  // 蓝色玻璃窗条纹
+  for(let r=0;r<3;r++) mapBox(16,0.4,0.4,0x4890e0,-10,2+r*3,13.1,false);
+
+  // 金属连廊（连接控制中心与发射台）
+  mapBox(12,0.5,3,0x809098,-4,10.5,6);
+  mapBox(0.4,10,0.4,0x9098a8,-4,5.5,4.5);     // 廊柱
+
+  // 卫星天线（3组）
+  const antM = new THREE.MeshLambertMaterial({color:0x909898});
+  const dishM= new THREE.MeshLambertMaterial({color:0xd8e0e0});
+  for(const [ax,az,ht] of [[16,-12,12],[18,10,8],[-18,-12,10]]){
+    const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.3,0.4,ht,6),antM);
+    pole.position.set(ax,ht/2,az); pole.castShadow=true; scene.add(pole); currentMapObjects.push(pole); addC(ax,ht/2,az,0.8,ht,0.8);
+    const dish = new THREE.Mesh(new THREE.CylinderGeometry(2.5,0.3,0.6,8),dishM);
+    dish.rotation.z = 0.7; dish.position.set(ax,ht+0.5,az); scene.add(dish); currentMapObjects.push(dish);
+    mapBox(5.5,0.5,5.5,0xa0a8b0,ax,ht+0.5,az,false);
+  }
+
+  // 储氢球罐（圆形大罐）
+  const tankM = new THREE.MeshLambertMaterial({color:0x607888});
+  for(const [tx,tz] of [[14,8],[18,2]]){
+    const tank = new THREE.Mesh(new THREE.SphereGeometry(3,10,8),tankM);
+    tank.position.set(tx,3,tz); tank.castShadow=true; scene.add(tank); currentMapObjects.push(tank); addC(tx,3,tz,6,6,6);
+  }
+}
+
+// === 玻璃办公楼 · 都市蓝灰 ===
+function buildGlassOffice(){
+  // 城市地面（深灰沥青）
+  mapBox(44,0.1,44,0x606870,0,-0.05,0,false);
+  // 人行道（浅灰）
+  mapBox(44,0.11,8,0x9098a0,0,0.0,0,false);
+  mapBox(8,0.11,44,0x9098a0,0,0.0,0,false);
+  // 草坪绿化
+  mapBox(14,0.11,8,0x50a030,6,0.0,16,false);
+  mapBox(10,0.11,10,0x50a030,-16,0.0,12,false);
+
+  // A座主楼（高层28层感，蓝玻璃）
+  mapBox(12,24,10,0x4a7098,0,12,0);
+  mapBox(14,0.8,12,0x3a5878,0,24.4,0);        // 顶层
+  // 玻璃横条纹
+  for(let f=0;f<6;f++) mapBox(12,0.5,0.4,0x6aacdc,0,2.5+f*4,5.1,false);
+  // 金属垂直框（两侧）
+  mapBox(0.6,24,10,0x384860,-6.3,12,0,false);
+  mapBox(0.6,24,10,0x384860,6.3,12,0,false);
+
+  // B座副楼（偏矮，翠绿玻璃）
+  mapBox(10,16,8,0x3a8870,14,8,2);
+  mapBox(12,0.7,10,0x2a6858,14,16.35,2);
+  for(let f=0;f<4;f++) mapBox(10,0.4,0.4,0x50c098,14,2+f*4,7.1,false);
+
+  // C座裙楼（低矮宽扁，连接两楼）
+  mapBox(20,5,8,0x546070,4,2.5,-8);
+  mapBox(22,0.6,10,0x404c5c,4,5.3,-8);        // 裙楼屋顶平台
+  // 停车场地下坡道（装饰）
+  mapBox(10,2,4,0x484e58,-14,1,-2);
+  mapBox(10,0.3,4,0x606870,-14,2.15,-2);
+
+  // 玻璃连廊（高空）
+  mapBox(10,1,3,0x80b0c8,7,16.5,0);           // 高空连廊
+  mapBox(0.4,16,0.4,0x607088,7,8,0,false);    // 连廊柱
+
+  // 入口台阶（4级）
+  for(let i=0;i<4;i++) mapBox(10,0.5+i*0.4,1.5,0x8898a8,-i*1.4,0.25+i*0.4,-5.1-i*1.5);
+
+  // 树池绿化
+  for(const [tx,tz] of [[8,12],[-8,12],[16,12],[-16,12],[8,-12],[-8,-12]]){
+    mapBox(2.5,0.8,2.5,0x60a038,tx,0.4,tz,false);
+  }
+  mapTree(8,14); mapTree(-8,14); mapTree(-18,-6); mapTree(18,-10);
+
+  // 路灯（城市感）
+  for(const [lx,lz] of [[12,0],[-12,0],[0,12],[0,-12]]){
+    mapBox(0.3,8,0.3,0x484858,lx,4,lz);
+    mapBox(3,0.2,0.2,0x484858,lx,8.1,lz,false);
+  }
+}
+
+// === 彩虹小镇 · 暖色缤纷 ===
+function buildHappyHome(){
+  // 暖米色地面
+  mapBox(44,0.1,44,0xd0c090,0,-0.05,0,false);
+  // 中央广场砖地
+  mapBox(14,0.11,14,0xe8c880,0,0.0,0,false);
+  // 粉色+蓝色马路
+  mapBox(44,0.12,4,0xf4a0b0,0,0.0,-11,false);
+  mapBox(44,0.12,4,0x80c0f0,0,0.0,11,false);
+  // 草坪
+  mapBox(10,0.11,8,0x70c048,-16,0.0,-6,false);
+  mapBox(8,0.11,8,0x70c048,16,0.0,16,false);
+
+  // 5栋彩色住宅（增加到5栋，布局错开）
+  mapHouse(-12, 10, 10, 9, 0xf06040, 0xa02020);  // 橙红 大
+  mapHouse( 12,-12, 9, 8, 0x40c070, 0x1a7040);   // 草绿
+  mapHouse( 16,  6, 8, 7, 0x60aaee, 0x1a4890);   // 天蓝
+  mapHouse( -4,-14, 8, 7, 0xf0d030, 0xc09010);   // 明黄
+  mapHouse(-16, -4, 7, 7, 0xc060d0, 0x803aaa);   // 紫色
+
+  // 大型中央喷泉
+  mapBox(8,0.5,8,0xd8c880,0,0.25,0,false);        // 广场地面
+  const fountainM = new THREE.MeshLambertMaterial({color:0xa0b8e0});
+  const fBase = new THREE.Mesh(new THREE.CylinderGeometry(3.5,4,0.8,12),fountainM);
+  fBase.position.set(0,0.4,0); scene.add(fBase); currentMapObjects.push(fBase); addC(0,0.4,0,8,0.8,8);
+  const fRing = new THREE.Mesh(new THREE.CylinderGeometry(3.5,3.5,1,12,1,true),fountainM);
+  fRing.position.set(0,0.9,0); scene.add(fRing); currentMapObjects.push(fRing);
+  const fPillar = new THREE.Mesh(new THREE.CylinderGeometry(0.5,0.6,3.5,8),
+    new THREE.MeshLambertMaterial({color:0xd0d8e8}));
+  fPillar.position.set(0,2.5,0); fPillar.castShadow=true; scene.add(fPillar); currentMapObjects.push(fPillar); addC(0,2.5,0,1.2,3.5,1.2);
+  // 喷水球（装饰）
+  const ballM = new THREE.MeshLambertMaterial({color:0x60c0f8});
+  const ball  = new THREE.Mesh(new THREE.SphereGeometry(0.8,8,6),ballM);
+  ball.position.set(0,4.6,0); scene.add(ball); currentMapObjects.push(ball);
+
+  // 彩色路灯×6
+  const lampColors=[0xf06060,0x60c060,0x6060f0,0xf0c060,0xc060f0,0x60c0f0];
+  for(const[[lx,lz],lc] of [[[8,8],[6,8],[-8,8],[-6,-8],[8,-8],[-8,8]].map((p,i)=>[p,lampColors[i]])].flat()){
+    mapBox(0.3,6.5,0.3,lc,lx,3.25,lz);
+    const bulb = new THREE.Mesh(new THREE.SphereGeometry(0.5,6,4),
+      new THREE.MeshLambertMaterial({color:lc,emissive:lc,emissiveIntensity:0.6}));
+    bulb.position.set(lx,6.7,lz); scene.add(bulb); currentMapObjects.push(bulb);
+  }
+
+  // 秋千架（玩具感）
+  mapBox(0.3,5,0.3,0xa07840,-18,2.5,0);
+  mapBox(0.3,5,0.3,0xa07840,-16,2.5,0);
+  mapBox(4,0.3,0.3,0xa07840,-17,5.1,0,false);
+  mapBox(1.4,0.2,0.4,0x60c0e0,-17,2.5,0,false);
+
+  // 彩色围栏
+  const fenceC=[0xf04040,0x40c040,0x4040f0,0xf0c040,0xc040f0];
+  for(let i=-5;i<=5;i++){
+    mapBox(0.3,1.6,0.3,fenceC[Math.abs(i)%5],i*4+2,0.8,22);
+    mapBox(4,0.3,0.3,fenceC[Math.abs(i)%5],i*4,1.5,22,false);
+  }
+
+  // 树
+  mapTree(20, 8); mapTree(-20,-8); mapTree(10,-18); mapTree(-16,16); mapTree(2,18);
+  addFlammable(-12,10,6,'house'); addFlammable(0,0,5,'fountain');
 }
 
 /* ============================================================
@@ -2020,27 +2174,32 @@ const MAP_DEFS = [
   {
     name: '阳光农场',
     build: buildSunnyRanch,
-    spawns: [[8,0,8],[8,0,-8],[-8,0,8],[-8,0,-8],[0,0,12],[12,0,0],[-12,0,0],[0,0,-12]]
+    spawns: [[8,0,8],[8,0,-8],[-8,0,8],[-8,0,-8],[0,0,12],[12,0,0],[-12,0,0],[0,0,-12]],
+    sky: 0x87ceeb, fog: 0x9ed8f0, fogNear: 80, fogFar: 280, sunI: 1.2, hemiI: 0.9
   },
   {
     name: '废弃工站',
     build: buildDevastationStation,
-    spawns: [[10,0,6],[10,0,-6],[-10,0,6],[-10,0,-6],[6,0,10],[-6,0,10],[6,0,-10],[-6,0,-10]]
+    spawns: [[10,0,6],[10,0,-6],[-10,0,6],[-10,0,-6],[6,0,10],[-6,0,10],[6,0,-10],[-6,0,-10]],
+    sky: 0x4a4850, fog: 0x504858, fogNear: 40, fogFar: 180, sunI: 0.6, hemiI: 0.55
   },
   {
     name: '发射基地',
     build: buildLaunchLand,
-    spawns: [[14,0,0],[10,0,8],[10,0,-8],[-10,0,8],[-10,0,-8],[-14,0,0],[0,0,14],[0,0,-14]]
+    spawns: [[14,0,0],[10,0,8],[10,0,-8],[-10,0,8],[-10,0,-8],[-14,0,0],[0,0,14],[0,0,-14]],
+    sky: 0x0a1a40, fog: 0x0d2050, fogNear: 60, fogFar: 240, sunI: 0.7, hemiI: 0.5
   },
   {
     name: '玻璃办公楼',
     build: buildGlassOffice,
-    spawns: [[8,0,8],[8,0,-8],[-8,0,8],[-8,0,-8],[0,0,10],[10,0,0],[-10,0,0],[0,0,-10]]
+    spawns: [[8,0,8],[8,0,-8],[-8,0,8],[-8,0,-8],[0,0,10],[10,0,0],[-10,0,0],[0,0,-10]],
+    sky: 0x8ab0cc, fog: 0x9abcce, fogNear: 70, fogFar: 260, sunI: 0.95, hemiI: 0.8
   },
   {
     name: '彩虹小镇',
     build: buildHappyHome,
-    spawns: [[10,0,6],[10,0,-6],[-10,0,6],[-10,0,-6],[6,0,10],[-6,0,10],[6,0,-10],[-6,0,-10]]
+    spawns: [[10,0,6],[10,0,-6],[-10,0,6],[-10,0,-6],[6,0,10],[-6,0,10],[6,0,-10],[-6,0,-10]],
+    sky: 0xffb8d0, fog: 0xffc8dc, fogNear: 70, fogFar: 260, sunI: 1.1, hemiI: 0.95
   }
 ];
 const MAPS = MAP_DEFS.map(m => m.name);
@@ -2120,6 +2279,11 @@ function setState(s){
     // 大厅阶段预先建造本回合地图，让玩家在塔上远望
     clearMapObjects();
     MAP_DEFS[G.mapIdx].build();
+    // 应用地图专属天空/雾色
+    const md = MAP_DEFS[G.mapIdx];
+    scene.background.setHex(md.sky); scene.fog.color.setHex(md.fog);
+    scene.fog.near = md.fogNear; scene.fog.far = md.fogFar;
+    sun.intensity = md.sunI; hemi.intensity = md.hemiI;
     setTip('大厅等待 · 【' + G.mapName + '】\n' + LOBBY_TIME + '秒后传送');
     // 传送到大厅观光塔顶
     player.pos.set(TOWER.x, TOWER.y, TOWER.z);
