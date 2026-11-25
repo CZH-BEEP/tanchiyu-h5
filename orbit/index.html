@@ -12,6 +12,8 @@
   #hud{position:fixed;inset:0;pointer-events:none;color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.55);
     user-select:none}
   #top{position:absolute;top:16px;left:50%;transform:translateX(-50%);text-align:center}
+  #top{transition:top .22s cubic-bezier(.22,1,.36,1)}
+  #top.push{top:74px}
   #phase{font-size:12px;letter-spacing:4px;opacity:.8}
   #timer{font-size:44px;font-weight:900;line-height:1.1;font-variant-numeric:tabular-nums;letter-spacing:-1px}
   /* 血条移到右上角（原版位置），细长条 */
@@ -29,10 +31,13 @@
   /* 原版底部道具栏（3格） */
   #itemBar{position:absolute;top:80px;right:12px;
     display:flex;flex-direction:column;gap:6px;pointer-events:auto}
-  .itemSlot{width:52px;height:52px;border-radius:6px;
-    background:rgba(10,20,35,.65);border:2px solid rgba(255,255,255,.28);
-    display:flex;align-items:center;justify-content:center;font-size:22px;
+  .itemSlot{position:relative;width:52px;height:52px;border-radius:8px;
+    background:rgba(10,20,35,.65);border:1px solid rgba(255,255,255,.2);
+    display:flex;align-items:center;justify-content:center;
     box-shadow:inset 0 0 12px rgba(0,0,0,.3)}
+  .itemSlot .cdBadge{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    font-size:15px;font-weight:900;color:#ffd479;background:rgba(3,10,18,.62);border-radius:7px;
+    opacity:0;transition:opacity .1s;letter-spacing:0}
   .itemSlot.selected{border-color:#4a9eff;box-shadow:0 0 14px rgba(74,158,255,.8),0 0 4px #4a9eff,inset 0 0 12px rgba(0,0,0,.3);transform:scale(1.08)}
   .itemTooltip{position:absolute;right:60px;background:rgba(5,14,24,.9);color:#9ff;font-size:11px;font-weight:700;padding:4px 8px;border-radius:6px;white-space:nowrap;pointer-events:none;border:1px solid rgba(255,255,255,.18);letter-spacing:.04em;display:none;line-height:1.4}
   #banner{position:absolute;top:30%;left:50%;transform:translate(-50%,-50%);
@@ -44,8 +49,8 @@
   #center .sub{margin-top:12px;font-size:14px;opacity:.8;letter-spacing:1px}
   #hint{position:absolute;left:22px;bottom:74px;font-size:11px;line-height:1.9;opacity:.55}
   #tipBox{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);max-width:min(380px,calc(100% - 200px));padding:10px 14px;border-radius:14px;background:rgba(7,18,31,.78);border:1px solid rgba(255,255,255,.2);box-shadow:0 10px 28px rgba(0,0,0,.28);font-size:13px;font-weight:800;letter-spacing:.04em;text-align:center;color:#e9f8ff;line-height:1.5;white-space:pre-wrap}
-  #skipBtn{position:absolute;right:18px;top:72px;display:none;pointer-events:auto;border:0;border-radius:999px;background:linear-gradient(180deg,#fff,#9be7ff);color:#0d2941;font-weight:900;padding:9px 16px;font-size:13px;box-shadow:0 6px 0 rgba(0,0,0,.26);letter-spacing:.08em}
-  #skipBtn:active{transform:translateY(3px);box-shadow:0 2px 0 rgba(0,0,0,.22)}
+  #skipBtn{position:absolute;left:50%;bottom:78px;transform:translateX(-50%);display:none;pointer-events:auto;border:0;border-radius:999px;background:linear-gradient(180deg,#fff,#9be7ff);color:#0d2941;font-weight:900;padding:9px 16px;font-size:13px;box-shadow:0 6px 0 rgba(0,0,0,.26);letter-spacing:.08em}
+  #skipBtn:active{transform:translate(-50%,3px);box-shadow:0 2px 0 rgba(0,0,0,.22)}
   #settingsBtn{position:absolute;right:18px;bottom:20px;pointer-events:auto;width:64px;height:64px;border-radius:20px;border:none;background:url('ui/btn_settings.png') no-repeat center/contain;box-shadow:0 8px 22px rgba(0,0,0,.32);cursor:pointer;-webkit-tap-highlight-color:transparent}
   #settingsBtn:active{transform:scale(.92);box-shadow:0 4px 10px rgba(0,0,0,.25)}
   /* 原版双层灾害警告条 */
@@ -106,11 +111,11 @@
     justify-content:center;color:#9fb;background:#06101a;font-size:13px;letter-spacing:2px}
   #hud:before{content:"";position:absolute;left:14px;right:155px;top:12px;height:62px;border-radius:22px;background:linear-gradient(180deg,rgba(8,20,34,.64),rgba(8,20,34,.18));border:1px solid rgba(255,255,255,.16);box-shadow:0 16px 44px rgba(0,0,0,.28);z-index:-1}
   #roundInfo{position:absolute;left:18px;top:18px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-  .chip{display:inline-flex;align-items:center;gap:7px;height:36px;padding:0 12px;border-radius:999px;background:rgba(7,18,31,.68);border:1px solid rgba(255,255,255,.18);box-shadow:inset 0 0 18px rgba(255,255,255,.05);font-size:12px;font-weight:900;letter-spacing:.04em}.chip b{font-variant-numeric:tabular-nums}.ico{width:22px;height:22px;border-radius:0;display:inline-block;background:no-repeat center/contain;flex-shrink:0;vertical-align:middle}
-  #survivors{position:absolute;right:12px;top:34px;min-width:172px;padding:10px 12px;border-radius:18px;background:rgba(7,18,31,.62);border:1px solid rgba(255,255,255,.18);box-shadow:0 14px 40px rgba(0,0,0,.22)}#survivors h3{font-size:12px;letter-spacing:.12em;margin-bottom:6px;opacity:.8}#survivors div{font-size:12px;line-height:1.55;color:#d7f1ff}
+  .chip{display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 13px;border-radius:10px;background:rgba(7,18,31,.66);border:1px solid rgba(255,255,255,.14);box-shadow:inset 0 0 18px rgba(255,255,255,.04);font-size:12px;font-weight:900;letter-spacing:.04em}.chip b{font-variant-numeric:tabular-nums;font-weight:900}.chip .k{opacity:.48;font-size:10px;letter-spacing:.14em;font-weight:800}.itIc{width:27px;height:27px;stroke-linecap:round;stroke-linejoin:round;opacity:.95}
+  #survivors{position:absolute;left:18px;top:74px;min-width:150px;padding:10px 12px;border-radius:12px;background:rgba(7,18,31,.6);border:1px solid rgba(255,255,255,.14);box-shadow:0 14px 40px rgba(0,0,0,.22)}#survivors h3{font-size:12px;letter-spacing:.12em;margin-bottom:6px;opacity:.8}#survivors div{font-size:12px;line-height:1.55;color:#d7f1ff}
   #mobile{position:fixed;inset:0;z-index:12;pointer-events:none;display:none}.joy{position:absolute;left:22px;bottom:26px;width:132px;height:132px;border-radius:50%;background:rgba(8,20,34,.42);border:1px solid rgba(255,255,255,.22);box-shadow:0 10px 28px rgba(0,0,0,.25);pointer-events:auto;touch-action:none;transition:transform .12s,opacity .12s}.joy.active{transform:scale(1.08);opacity:.96}.knob{position:absolute;left:43px;top:43px;width:46px;height:46px;border-radius:50%;background:linear-gradient(180deg,#e7f8ff,#62c8ff);box-shadow:0 6px 18px rgba(0,0,0,.32)}.lookPad{position:absolute;right:0;top:0;width:55vw;height:calc(100% - 150px);border-radius:0;border:none;background:transparent;pointer-events:auto;touch-action:none}.lookGuide{position:absolute;right:14%;top:42%;width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,.86);box-shadow:0 0 24px rgba(99,200,255,.9);opacity:0;pointer-events:none}.lookGuide:after{content:"";position:absolute;left:20px;top:18px;width:24px;height:34px;border-radius:12px 12px 16px 16px;background:#4aa9ff;box-shadow:inset 0 -8px 0 rgba(0,0,0,.12)}.lookGuide.show{animation:dragGuide 2.2s ease-in-out 2}@keyframes dragGuide{0%{opacity:0;transform:translateX(-50px)}20%,75%{opacity:.9}55%{transform:translateX(46px)}100%{opacity:0;transform:translateX(70px)}}.ab{position:absolute;right:20px;bottom:28px;display:flex;flex-direction:column;gap:18px;align-items:center;pointer-events:auto}.ab button{width:88px;height:88px;border-radius:50%;border:none;background:transparent;box-shadow:none;touch-action:none;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent;overflow:hidden;display:flex;align-items:center;justify-content:center}.ab button img{width:100%;height:100%;object-fit:contain;display:block;pointer-events:none}.ab button:active{transform:translateY(5px) scale(1.04);filter:brightness(.82)}
   .touch-device #mobile{display:block}
-  @media(max-width:760px),(pointer:coarse){#mobile{display:block}#hint{display:none}#survivors{right:10px;top:84px;min-width:128px;padding:8px 9px}#skipBtn{right:10px;top:88px;padding:7px 13px;font-size:12px}#roundInfo{left:10px;right:10px;top:82px}.chip{height:30px;padding:0 8px;font-size:11px}#top{top:14px}#hpwrap{right:10px;top:14px;width:110px}#banner{top:24%}#tipBox{bottom:122px;max-width:calc(100% - 34px);font-size:12px;padding:10px 12px}#settingsBtn{right:14px;bottom:184px}.joy{width:142px;height:142px}#itemBar{top:88px;right:10px;}.ab{flex-direction:column;gap:18px}.ab button{width:80px;height:80px}
+  @media(max-width:760px),(pointer:coarse){#mobile{display:block}#hint{display:none}#survivors{right:10px;top:84px;min-width:128px;padding:8px 9px}#skipBtn{right:auto;left:50%;top:auto;bottom:172px;padding:7px 13px;font-size:12px}#roundInfo{left:10px;right:10px;top:82px}.chip{height:30px;padding:0 8px;font-size:11px}#top{top:14px}#hpwrap{right:10px;top:14px;width:110px}#banner{top:24%}#tipBox{bottom:122px;max-width:calc(100% - 34px);font-size:12px;padding:10px 12px}#settingsBtn{right:14px;bottom:184px}.joy{width:142px;height:142px}#itemBar{top:88px;right:10px;}.ab{flex-direction:column;gap:18px}.ab button{width:80px;height:80px}
     /* 开始界面移动端适配 */
     #start h1{letter-spacing:2px}
     #start .sub{font-size:12px;line-height:1.8;padding:0 20px}
@@ -176,9 +181,9 @@
 <div id="hud">
   <div id="top"><div id="phase">—</div><div id="timer">—</div></div>
   <div id="roundInfo">
-    <span class="chip"><span class="ico" style="font-size:16px">🗺</span><b id="mapName">海岛小镇</b></span>
-    <span class="chip"><span class="ico" style="font-size:16px">🔄</span><b id="roundNo">1</b></span>
-    <span class="chip"><span class="ico" style="font-size:16px">🧑</span><b id="aliveCount">5/5</b></span>
+    <span class="chip"><span class="k">地图</span><b id="mapName">海岛小镇</b></span>
+    <span class="chip"><span class="k">回合</span><b id="roundNo">1</b></span>
+    <span class="chip"><span class="k">存活</span><b id="aliveCount">5/5</b></span>
   </div>
   <div id="survivors"><h3>幸存者</h3><div id="survivorList">等待回合开始</div></div>
   <div id="hpwrap">
@@ -193,23 +198,23 @@
   <button id="settingsBtn" type="button" aria-label="设置"></button>
   <div id="hint">WASD 移动 · Shift 加速 · 空格 跳跃<br>鼠标 视角 · 滚轮 缩放 · 1/2/3 道具 · E 使用 · Tab 排行榜 · N 跳过等待 · ESC 释放鼠标</div>
   <div id="itemBar">
-    <div class="itemSlot selected" data-tip="草药：恢复30HP"><span>🌿</span><div class="itemTooltip">草药<br>+30 HP</div></div>
-    <div class="itemSlot" data-tip="苹果：恢复15HP"><span>🍎</span><div class="itemTooltip">苹果<br>+15 HP</div></div>
-    <div class="itemSlot" data-tip="气球：短暂漂浮"><span>🎈</span><div class="itemTooltip">气球<br>短暂漂浮</div></div>
+    <div class="itemSlot selected" data-tip="草药：恢复30HP"><svg class="itIc" viewBox="0 0 24 24"><path d="M4.5 19.5Q4.5 4.5 19.5 4.5Q19.5 19.5 4.5 19.5Z" fill="#74d95f" stroke="#2f8f36" stroke-width="1.2"/><path d="M19.5 4.5L4.5 19.5" stroke="#2f8f36" stroke-width="1.2"/></svg><span class="cdBadge"></span><div class="itemTooltip">草药<br>+30 HP</div></div>
+    <div class="itemSlot" data-tip="苹果：恢复15HP"><svg class="itIc" viewBox="0 0 24 24"><circle cx="12" cy="14.4" r="6" fill="#e2564d" stroke="#a8322b" stroke-width="1.2"/><path d="M12 8.6V5" stroke="#8a6a3a" stroke-width="1.5"/><path d="M12 6.2c1.2-1.5 3.1-1.7 4.2-.9-.2 1.7-1.9 2.6-4.2 2.1z" fill="#74d95f"/></svg><span class="cdBadge"></span><div class="itemTooltip">苹果<br>+15 HP</div></div>
+    <div class="itemSlot" data-tip="气球：短暂漂浮"><svg class="itIc" viewBox="0 0 24 24"><ellipse cx="12" cy="9.4" rx="4.6" ry="5.8" fill="#ff7b8a" stroke="#c8455a" stroke-width="1.2"/><path d="M12 15.4v4.2" stroke="#c8455a" stroke-width="1.3"/><path d="M10.9 15h2.2l-1.1 1.6z" fill="#c8455a" stroke="none"/></svg><span class="cdBadge"></span><div class="itemTooltip">气球<br>短暂漂浮</div></div>
   </div>
 </div>
 
 <div id="flash"></div>
 <div id="flashRed"></div>
 <div id="disasterWarning">
-  <div id="warnTitle">▲ DISASTER WARNING ▲</div>
+  <div id="warnTitle">DISASTER WARNING</div>
   <div id="warnMsg">灾害即将来临，立刻寻找掩护！</div>
 </div>
 
 <!-- 地图投票面板 -->
 <div id="votePanel">
   <div class="vpanel">
-    <h2>🗳 地图投票</h2>
+    <h2>地图投票</h2>
     <div class="vsub">为下一回合选择地图（NPC也会投票）</div>
     <div class="voteGrid" id="voteGrid"></div>
     <div id="voteTimer">投票将在 <b id="voteCountdown">10</b> 秒后结束</div>
@@ -218,7 +223,7 @@
 
 <!-- 排行榜面板 -->
 <div id="scoreBoard">
-  <h2>🏆 累计排行榜</h2>
+  <h2>累计排行榜</h2>
   <div id="sbList"></div>
   <button id="closeSb" style="width:100%;margin-top:10px;padding:8px;border:0;border-radius:10px;background:rgba(255,255,255,.12);color:#fff;font-weight:900;cursor:pointer;pointer-events:auto">关闭</button>
 </div>
@@ -234,14 +239,14 @@
 </div>
 
 <!-- 大厅电梯按钮 -->
-<button id="elevatorBtn" type="button">🛗 下楼梯</button>
+<button id="elevatorBtn" type="button">下楼梯</button>
 
 <div id="start">
   <h1>灾害生存岛 3D</h1>
   <div class="sub">出生塔观战 · 随机地图 · 随机灾害 · 活到最后</div>
   <div id="startBtns">
-    <button class="sbtn sbtn-solo" id="btnSolo" type="button">⚔ 单 人 游 玩</button>
-    <button class="sbtn sbtn-team" id="btnTeam" type="button">👥 组 队 游 玩</button>
+    <button class="sbtn sbtn-solo" id="btnSolo" type="button">单人游玩</button>
+    <button class="sbtn sbtn-team" id="btnTeam" type="button">组队游玩</button>
   </div>
   <div class="note">灾害开始前不会告诉你是什么<br>先观察地形：高地、屋顶和掩体都可能救命</div>
 </div>
@@ -249,13 +254,13 @@
 <!-- 组队邀请码面板 -->
 <div id="teamPanel">
   <div class="tpanel">
-    <h3>🏝 邀请好友同服</h3>
+    <h3>邀请好友同服</h3>
     <div class="tdesc">将以下房间码发给朋友<br>大家进入同一局游戏后即可一起游玩</div>
     <div id="teamCode">------</div>
     <div id="teamCodeHint">点击复制链接</div>
     <div class="tbtns">
-      <button id="btnTeamBack" type="button">返 回</button>
-      <button class="tstart" id="btnTeamStart" type="button">开 始 游 戏</button>
+      <button id="btnTeamBack" type="button">返回</button>
+      <button class="tstart" id="btnTeamStart" type="button">开始游戏</button>
     </div>
   </div>
 </div>
@@ -291,7 +296,7 @@ window.addEventListener('error', function (e) {
 <script type="importmap">
 {
   "imports": {
-    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"
+    "three": "https://registry.npmmirror.com/three/0.160.0/files/build/three.module.js"
   }
 }
 </script>
@@ -351,6 +356,31 @@ const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x8fcbe8);
 scene.fog = new THREE.Fog(0x9ed3ee, 75, 270);
 
+/* 渐变天穹：天顶偏深、地平线偏亮，比纯色背景多一层空气感 */
+const skyMat = new THREE.ShaderMaterial({
+  uniforms: {
+    cTop: { value: new THREE.Color(0x4a90c0) },
+    cMid: { value: new THREE.Color(0x8fcbe8) },
+    cBot: { value: new THREE.Color(0xd6ecf7) }
+  },
+  vertexShader: 'varying float hh; void main(){ hh = normalize(position).y; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }',
+  fragmentShader: 'uniform vec3 cTop; uniform vec3 cMid; uniform vec3 cBot; varying float hh;'
+    + 'void main(){ vec3 c = cMid; if (hh > 0.0) c = mix(cMid, cTop, pow(hh, 0.55)); else c = mix(cMid, cBot, pow(-hh, 0.45)); gl_FragColor = vec4(c, 1.0); }',
+  side: THREE.BackSide, depthWrite: false, fog: false
+});
+const skyDome = new THREE.Mesh(new THREE.SphereGeometry(640, 32, 20), skyMat);
+skyDome.frustumCulled = false;
+scene.add(skyDome);
+
+const _whiteRef = new THREE.Color(0xffffff);
+function setSkyColor(hex){
+  scene.background.setHex(hex);
+  const c = new THREE.Color(hex);
+  skyMat.uniforms.cMid.value.copy(c);
+  skyMat.uniforms.cTop.value.copy(c.clone().multiplyScalar(0.52));
+  skyMat.uniforms.cBot.value.copy(c.clone().lerp(_whiteRef, 0.45));
+}
+
 const camera = new THREE.PerspectiveCamera(68, innerWidth/innerHeight, 0.1, 900);
 const renderer = new THREE.WebGLRenderer({antialias:true, powerPreference:'high-performance'});
 renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
@@ -372,7 +402,7 @@ function applyQuality(){
   }
 }
 
-const hemi = new THREE.HemisphereLight(0xcfe8ff, 0x50703f, 1.05);
+const hemi = new THREE.HemisphereLight(0xdcf0ff, 0x76855e, 1.18);
 scene.add(hemi);
 
 const sun = new THREE.DirectionalLight(0xfff2d5, 1.7);
@@ -424,8 +454,40 @@ function addFlammable(x,z,r,tag){ flammables.push({x,z,r,tag}); }
    地形
    ============================================================ */
 // 海面
+// 海面：柔和波纹贴图 + 缓慢滚动，避免死板的单色平面
+function makeSeaTexture(){
+  const S = 512;
+  const cv = document.createElement('canvas');
+  cv.width = cv.height = S;
+  const g = cv.getContext('2d');
+  g.fillStyle = '#2277a2';
+  g.fillRect(0, 0, S, S);
+  for (let i = 0; i < 90; i++){
+    const x = Math.random() * S, y = Math.random() * S, r = 14 + Math.random() * 52;
+    const grd = g.createRadialGradient(x, y, 0, x, y, r);
+    grd.addColorStop(0, 'rgba(255,255,255,' + (0.02 + Math.random() * 0.03).toFixed(3) + ')');
+    grd.addColorStop(1, 'rgba(255,255,255,0)');
+    g.fillStyle = grd;
+    g.beginPath(); g.arc(x, y, r, 0, Math.PI * 2); g.fill();
+  }
+  for (let i = 0; i < 26; i++){
+    const x = Math.random() * S, y = Math.random() * S, r = 30 + Math.random() * 60;
+    const grd = g.createRadialGradient(x, y, 0, x, y, r);
+    grd.addColorStop(0, 'rgba(0,30,55,' + (0.05 + Math.random() * 0.05).toFixed(3) + ')');
+    grd.addColorStop(1, 'rgba(0,30,55,0)');
+    g.fillStyle = grd;
+    g.beginPath(); g.arc(x, y, r, 0, Math.PI * 2); g.fill();
+  }
+  const t = new THREE.CanvasTexture(cv);
+  t.wrapS = t.wrapT = THREE.RepeatWrapping;
+  t.repeat.set(26, 26);
+  if ('colorSpace' in t) t.colorSpace = THREE.SRGBColorSpace;
+  return t;
+}
+const seaTex = makeSeaTexture();
+
 const seaGeo = new THREE.PlaneGeometry(700,700);
-const sea = new THREE.Mesh(seaGeo, new THREE.MeshLambertMaterial({color:0x2a86c4}));
+const sea = new THREE.Mesh(seaGeo, new THREE.MeshLambertMaterial({color:0xffffff, map:seaTex}));
 sea.rotation.x = -Math.PI/2;
 sea.position.y = WATER_Y;
 sea.receiveShadow = true;
@@ -436,8 +498,8 @@ scene.add(sea);
    青蓝阶梯 · 观光高塔 · 12 个出生点
    ============================================================ */
 // 大厅地基（连接两个区域的低矮平台）
-box(60, 4, 60, 0x6a6a7a, LOBBY_X, -2, LOBBY_Z);                // 主地面
-box(80, 2, 80, 0x5a5a6a, LOBBY_X, -4, LOBBY_Z, false);         // 下沿扩展
+box(60, 4, 60, 0x7e7f90, LOBBY_X, -2, LOBBY_Z);                // 主地面
+box(80, 2, 80, 0x6b6c7c, LOBBY_X, -4, LOBBY_Z, false);         // 下沿扩展
 
 // 青蓝阶梯（MGSP 标志性元素，从地面延伸向高塔方向）
 // 共 6 级，每级高 1.4m、深 2.4m，从 Z=-12 向 Z=0 递升
@@ -1009,6 +1071,8 @@ function buildHuman(shirtColor, skinColor, pantsColor){
 const player = {
   pos: new THREE.Vector3(TOWER.x, TOWER.y, TOWER.z),
   vel: new THREE.Vector3(),
+  push: new THREE.Vector3(),
+  stunT: 0,
   hp: 100, maxHp: 100,
   dead: false,
   onGround: false,
@@ -1017,6 +1081,72 @@ const player = {
   group: buildHuman(0x3f6fd8, 0xe6b48c, 0x3a4258)
 };
 scene.add(player.group);
+
+/* ============================================================
+   外力系统：击退 / 失稳 / 镜头抖 / 碎块
+   原版的手感来自"被环境推着走"，不是只扣血。
+   push 独立于输入速度，衰减慢，不会被移动输入立刻吃掉。
+   ============================================================ */
+let shakeAmp = 0, shakeDur = 0;
+function shakeCamera(amp, dur){
+  shakeAmp = Math.max(shakeAmp, amp);
+  shakeDur = Math.max(shakeDur, dur);
+}
+
+function knock(dx, dz, power, opt){
+  if (player.dead) return;
+  const len = Math.hypot(dx, dz) || 1;
+  player.push.x += (dx / len) * power;
+  player.push.z += (dz / len) * power;
+  if (opt && opt.up) player.vel.y = Math.max(player.vel.y, opt.up);
+  const t = (opt && opt.stun) || Math.min(0.55, 0.12 + power * 0.02);
+  player.stunT = Math.max(player.stunT, t);
+  shakeCamera(Math.min(1.0, 0.12 + power * 0.03), 0.28 + t * 0.35);
+}
+
+const debrisPool = createPool(
+  () => {
+    const m = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshLambertMaterial({ color: 0x8c8579 }));
+    m.castShadow = true;
+    return m;
+  },
+  m => { m.rotation.set(0, 0, 0); m.scale.set(1, 1, 1); }
+);
+const debrisList = [];
+function spawnDebris(x, y, z, vx, vy, vz, size, color, life){
+  if (debrisList.length > 44) return;
+  const m = debrisPool.get();
+  m.material.color.setHex(color || 0x8c8579);
+  m.scale.set(size, size * rnd(0.6, 1.4), size);
+  m.position.set(x, y, z);
+  debrisList.push({ m, vx, vy, vz, life: life || 2.2, spin: rnd(-6, 6) });
+}
+
+function updateDebris(dt){
+  for (let i = debrisList.length - 1; i >= 0; i--){
+    const d = debrisList[i];
+    d.vy -= GRAV * dt;
+    d.m.position.x += d.vx * dt;
+    d.m.position.y += d.vy * dt;
+    d.m.position.z += d.vz * dt;
+    d.m.rotation.x += d.spin * dt;
+    d.m.rotation.z += d.spin * 0.7 * dt;
+    if (d.m.position.y > WATER_Y){
+      const g = supportHeight(d.m.position.x, d.m.position.z, d.m.position.y);
+      if (g > -900 && d.m.position.y < g + 0.2){
+        d.m.position.y = g + 0.2;
+        d.vy = -d.vy * 0.34;
+        d.vx *= 0.6; d.vz *= 0.6; d.spin *= 0.5;
+        if (Math.abs(d.vy) < 1.2) d.vy = 0;
+      }
+    }
+    d.life -= dt;
+    if (d.life <= 0 || d.m.position.y < WATER_Y - 1){
+      debrisPool.release(d.m);
+      debrisList.splice(i, 1);
+    }
+  }
+}
 
 /* ============================================================
    假人（装饰，让岛上不那么空）
@@ -1055,7 +1185,7 @@ function updateItemBoxes(dt) {
     if (!player.dead && Math.hypot(player.pos.x - b.x, player.pos.z - b.z) < 1.1) {
       if (itemCD[b.type] > 0) {
         itemCD[b.type] = 0;
-        spawnFloatText('拾取 ' + ITEMS[b.type].icon + ITEMS[b.type].name, '#fbbf24');
+        spawnFloatText('拾取 ' + ITEMS[b.type].name, '#fbbf24');
         playSfx('survive');
       } else {
         ITEMS[b.type].effect();
@@ -1228,6 +1358,8 @@ function clearTransientEffects(){
   boltPool.releaseAll();
   meteorPool.releaseAll();
   firePool?.releaseAll();
+  debrisPool?.releaseAll();
+  debrisList.length = 0;
 }
 
 function flashWhite(){
@@ -1357,7 +1489,7 @@ function damage(n){
     return;
   }
   player.hp = Math.max(0, player.hp - n);
-  player.hurtT = 0.25;
+  player.hurtT = n >= 5 ? 0.25 : player.hurtT;
   const now = performance.now();
   if (now - lastHurtSfx > 520){ playSfx('hurt'); lastHurtSfx = now; }
   // 血条闪烁
@@ -1384,7 +1516,7 @@ function die(reason){
   setTimeout(()=>{
     if (player.dead && G.state === 'disaster'){
       player.pos.set(TOWER.x, TOWER.y, TOWER.z);
-      camYaw = Math.atan2(0 - LOBBY_X, 0 - LOBBY_Z);
+      camYaw = Math.atan2(LOBBY_X, LOBBY_Z);
       camPitch = 0.42;
       // 找第一个存活 NPC 并显示"正在观战 XXX"
       const alive = npcs.filter(n => !n.dead);
@@ -1435,7 +1567,7 @@ function makeRing(x, z, inner, outer, color){
 }
 
 function stormInit(){
-  scene.background.setHex(0x5d6878);
+  setSkyColor(0x5d6878);
   scene.fog.color.setHex(0x67717e);
   scene.fog.near = 34; scene.fog.far = 165;
   hemi.intensity = 0.72;
@@ -1472,15 +1604,18 @@ function stormUpdate(s, dt){
   s.next -= dt;
   if (s.next <= 0 && s.strikes.length < 5){
     s.next = THUNDER_INTERVAL + rnd(-0.3, 0.3);
-    let x, z;
-    if (Math.random() < 0.68){
-      const a = rnd(0, Math.PI*2), r = rnd(3.5, 11);
-      x = clamp(player.pos.x + Math.cos(a)*r, -20, 20);
-      z = clamp(player.pos.z + Math.sin(a)*r, -20, 20);
-    } else {
-      x = rnd(-20, 20); z = rnd(-20, 20);
+    if (!netIsClient()){
+      let x, z;
+      if (Math.random() < 0.68){
+        const a = rnd(0, Math.PI*2), r = rnd(3.5, 11);
+        x = clamp(player.pos.x + Math.cos(a)*r, -20, 20);
+        z = clamp(player.pos.z + Math.sin(a)*r, -20, 20);
+      } else {
+        x = rnd(-20, 20); z = rnd(-20, 20);
+      }
+      s.strikes.push({x, z, timer:1.35, ring:makeRing(x, z, 2.5, 3.4, 0xff3b30)});
+      if (NET.host && NET.connected) netSend('ev', {e:'strike', x:+x.toFixed(1), z:+z.toFixed(1)});
     }
-    s.strikes.push({x, z, timer:1.35, ring:makeRing(x, z, 2.5, 3.4, 0xff3b30)});
   }
 
   for (let i=s.strikes.length-1;i>=0;i--){
@@ -1513,6 +1648,13 @@ function strikeHit(x, z){
 
   const d = Math.hypot(player.pos.x - x, player.pos.z - z);
   if (!player.dead && d < 3.5) die('被雷电直击');  // direct_contact_lethal
+  else if (!player.dead && d < 9){
+    const p = (9 - d) / 5.5;
+    knock(player.pos.x - x, player.pos.z - z, 3 + p * 6, { stun: 0.45 });
+    damage(9 * p);
+  }
+  for (let i = 0; i < 7; i++)
+    spawnDebris(x, 0.5, z, rnd(-6, 6), rnd(4, 10), rnd(-6, 6), rnd(0.16, 0.4), 0x8a7a5e, rnd(0.7, 1.5));
 
   for (const n of npcs){
     if (n.dead) continue;
@@ -1572,9 +1714,15 @@ function tsunamiUpdate(s, dt){
   const swept = proj < L + 2.5;          // 浪已经越过玩家
   if (!player.dead && swept && player.pos.y < waveTop - 0.35){
     damage(58 * dt);
-    // 顺着浪的方向推
-    player.pos.x += s.dir[0] * 7 * dt;
-    player.pos.z += s.dir[1] * 7 * dt;
+    // 被浪卷走：脉冲式击退，不每帧硬塞位移，否则直接穿墙
+    s.hitT = (s.hitT || 0) - dt;
+    if (s.hitT <= 0){
+      s.hitT = 0.55;
+      knock(s.dir[0], s.dir[1], 8, { stun: 0.5, up: 2.6 });
+      for (let i = 0; i < 8; i++)
+        spawnDebris(player.pos.x + rnd(-2, 2), WATER_Y + 0.4, player.pos.z + rnd(-2, 2),
+          s.dir[0] * rnd(4, 9), rnd(2, 5), s.dir[1] * rnd(4, 9), rnd(0.2, 0.5), 0x8f795a, rnd(0.8, 1.6));
+    }
     if (Math.random() < 0.35) flashRed();
   }
 
@@ -1651,10 +1799,10 @@ function makeFlameSprite(sx, sy, y, color, opacity){
 const firePool = createPool(
   () => {
     const g = new THREE.Group();
-    const s1 = makeFlameSprite(4.4, 6.8, 3.1, 0xff6a12, 0.85);
-    const s2 = makeFlameSprite(3.0, 4.8, 2.5, 0xffb648, 0.95);
-    const s3 = makeFlameSprite(1.7, 2.8, 1.9, 0xfff0c0, 0.9);
-    const light = new THREE.PointLight(0xff7a1a, 2.8, 26);
+    const s1 = makeFlameSprite(2.7, 4.2, 2.2, 0xff6a12, 0.52);
+    const s2 = makeFlameSprite(1.9, 3.0, 1.8, 0xffb648, 0.62);
+    const s3 = makeFlameSprite(1.0, 1.8, 1.2, 0xffe8a8, 0.72);
+    const light = new THREE.PointLight(0xff7a1a, 1.5, 12);
     light.position.y = 3.4;
     g.add(s1, s2, s3, light);
     g.userData = {s1, s2, s3, light};
@@ -1663,7 +1811,7 @@ const firePool = createPool(
   g => {
     const {s1, s2, s3, light} = g.userData;
     for (const s of [s1,s2,s3]) s.material.opacity = s.userData.base.opacity;
-    light.intensity = 2.8;
+    light.intensity = 1.5;
   }
 );
 
@@ -1716,14 +1864,14 @@ function fireUpdate(s, dt){
     p.s3.scale.set(1.7 * (1 + Math.sin(t*6.2) * 0.15), 2.8 * (1 + Math.sin(t*7.1) * 0.18), 1);
     p.s1.material.rotation = Math.sin(t*1.7) * 0.2;
     p.s2.material.rotation = Math.sin(t*2.2 + 2) * 0.15;
-    p.light.intensity = 2.8 + Math.sin(t*9) * 0.7;
+    p.light.intensity = 1.5 + Math.sin(t*9) * 0.35;
 
     if (p.life < 1.4){
       const o = Math.max(0, p.life / 1.4);
       p.s1.material.opacity = o * 0.85;
       p.s2.material.opacity = o * 0.95;
       p.s3.material.opacity = o * 0.9;
-      p.light.intensity = 2.8 * o;
+      p.light.intensity = 1.5 * o;
     }
     if (p.life <= 0){
       firePool.release(p.g);
@@ -1751,31 +1899,44 @@ function fireUpdate(s, dt){
    灾害：龙卷风 / 洪水 / 流星雨 / 酸雨
    ============================================================ */
 function tornadoInit(){
-  scene.background.setHex(0x7d8791); scene.fog.color.setHex(0x7d8791); scene.fog.near=24; scene.fog.far=140; sun.intensity=.78; hemi.intensity=.72;
+  setSkyColor(0x7d8791); scene.fog.color.setHex(0x7d8791); scene.fog.near=24; scene.fog.far=140; sun.intensity=.78; hemi.intensity=.72;
   const group=new THREE.Group();
   const cone=new THREE.Mesh(new THREE.ConeGeometry(2.2,13,18,1,true),new THREE.MeshBasicMaterial({color:0x4b5563,transparent:true,opacity:.42,side:THREE.DoubleSide,depthWrite:false}));
   cone.position.y=6.4; group.add(cone);
   const core=new THREE.Mesh(new THREE.CylinderGeometry(.55,1.2,12,14,1,true),new THREE.MeshBasicMaterial({color:0xe5edf5,transparent:true,opacity:.22,side:THREE.DoubleSide,depthWrite:false}));
   core.position.y=6.2; group.add(core);
   for(let i=0;i<18;i++){const r=new THREE.Mesh(new THREE.BoxGeometry(.45,.22,.45),mat(0x7a6b55));r.position.set(rnd(-2.5,2.5),rnd(1,9),rnd(-2.5,2.5));group.add(r)}
-  scene.add(group);return{kind:'tornado',t:0,dur:14,group,angle:rnd(0,Math.PI*2)};
+  scene.add(group);
+  const st={kind:'tornado',t:0,dur:14,group,angle:rnd(0,Math.PI*2)};
+  if(NET.host&&NET.connected) netSend('ev',{e:'tor',a:+st.angle.toFixed(3)});
+  return st;
 }
 function tornadoUpdate(s,dt){
   s.angle+=dt*.7;const x=Math.cos(s.angle)*15,z=Math.sin(s.angle*1.3)*15;s.group.position.set(x,0,z);s.group.rotation.y+=dt*5;
-  const d=Math.hypot(player.pos.x-x,player.pos.z-z);if(!player.dead&&d<8){const pull=(8-d)/8;player.pos.x+=(x-player.pos.x)*pull*dt*.9;player.pos.z+=(z-player.pos.z)*pull*dt*.9;damage((d<3?34:9)*dt);}
+  const d=Math.hypot(player.pos.x-x,player.pos.z-z);
+  s.pulseT=(s.pulseT||0)-dt;
+  if(!player.dead&&d<9){
+    if(s.pulseT<=0){
+      s.pulseT=.3;
+      const tx=-(z-player.pos.z), tz=(x-player.pos.x);
+      knock((x-player.pos.x)*0.7+tx*0.7,(z-player.pos.z)*0.7+tz*0.7, 3+(9-d)*0.8, {stun:0.3});
+      if(d<3.6) player.vel.y=Math.max(player.vel.y,7);
+    }
+    damage((d<3?34:9)*dt);
+  }
   for(const n of npcs){if(n.dead)continue;const nd=Math.hypot(n.pos.x-x,n.pos.z-z);if(nd<4)npcDie(n)}
 }
 function floodInit(){
-  scene.background.setHex(0x769eb8); scene.fog.color.setHex(0x8db2c8); sun.intensity=.9;
+  setSkyColor(0x769eb8); scene.fog.color.setHex(0x8db2c8); sun.intensity=.9;
   const water=new THREE.Mesh(new THREE.BoxGeometry(128,1,128),new THREE.MeshLambertMaterial({color:0x2f8fd0,transparent:true,opacity:.62}));water.position.set(0,WATER_Y,0);scene.add(water);return{kind:'flood',t:0,dur:14,group:water,peak:4.8};
 }
 function floodUpdate(s,dt){
   const k=clamp(s.t/s.dur,0,1);const y=WATER_Y+s.peak*Math.sin(k*Math.PI);s.group.position.y=y-.5;
-  if(!player.dead&&player.pos.y+PLAYER_H*.55<y){damage(30*dt);player.vel.y+=5*dt;if(Math.random()<.05)playSfx('water');}
+  if(!player.dead&&player.pos.y+PLAYER_H*.55<y){damage(30*dt);player.vel.y=Math.max(player.vel.y,2.4);if(Math.random()<.05)playSfx('water');}
   for(const n of npcs){if(!n.dead&&n.pos.y<y+.25){n.hp-=35*dt;if(n.hp<=0)npcDie(n)}}
 }
 function meteorInit(){
-  scene.background.setHex(0x2d3245); scene.fog.color.setHex(0x34384a); sun.intensity=.55; hemi.intensity=.6;
+  setSkyColor(0x2d3245); scene.fog.color.setHex(0x34384a); sun.intensity=.55; hemi.intensity=.6;
   return{kind:'meteor',t:0,dur:13,next:.25,rocks:[],group:new THREE.Group()};
 }
 function meteorUpdate(s,dt){
@@ -1784,15 +1945,19 @@ function meteorUpdate(s,dt){
   const maxRocks = SETTINGS.quality === 'low' ? 12 : 22;
   if(s.next<=0 && s.rocks.length < maxRocks){
     s.next=METEOR_INTERVAL;
-    const x=rnd(-24,24),z=rnd(-24,24);
-    const r=meteorPool.get();
-    scene.remove(r);
-    s.group.add(r);
-    r.scale.setScalar(rnd(.75,1.2));
-    r.position.set(x+rnd(-8,8),32,z+rnd(-8,8));
-    r.userData={tx:x,tz:z,v:rnd(20,28)};
-    s.rocks.push(r);
-    addFx(makeRing(x,z,1.6,2.4,0xff9f38),.8,'expand',ringPool);
+    if(!netIsClient()){
+      const x=rnd(-24,24),z=rnd(-24,24);
+      const r=meteorPool.get();
+      scene.remove(r);
+      s.group.add(r);
+      r.scale.setScalar(rnd(.75,1.2));
+      r.position.set(x+rnd(-8,8),32,z+rnd(-8,8));
+      r.userData={tx:x,tz:z,v:rnd(20,28)};
+      s.rocks.push(r);
+      addFx(makeRing(x,z,1.6,2.4,0xff9f38),.8,'expand',ringPool);
+      if(NET.host&&NET.connected) netSend('ev',{e:'meteor',x:+x.toFixed(1),z:+z.toFixed(1),
+        sx:+r.position.x.toFixed(1),sz:+r.position.z.toFixed(1),v:+r.userData.v.toFixed(1),sc:+r.scale.x.toFixed(2)});
+    }
   }
   for(let i=s.rocks.length-1;i>=0;i--){
     const r=s.rocks[i],u=r.userData;
@@ -1804,6 +1969,8 @@ function meteorUpdate(s,dt){
     if(r.position.y<=.45){
       // direct_contact_lethal — 陨石落地判定区域内致死
       strikeHit(u.tx,u.tz);
+      for(let k=0;k<5;k++) spawnDebris(u.tx,0.6,u.tz,rnd(-7,7),rnd(5,11),rnd(-7,7),rnd(0.18,0.45),0x6b5442,rnd(0.9,1.8));
+      if(!player.dead){const pd=Math.hypot(player.pos.x-u.tx,player.pos.z-u.tz);if(pd<7.5)knock(player.pos.x-u.tx,player.pos.z-u.tz,2+(7.5-pd)*1.1);}
       s.group.remove(r);
       meteorPool.release(r);
       s.rocks.splice(i,1);
@@ -1816,7 +1983,7 @@ function hasRoof(){
   return colliders.some(c=>x>c.minX&&x<c.maxX&&z>c.minZ&&z<c.maxZ&&c.minY>y&&c.maxY<12);
 }
 function acidInit(){
-  scene.background.setHex(0x6d7b58);scene.fog.color.setHex(0x77845d);scene.fog.near=30;scene.fog.far=150;sun.intensity=.55;
+  setSkyColor(0x6d7b58);scene.fog.color.setHex(0x77845d);scene.fog.near=30;scene.fog.far=150;sun.intensity=.55;
   const group=new THREE.Group(),N=360,geo=new THREE.BoxGeometry(.045,1.1,.045),matr=new THREE.MeshBasicMaterial({color:0xb9ff6a,transparent:true,opacity:.58}),rain=new THREE.InstancedMesh(geo,matr,N),drops=[],dummy=new THREE.Object3D();
   for(let i=0;i<N;i++)drops.push({x:rnd(-55,55),y:rnd(0,45),z:rnd(-55,55),v:rnd(18,30)});group.add(rain);scene.add(group);return{kind:'acid',t:0,dur:13,group,rain,drops,dummy};
 }
@@ -1829,9 +1996,11 @@ function acidUpdate(s,dt){
    灾害：雪崩 / 暴风雪 / 病毒 / 地震 / 沙尘暴 / 火山爆发
    ============================================================ */
 function avalancheInit(){
-  scene.background.setHex(0xc8d4de);scene.fog.color.setHex(0xd0dde6);scene.fog.near=10;scene.fog.far=70;sun.intensity=.55;hemi.intensity=.7;
+  setSkyColor(0xc8d4de);scene.fog.color.setHex(0xd0dde6);scene.fog.near=10;scene.fog.far=70;sun.intensity=.55;hemi.intensity=.7;
   const group=new THREE.Group();scene.add(group);
-  return{kind:'avalanche',t:0,dur:14,group,blocks:[],next:.15,dir:Math.random()<.5?'x':'z'};
+  const st={kind:'avalanche',t:0,dur:14,group,blocks:[],next:.15,dir:Math.random()<.5?'x':'z'};
+  if(NET.host&&NET.connected) netSend('ev',{e:'ave',d:st.dir});
+  return st;
 }
 function avalancheUpdate(s,dt){
   s.next-=dt;
@@ -1854,12 +2023,12 @@ function avalancheUpdate(s,dt){
     b.position.y=Math.max(.6,b.position.y-9*dt);
     u.life-=dt;
     const d=Math.hypot(player.pos.x-b.position.x,player.pos.z-b.position.z);
-    if(!player.dead&&d<2.5){damage(60*dt);player.vel.x+=u.vx*.03;player.vel.z+=u.vz*.03;}
+    if(!player.dead&&d<2.5){damage(60*dt);knock(u.vx,u.vz,6.5,{stun:0.4});}
     if(u.life<=0||Math.abs(b.position.x)>32||Math.abs(b.position.z)>32){s.group.remove(b);s.blocks.splice(i,1);}
   }
 }
 function blizzardInit(){
-  scene.background.setHex(0xe8edf2);scene.fog.color.setHex(0xdde3ea);scene.fog.near=5;scene.fog.far=55;sun.intensity=.45;hemi.intensity=.65;
+  setSkyColor(0xe8edf2);scene.fog.color.setHex(0xdde3ea);scene.fog.near=5;scene.fog.far=55;sun.intensity=.45;hemi.intensity=.65;
   const group=new THREE.Group(),N=280,geo=new THREE.BoxGeometry(.07,.07,.07),matr=new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:.82}),snow=new THREE.InstancedMesh(geo,matr,N),flakes=[],dummy=new THREE.Object3D();
   for(let i=0;i<N;i++)flakes.push({x:rnd(-45,45),y:rnd(0,38),z:rnd(-45,45),v:rnd(4,9),dx:rnd(-2,2)});
   group.add(snow);scene.add(group);
@@ -1867,10 +2036,15 @@ function blizzardInit(){
 }
 function blizzardUpdate(s,dt){
   for(let i=0;i<s.flakes.length;i++){const f=s.flakes[i];f.y-=f.v*dt;f.x+=f.dx*dt;if(f.y<-2){f.y+=40;f.x=rnd(-45,45);f.z=rnd(-45,45);}s.dummy.position.set(player.pos.x+f.x,f.y,player.pos.z+f.z);s.dummy.updateMatrix();s.snow.setMatrixAt(i,s.dummy.matrix);}s.snow.instanceMatrix.needsUpdate=true;
-  if(!player.dead&&!hasRoof())damage(8*dt);
+  if(!player.dead&&!hasRoof()){
+    let warm=false;
+    for(const n of npcs){ if(!n.dead && Math.hypot(n.pos.x-player.pos.x,n.pos.z-player.pos.z)<5.5){ warm=true; break; } }
+    for(const rp of NET.peers.values()){ if(rp.active && Math.hypot(rp.pos.x-player.pos.x,rp.pos.z-player.pos.z)<5.5){ warm=true; break; } }
+    damage(warm?3.5:9);
+  }
 }
 function virusInit(){
-  scene.background.setHex(0x5a4a6b);scene.fog.color.setHex(0x6b547e);scene.fog.near=20;scene.fog.far=120;sun.intensity=.5;hemi.intensity=.55;
+  setSkyColor(0x5a4a6b);scene.fog.color.setHex(0x6b547e);scene.fog.near=20;scene.fog.far=120;sun.intensity=.5;hemi.intensity=.55;
   const group=new THREE.Group();scene.add(group);
   const infIdx=Math.floor(Math.random()*npcs.length);
   const infLight=new THREE.PointLight(0xaa44ff,1.6,8);npcs[infIdx].group.add(infLight);
@@ -1894,7 +2068,7 @@ function virusUpdate(s,dt){
   }
 }
 function earthquakeInit(){
-  scene.background.setHex(0x9e9070);scene.fog.color.setHex(0xa89878);scene.fog.near=25;scene.fog.far=160;sun.intensity=.72;hemi.intensity=.75;
+  setSkyColor(0x9e9070);scene.fog.color.setHex(0xa89878);scene.fog.near=25;scene.fog.far=160;sun.intensity=.72;hemi.intensity=.75;
   const group=new THREE.Group();scene.add(group);
   return{kind:'earthquake',t:0,dur:13,group,shakeT:0,nextPush:.6};
 }
@@ -1903,8 +2077,16 @@ function earthquakeUpdate(s,dt){
   camYaw+=Math.sin(s.shakeT*18)*.008;
   s.nextPush-=dt;
   if(s.nextPush<=0){
-    s.nextPush=.6;
-    if(!player.dead){player.vel.x+=rnd(-8,8);player.vel.z+=rnd(-8,8);}
+    s.nextPush=.55;
+    if(!player.dead) knock(rnd(-1,1),rnd(-1,1),rnd(2.5,5.5),{stun:0.22});
+    for(let i=0;i<3;i++){
+      const c=colliders[rndi(0,colliders.length-1)];
+      if(!c||c.maxY<1.2||c.maxY>14) continue;
+      const cx=(c.maxX-c.minX<0.3)?c.minX:rnd(c.minX,c.maxX);
+      const cz=(c.maxZ-c.minZ<0.3)?c.minZ:rnd(c.minZ,c.maxZ);
+      if(Math.abs(cx)>26||Math.abs(cz)>26) continue;
+      spawnDebris(cx,c.maxY+0.2,cz,rnd(-2,2),rnd(0,2),rnd(-2,2),rnd(0.2,0.55),0x8a8378,rnd(1.4,2.6));
+    }
   }
   if(!player.dead){
     const px=player.pos.x,pz=player.pos.z,py=player.pos.y+PLAYER_H*.5;
@@ -1913,7 +2095,7 @@ function earthquakeUpdate(s,dt){
   }
 }
 function sandstormInit(){
-  scene.background.setHex(0xb89040);scene.fog.color.setHex(0xc09848);scene.fog.near=5;scene.fog.far=45;sun.intensity=.48;hemi.intensity=.55;
+  setSkyColor(0xb89040);scene.fog.color.setHex(0xc09848);scene.fog.near=5;scene.fog.far=45;sun.intensity=.48;hemi.intensity=.55;
   const group=new THREE.Group(),N=400,geo=new THREE.BoxGeometry(.055,.055,.055),matr=new THREE.MeshBasicMaterial({color:0xe8b84a,transparent:true,opacity:.7}),dust=new THREE.InstancedMesh(geo,matr,N),particles=[],dummy=new THREE.Object3D();
   for(let i=0;i<N;i++)particles.push({x:rnd(-50,50),y:rnd(.5,16),z:rnd(-50,50),v:rnd(12,24)});
   group.add(dust);
@@ -1925,6 +2107,8 @@ function sandstormInit(){
 function sandstormUpdate(s,dt){
   for(let i=0;i<s.particles.length;i++){const p=s.particles[i];p.x-=p.v*dt;p.y+=Math.sin(p.x*.3)*.4*dt;if(p.x<-50){p.x+=100;p.y=rnd(.5,16);p.z=rnd(-50,50);}s.dummy.position.set(player.pos.x+p.x,p.y,player.pos.z+p.z);s.dummy.updateMatrix();s.dust.setMatrixAt(i,s.dummy.matrix);}s.dust.instanceMatrix.needsUpdate=true;
   if(!player.dead)damage((hasRoof()?2:4)*dt);
+  s.nextPush=(s.nextPush===undefined?0:s.nextPush)-dt;
+  if(!player.dead&&s.nextPush<=0){s.nextPush=.45;knock(-1,rnd(-0.3,0.3),2.4,{stun:0.12});}
   for(let i=s.chunks.length-1;i>=0;i--){
     const c=s.chunks[i],u=c.userData;
     c.position.x+=u.vx*dt;c.position.y+=u.vy*dt-4.9*dt*dt;u.vy-=9.8*dt;c.position.z+=u.vz*dt;u.life-=dt;
@@ -1935,7 +2119,7 @@ function sandstormUpdate(s,dt){
 }
 let _volcanoMesh = null;
 function volcanoInit(){
-  scene.background.setHex(0x9e4820);scene.fog.color.setHex(0xa85028);scene.fog.near=18;scene.fog.far=140;sun.intensity=.6;sun.color.setHex(0xff9933);hemi.intensity=.5;
+  setSkyColor(0x9e4820);scene.fog.color.setHex(0xa85028);scene.fog.near=18;scene.fog.far=140;sun.intensity=.6;sun.color.setHex(0xff9933);hemi.intensity=.5;
   if(!_volcanoMesh){
     const coneGeo=new THREE.ConeGeometry(7,18,12);
     _volcanoMesh=new THREE.Mesh(coneGeo,mat(0x3d2a1a));
@@ -1962,7 +2146,9 @@ function volcanoUpdate(s,dt){
     if(!u.landed){
       u.vy-=14*dt;l.position.y+=u.vy*dt;
       l.position.x+=(u.tx-l.position.x)*dt*2.2;l.position.z+=(u.tz-l.position.z)*dt*2.2;
-      if(l.position.y<=.5){l.position.y=.5;l.position.x=u.tx;l.position.z=u.tz;u.landed=true;}
+      if(l.position.y<=.5){l.position.y=.5;l.position.x=u.tx;l.position.z=u.tz;u.landed=true;
+        for(let k=0;k<3;k++)spawnDebris(u.tx,0.5,u.tz,rnd(-4,4),rnd(3,7),rnd(-4,4),rnd(0.16,0.36),0x3d2a1a,rnd(0.8,1.6));
+        if(!player.dead){const pd=Math.hypot(player.pos.x-u.tx,player.pos.z-u.tz);if(pd<4.5)knock(player.pos.x-u.tx,player.pos.z-u.tz,2+(4.5-pd)*1.1);}}
     } else {
       u.life-=dt;
       if(u.life<1.5&&!u.cooled){u.cooled=true;l.material.color.setHex(0x1a1a1a);}
@@ -1982,19 +2168,19 @@ const DISASTER_TYPES = ['storm','tsunami','fire','tornado','flood','meteor','aci
 const DISASTER_NAME = {storm:'雷暴', tsunami:'海啸', fire:'火灾', tornado:'龙卷风', flood:'洪水', meteor:'流星雨', acid:'酸雨', avalanche:'雪崩', blizzard:'暴风雪', virus:'病毒', earthquake:'地震', sandstorm:'沙尘暴', volcano:'火山爆发'};
 
 const DISASTER_TIPS = {
-  storm:'⚡ 雷暴 — 避开高处和空旷地带！',
-  tsunami:'🌊 海啸 — 马上跑向高地！',
-  fire:'🔥 火灾 — 远离火源！',
-  tornado:'🌪 龙卷风 — 远离风柱路径！',
-  flood:'💧 洪水 — 寻找高地！',
-  meteor:'☄️ 流星雨 — 注意天空，找掩体！',
-  acid:'🌧 酸雨 — 躲进室内！',
-  avalanche:'🏔 雪崩 — 避开雪流路径！',
-  blizzard:'❄️ 暴风雪 — 找掩体保暖！',
-  virus:'🦠 病毒 — 避开人群！',
-  earthquake:'🌍 地震 — 离建筑远一点！',
-  sandstorm:'🌪 沙尘暴 — 躲避飞来的碎块！',
-  volcano:'🌋 火山爆发 — 远离火山！'
+  storm:'雷暴 — 避开高处和空旷地带！',
+  tsunami:'海啸 — 马上跑向高地！',
+  fire:'火灾 — 远离火源！',
+  tornado:'龙卷风 — 远离风柱路径！',
+  flood:'洪水 — 寻找高地！',
+  meteor:'流星雨 — 注意天空，找掩体！',
+  acid:'酸雨 — 躲进室内！',
+  avalanche:'雪崩 — 避开雪流路径！',
+  blizzard:'暴风雪 — 找掩体保暖！',
+  virus:'病毒 — 避开人群！',
+  earthquake:'地震 — 离建筑远一点！',
+  sandstorm:'沙尘暴 — 躲避飞来的碎块！',
+  volcano:'火山爆发 — 远离火山！'
 };
 
 function startDisaster(type){
@@ -2012,6 +2198,11 @@ function startDisaster(type){
   if (type === 'sandstorm')  G.instance = sandstormInit();
   if (type === 'volcano')    G.instance = volcanoInit();
   playSfx('sfx_' + type);
+  if (NET.pendingEv && NET.pendingEv.length){
+    const q = NET.pendingEv.slice();
+    NET.pendingEv.length = 0;
+    for (const m of q) netApplyEvent(m);
+  }
   setTip(DISASTER_TIPS[type] || '灾害开始：保持移动，寻找掩体。');
 }
 
@@ -2025,7 +2216,7 @@ function clearDisaster(){
   G.instance = null;
   clearTransientEffects();
 
-  scene.background.setHex(0x8fcbe8);
+  setSkyColor(0x8fcbe8);
   scene.fog.color.setHex(0x9ed3ee);
   scene.fog.near = 75; scene.fog.far = 270;
   hemi.intensity = 1.05;
@@ -2120,6 +2311,33 @@ function updateNpcDeathParticles(dt) {
 }
 
 function updateNpcs(dt){
+  // 客机：机器人位置由房主广播，本地不跑寻路逻辑，避免各端看到不同的人
+  if (NET.on && !NET.host && NET.npcData){
+    for (let i = 0; i < npcs.length; i++){
+      const d = NET.npcData[i], n = npcs[i];
+      if (!d) continue;
+      if (!n._tgt) n._tgt = new THREE.Vector3();
+      n._tgt.set(d[0], d[1], d[2]);
+      n.pos.lerp(n._tgt, Math.min(1, dt * 10));
+      n.group.position.copy(n.pos);
+      n.group.rotation.y = d[3];
+      const wasDead = n.dead;
+      n.dead = !!d[4];
+      n.group.visible = !n.dead;
+      if (!n.dead){
+        const u = n.group.userData;
+        const moving = n.pos.distanceTo(n._tgt) > 0.05;
+        if (moving){
+          n.animT += dt * 6;
+          const sw = Math.sin(n.animT) * 0.55;
+          u.legL.rotation.x = sw; u.legR.rotation.x = -sw;
+          u.armL.rotation.x = -sw * 0.6; u.armR.rotation.x = sw * 0.6;
+        }
+      }
+    }
+    return;
+  }
+
   for (const n of npcs){
     if (n.dead) continue;
 
@@ -2254,7 +2472,7 @@ function resetNpcs(){
   }
 }
 
-function setState(s){
+function setState(s, src){
   G.state = s;
   G.t = 0;
   hideCenter();
@@ -2266,7 +2484,11 @@ function setState(s){
     camera.position.set(0, 20, -45);
     G.round++;
     // 若投票已结束则使用投票结果，否则随机
-    if (!voteState.active && voteState.options.length > 0 && G.round > 1){
+    if (src && src.mapIdx !== undefined){
+      // 联机：沿用房主选定的地图
+      G.mapIdx = src.mapIdx;
+      G.mapName = MAP_DEFS[G.mapIdx].name;
+    } else if (!voteState.active && voteState.options.length > 0 && G.round > 1){
       // already set by closeVotePanel
     } else {
       G.mapIdx = rndi(0, MAP_DEFS.length - 1);
@@ -2281,14 +2503,14 @@ function setState(s){
     MAP_DEFS[G.mapIdx].build();
     // 应用地图专属天空/雾色
     const md = MAP_DEFS[G.mapIdx];
-    scene.background.setHex(md.sky); scene.fog.color.setHex(md.fog);
+    setSkyColor(md.sky); scene.fog.color.setHex(md.fog);
     scene.fog.near = md.fogNear; scene.fog.far = md.fogFar;
-    sun.intensity = md.sunI; hemi.intensity = md.hemiI;
+    sun.intensity = Math.max(1.15, md.sunI); hemi.intensity = Math.max(0.9, md.hemiI);
     setTip('大厅等待 · 【' + G.mapName + '】\n' + LOBBY_TIME + '秒后传送');
     // 传送到大厅观光塔顶
     player.pos.set(TOWER.x, TOWER.y, TOWER.z);
-    camYaw = Math.atan2(0 - LOBBY_X, 0 - LOBBY_Z);  // 朝向灾害岛
-    camPitch = 0.52;
+    camYaw = Math.atan2(LOBBY_X, LOBBY_Z);  // 朝向灾害岛
+    camPitch = 0.62;
   }
 
   if (s === 'prep'){
@@ -2317,7 +2539,7 @@ function setState(s){
 
   if (s === 'disaster'){
     bgmStart('disaster');
-    G.disasterType = DISASTER_TYPES[rndi(0,DISASTER_TYPES.length-1)];
+    G.disasterType = (src && src.disasterType) || DISASTER_TYPES[rndi(0,DISASTER_TYPES.length-1)];
     playSfx('alarm');
     startDisaster(G.disasterType);
     showBanner(DISASTER_NAME[G.disasterType], 1600);
@@ -2334,7 +2556,8 @@ function setState(s){
     };
     dw.querySelector('#warnMsg').textContent = (DISASTER_NAME[G.disasterType]||'灾害') + '！' + (tips[G.disasterType]||'寻找掩体！');
     dw.classList.add('show');
-    setTimeout(() => dw.classList.remove('show'), 5000);
+    document.getElementById('top').classList.add('push');
+    setTimeout(() => { dw.classList.remove('show'); document.getElementById('top').classList.remove('push'); }, 5000);
   }
 
   if (s === 'result'){
@@ -2356,6 +2579,13 @@ function skipPhase(){
 }
 
 function updateGame(dt){
+  if (NET.on && !NET.host) {
+    // 客机：时钟跟随房主，阶段转移完全由 sync 消息驱动
+    if (!NET.hasSync) return;
+    G.t += dt;
+    if (Math.abs(G.t - NET.sync.t) > 0.5) G.t = NET.sync.t;
+    return;
+  }
   G.t += dt;
 
   if (G.state === 'lobby'){
@@ -2369,9 +2599,10 @@ function updateGame(dt){
       setTip('警报！灾害即将来袭\n类型未知，尽快找掩体');
       playSfx('alarm');
       const dw = document.getElementById('disasterWarning');
-      dw.querySelector('#warnMsg').textContent = '⚠ 灾害即将来临！寻找高地或掩体躲避';
+      dw.querySelector('#warnMsg').textContent = '灾害即将来临！寻找高地或掩体躲避';
       dw.classList.add('show');
-      setTimeout(() => dw.classList.remove('show'), 4500);
+      document.getElementById('top').classList.add('push');
+      setTimeout(() => { dw.classList.remove('show'); document.getElementById('top').classList.remove('push'); }, 4500);
     }
     if (G.t > PREP_TIME) setState('disaster');
   }
@@ -2434,6 +2665,12 @@ function updatePlayer(dt){
   want.addScaledVector(right, ix).addScaledVector(fwd, -iz);
   if (want.lengthSq() > 0) want.normalize().multiplyScalar(speed);
 
+  // 失稳：受击后短暂失控，走不动才有"被打懵"的感觉
+  if (player.stunT > 0){
+    player.stunT -= dt;
+    want.multiplyScalar(0.38);
+  }
+
   const acc = player.onGround ? 14 : 5;
   player.vel.x += (want.x - player.vel.x) * Math.min(1, acc * dt);
   player.vel.z += (want.z - player.vel.z) * Math.min(1, acc * dt);
@@ -2447,9 +2684,11 @@ function updatePlayer(dt){
 
   const prevY = player.pos.y;
 
-  player.pos.x += player.vel.x * dt;
-  player.pos.z += player.vel.z * dt;
+  player.pos.x += (player.vel.x + player.push.x) * dt;
+  player.pos.z += (player.vel.z + player.push.z) * dt;
   resolveHorizontal(player.pos, PLAYER_R);
+  player.push.multiplyScalar(Math.exp(-dt * 2.4));
+  if (player.push.lengthSq() < 0.01) player.push.set(0, 0, 0);
 
   player.pos.y += player.vel.y * dt;
   const ground = supportHeight(player.pos.x, player.pos.z, prevY);
@@ -2546,13 +2785,22 @@ function updateCamera(dt){
 
   camera.position.copy(desired);
   camera.lookAt(target);
+
+  // 镜头抖：灾害冲击时给一点物理反馈
+  if (shakeDur > 0){
+    shakeDur -= dt;
+    const k = Math.max(0, shakeDur);
+    camera.position.x += (Math.random() - 0.5) * shakeAmp * k * 1.6;
+    camera.position.y += (Math.random() - 0.5) * shakeAmp * k * 1.2;
+    if (shakeDur <= 0) shakeAmp = 0;
+  }
 }
 
 /* ============================================================
    鼠标滚轮 / 双指缩放镜头
    ============================================================ */
 let camZoomDist = 8.4;   // 当前目标拉远距离（会覆盖固定值）
-let camZoomLobby = 13;
+let camZoomLobby = 16;
 const CAM_ZOOM_MIN = 2.5, CAM_ZOOM_MAX = 22;
 
 addEventListener('wheel', e => {
@@ -2587,9 +2835,9 @@ renderer.domElement.addEventListener('touchend', () => { pinchDist0 = null; }, {
    道具栏点击使用（INPUT-EQUIP/USE）
    ============================================================ */
 const ITEMS = [
-  { icon:'🌿', name:'草药', key:'1', effect(){ damage(-30); showBanner('+30 HP', 900); playSfx('survive'); spawnFloatText('+30 HP', '#4ade80'); } },
-  { icon:'🍎', name:'苹果', key:'2', effect(){ damage(-15); showBanner('+15 HP', 900); playSfx('survive'); spawnFloatText('+15 HP', '#fbbf24'); } },
-  { icon:'🎈', name:'气球', key:'3', effect(){ player.vel.y = Math.max(player.vel.y, JUMP_V * 1.6); player.onGround = false; showBanner('飞升！', 900); spawnFloatText('🎈飞升', '#9ff'); } }
+  { name:'草药', key:'1', effect(){ damage(-30); showBanner('+30 HP', 900); playSfx('survive'); spawnFloatText('+30 HP', '#4ade80'); } },
+  { name:'苹果', key:'2', effect(){ damage(-15); showBanner('+15 HP', 900); playSfx('survive'); spawnFloatText('+15 HP', '#fbbf24'); } },
+  { name:'气球', key:'3', effect(){ player.vel.y = Math.max(player.vel.y, JUMP_V * 1.6); player.onGround = false; showBanner('飞升！', 900); spawnFloatText('飞升', '#9ff'); } }
 ];
 let selectedSlot = 0;
 const itemSlots = document.querySelectorAll('.itemSlot');
@@ -2601,12 +2849,15 @@ function updateItemCooldown(dt){
   for(let i=0;i<3;i++){
     if(itemCD[i]>0) itemCD[i] = Math.max(0, itemCD[i] - dt);
     const slot = itemSlots[i];
+    const badge = slot.querySelector('.cdBadge');
     if(itemCD[i]>0){
-      slot.style.opacity = '0.42';
-      slot.querySelector('span').textContent = Math.ceil(itemCD[i]) + '';
+      slot.style.opacity = '0.62';
+      badge.textContent = Math.ceil(itemCD[i]) + '';
+      badge.style.opacity = '1';
     } else {
       slot.style.opacity = '1';
-      slot.querySelector('span').textContent = ITEMS[i].icon;
+      badge.textContent = '';
+      badge.style.opacity = '0';
     }
   }
 }
@@ -2654,7 +2905,7 @@ function spawnFloatText(txt, color){
 
 function showSurviveReward(survived){
   if (!survived) return;
-  const msgs = ['+经验值 +50', '+金币 🪙 20', '🏆 生存奖励', '幸存者 ✓'];
+  const msgs = ['+经验值 +50', '+金币 20', '生存奖励', '幸存者'];
   msgs.forEach((m, i) => setTimeout(() => spawnFloatText(m, ['#4ade80','#fbbf24','#9ff','#f9f'][i]), i * 220));
   playSfx('survive');
 }
@@ -2665,7 +2916,7 @@ function showResultPanel(survived) {
   const sub = document.getElementById('rcSub');
   const list = document.getElementById('rcList');
 
-  title.textContent = survived ? '🏆 你幸存了！' : '💀 你没能幸存';
+  title.textContent = survived ? '你幸存了' : '你没能幸存';
   title.style.color = survived ? '#4ade80' : '#f87171';
   sub.textContent = '第 ' + G.round + ' 回合 · ' + (G.mapName || '未知地图');
 
@@ -2675,9 +2926,9 @@ function showResultPanel(survived) {
   ].sort((a, b) => (b.alive ? 1 : 0) - (a.alive ? 1 : 0));
 
   list.innerHTML = all.map((p, i) => {
-    const ranks = ['🥇','🥈','🥉','4️⃣','5️⃣'];
+    const ranks = ['1','2','3','4','5'];
     return `<div class="rc-row${p.isMe ? ' rc-me' : ''}">
-      <span class="rc-rank">${p.alive ? ranks[i] || (i+1) : '💀'}</span>
+      <span class="rc-rank">${p.alive ? ranks[i] || (i+1) : '—'}</span>
       <span class="rc-name">${p.name}</span>
       <span class="rc-status ${p.alive ? 'rc-alive' : 'rc-dead'}">${p.alive ? '幸存' : '淘汰'}</span>
     </div>`;
@@ -2777,7 +3028,7 @@ function showScoreBoard(){
   const list = document.getElementById('sbList');
   list.innerHTML = all.map((p,i) => {
     const isMe = p.name === '你';
-    return `<div class="sbRow${isMe?' me':''}"><span class="sbRank">${['🥇','🥈','🥉','4','5'][i]}</span><span class="sbName">${p.name}</span><span class="sbScore">${p.score}</span></div>`;
+    return `<div class="sbRow${isMe?' me':''}"><span class="sbRank">${['1','2','3','4','5'][i]}</span><span class="sbName">${p.name}</span><span class="sbScore">${p.score}</span></div>`;
   }).join('');
   document.getElementById('scoreBoard').style.display = 'block';
 }
@@ -2847,7 +3098,7 @@ function updateElevator(dt){
   const btn = document.getElementById('elevatorBtn');
   if(G.state === 'lobby' && !player.dead && dist < 3.5 && !ELEV.going){
     btn.style.display = 'block';
-    btn.textContent = ELEV.targetY === 0 ? '🛗 上顶层' : '🛗 下楼梯';
+    btn.textContent = ELEV.targetY === 0 ? '上顶层' : '下楼梯';
   } else {
     btn.style.display = 'none';
   }
@@ -2965,7 +3216,7 @@ function updateHUD(dt){
   elHpNum.textContent = Math.ceil(player.hp);
 
   if (player.hurtT > 0) player.hurtT -= dt;
-  elRed.style.opacity = String(player.hurtT > 0 ? Math.min(0.45, player.hurtT * 1.8) : 0);
+  elRed.style.opacity = String(player.hurtT > 0 ? Math.min(0.26, player.hurtT * 1.4) : 0);
 
   let phase = '—', remain = 0;
   if (G.state === 'lobby')        { phase = '下一回合'; remain = Math.max(0, LOBBY_TIME - G.t); }
@@ -3003,6 +3254,359 @@ function updateHUD(dt){
 }
 
 /* ============================================================
+   联机层 · MQTT over WSS（broker.emqx.io）· 主机权威 · 星型广播
+   零后端：静态托管即可联机。房主跑全部权威逻辑，其他人跟随。
+   ============================================================ */
+const NET = {
+  on: false, host: false, room: '', id: '', name: '', client: null, topic: '',
+  peers: new Map(),
+  sync: { state: null, mapIdx: 0, disasterType: null, t: 0, round: 0 },
+  hasSync: false, connected: false, lastPosSent: 0, lastSyncSent: 0, lastNpcSent: 0, hostIntent: true,
+  npcData: null
+};
+
+const NET_PALETTE = [0xd8425d, 0xe8a33d, 0x3fa66b, 0x8b5cf6, 0x2fb3d9, 0xd9568f, 0x7ba428, 0xb05a24];
+
+function netHashId(s) {
+  let h = 2166136261;
+  for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = (h * 16777619) >>> 0; }
+  return h;
+}
+
+function netMakeTag(text) {
+  const cv = document.createElement('canvas');
+  cv.width = 320; cv.height = 72;
+  const c = cv.getContext('2d');
+  c.fillStyle = 'rgba(4,12,20,.62)'; c.fillRect(0, 0, 320, 72);
+  c.strokeStyle = 'rgba(255,255,255,.22)'; c.lineWidth = 2; c.strokeRect(1, 1, 318, 70);
+  c.font = 'bold 32px "PingFang SC","Microsoft YaHei",sans-serif';
+  c.textAlign = 'center'; c.textBaseline = 'middle';
+  c.fillStyle = '#eaf6ff';
+  c.fillText(text, 160, 38);
+  const tex = new THREE.CanvasTexture(cv);
+  if ('colorSpace' in tex) tex.colorSpace = THREE.SRGBColorSpace;
+  const sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, transparent: true, depthTest: false }));
+  sp.scale.set(2.1, 0.47, 1);
+  sp.position.set(0, 2.32, 0);
+  return sp;
+}
+
+function netAddPeer(id, name) {
+  if (id === NET.id) return null;
+  let p = NET.peers.get(id);
+  if (p) {
+    if (name && p.name !== name) {
+      p.name = name;
+      if (p.tag) { p.group.remove(p.tag); p.tag = netMakeTag(name); p.group.add(p.tag); }
+    }
+    return p;
+  }
+  const h = netHashId(id);
+  const shirt = NET_PALETTE[h % NET_PALETTE.length];
+  const skin = [0xe6b48c, 0xd9a06f, 0xf0c9a4, 0xc68a5a][(h >>> 8) % 4];
+  const group = buildHuman(shirt, skin, 0x39405a);
+  const tag = netMakeTag(name || '玩家');
+  group.add(tag);
+  group.visible = false;
+  scene.add(group);
+  p = {
+    id, name: name || '玩家', group, tag,
+    pos: new THREE.Vector3(0, 0, 0), tgt: new THREE.Vector3(0, 0, 0),
+    yaw: 0, tgtYaw: 0, animT: 0, dead: false, active: false, last: 0, spd: 0
+  };
+  NET.peers.set(id, p);
+  return p;
+}
+
+function netRemovePeer(id) {
+  const p = NET.peers.get(id);
+  if (!p) return;
+  scene.remove(p.group);
+  NET.peers.delete(id);
+  netUpdateRoster();
+}
+
+function netEnsureUI() {
+  const panel = document.querySelector('#teamPanel .tpanel');
+  if (!panel || document.getElementById('netRoster')) return;
+  const roster = document.createElement('div');
+  roster.id = 'netRoster';
+  roster.style.cssText = 'margin:10px 0 2px;font-size:12px;line-height:1.75;color:#9fe8ff;text-align:center;letter-spacing:.04em';
+  const status = document.createElement('div');
+  status.id = 'netStatus';
+  status.style.cssText = 'margin-bottom:8px;font-size:11px;color:#ffd479;text-align:center;min-height:14px';
+  const hint = panel.querySelector('#teamCodeHint');
+  hint.parentNode.insertBefore(roster, hint.nextSibling);
+  hint.parentNode.insertBefore(status, roster.nextSibling);
+}
+
+function netUpdateRoster() {
+  netEnsureUI();
+  const el = document.getElementById('netRoster');
+  if (!el) return;
+  const others = [...NET.peers.values()].map(p => p.name);
+  const all = [NET.name || '我'].concat(others);
+  el.innerHTML = '房间内 <b style="color:#fff">' + all.length + '</b> 人：'
+    + all.map(n => '<span style="opacity:.85">' + n + '</span>').join(' · ');
+}
+
+function netStatus(txt) {
+  netEnsureUI();
+  const el = document.getElementById('netStatus');
+  if (el) el.textContent = txt;
+}
+
+let mqttBoot = null;
+function netLoadMqtt() {
+  if (window.mqtt) return Promise.resolve(window.mqtt);
+  if (mqttBoot) return mqttBoot;
+  mqttBoot = new Promise((resolve, reject) => {
+    const urls = [
+      'https://unpkg.com/mqtt@5.10.1/dist/mqtt.min.js',
+      'https://cdn.jsdelivr.net/npm/mqtt@5.10.1/dist/mqtt.min.js'
+    ];
+    let i = 0;
+    const next = () => {
+      if (i >= urls.length) { mqttBoot = null; return reject(new Error('mqtt unavailable')); }
+      const s = document.createElement('script');
+      s.src = urls[i++];
+      s.onload = () => resolve(window.mqtt);
+      s.onerror = next;
+      document.head.appendChild(s);
+    };
+    next();
+  });
+  return mqttBoot;
+}
+
+function netIsClient(){
+  return !!(NET.connected && NET.on && !NET.host);
+}
+
+function netApplyEvent(m){
+  NET.evCount = (NET.evCount || 0) + 1;
+  NET.evLast = m.e;
+  const s = G.instance;
+  if (!s){ (NET.pendingEv || (NET.pendingEv = [])).push(m); return; }
+  if (m.e === 'strike' && s.kind === 'storm'){
+    s.strikes.push({ x: m.x, z: m.z, timer: 1.35, ring: makeRing(m.x, m.z, 2.5, 3.4, 0xff3b30) });
+    return;
+  }
+  if (m.e === 'meteor' && s.kind === 'meteor'){
+    if (s.rocks.length >= 24) return;
+    const r = meteorPool.get();
+    scene.remove(r);
+    s.group.add(r);
+    r.scale.setScalar(m.sc || 1);
+    r.position.set(m.sx, 32, m.sz);
+    r.userData = { tx: m.x, tz: m.z, v: m.v };
+    s.rocks.push(r);
+    addFx(makeRing(m.x, m.z, 1.6, 2.4, 0xff9f38), .8, 'expand', ringPool);
+    return;
+  }
+  if (m.e === 'tor' && s.kind === 'tornado'){ s.angle = m.a; return; }
+  if (m.e === 'ave' && s.kind === 'avalanche'){ s.dir = m.d; return; }
+}
+
+function netReconcile(m){
+  const s = G.instance;
+  if (!s) return;
+  if (m.rk && s.kind === 'meteor'){
+    for (const it of m.rk){
+      const x = it[0], z = it[1];
+      if (s.rocks.some(r => Math.abs(r.userData.tx - x) < 0.3 && Math.abs(r.userData.tz - z) < 0.3)) continue;
+      const r = meteorPool.get();
+      scene.remove(r);
+      s.group.add(r);
+      r.scale.setScalar(0.95);
+      r.position.set(x + 2, 30, z + 2);
+      r.userData = { tx: x, tz: z, v: it[2] || 24 };
+      s.rocks.push(r);
+    }
+  }
+  if (m.sk && s.kind === 'storm'){
+    for (const it of m.sk){
+      const x = it[0], z = it[1];
+      if (s.strikes.some(st => Math.abs(st.x - x) < 0.3 && Math.abs(st.z - z) < 0.3)) continue;
+      s.strikes.push({ x, z, timer: Math.max(0.2, it[2] || 0.6), ring: makeRing(x, z, 2.5, 3.4, 0xff3b30) });
+    }
+  }
+}
+
+function netSend(k, extra) {
+  if (!NET.client || !NET.connected) return;
+  const body = Object.assign({ k, from: NET.id, n: NET.name }, extra || {});
+  try { NET.client.publish(NET.topic, JSON.stringify(body), { qos: 0 }); } catch (e) {}
+}
+
+async function netStart(room, host) {
+  NET.room = room;
+  NET.host = !!host;
+  NET.hostIntent = !!host;
+  NET.id = 'p' + Math.random().toString(36).slice(2, 8);
+  NET.name = NET.host ? '房主' : '玩家' + NET.id.slice(-3).toUpperCase();
+  NET.topic = 'nds/v1/' + room;
+  netEnsureUI();
+  netUpdateRoster();
+  netStatus('正在连接联机服务…');
+
+  let mq;
+  try { mq = await netLoadMqtt(); }
+  catch (e) { netStatus('联机组件加载失败，可退回单人游玩'); return false; }
+
+  const client = mq.connect('wss://broker.emqx.io:8084/mqtt', {
+    clientId: 'nds_' + NET.id + '_' + Math.random().toString(16).slice(2, 8),
+    clean: true, keepalive: 45, reconnectPeriod: 2500, connectTimeout: 12000
+  });
+  NET.client = client;
+
+  client.on('connect', () => {
+    NET.connected = true;
+    NET.on = true;
+    client.subscribe(NET.topic, { qos: 0 });
+    netSend('hello');
+    netStatus('已连接 · 房间 ' + NET.room + (NET.host ? '（你是房主）' : '（等待房主开始）'));
+  });
+  client.on('close', () => { NET.connected = false; netStatus('连接断开，正在重连…'); });
+  client.on('error', (e) => { netStatus('联机异常：' + ((e && e.message) || e)); });
+  client.on('message', (t, payload) => {
+    if (t !== NET.topic) return;
+    let m;
+    try { m = JSON.parse(payload.toString()); } catch (e) { return; }
+    netHandle(m);
+  });
+
+  return true;
+}
+
+function netHandle(m) {
+  if (!m || m.from === NET.id) return;
+
+  if (m.k === 'hello' || m.k === 'welcome') {
+    const p = netAddPeer(m.from, m.n);
+    if (p) { p.active = true; p.last = performance.now(); }
+    if (m.k === 'hello') setTimeout(() => netSend('welcome'), 50);
+    netUpdateRoster();
+    return;
+  }
+
+  if (m.k === 'bye') { netRemovePeer(m.from); return; }
+
+  if (m.k === 'p') {
+    const p = netAddPeer(m.from, m.n);
+    if (!p) return;
+    if (!p.active) p.pos.set(m.x, m.y, m.z);   // 首次出现直接就位，避免从原点飞来
+    p.tgt.set(m.x, m.y, m.z);
+    p.tgtYaw = m.r;
+    p.dead = !!m.d;
+    p.active = true;
+    p.group.visible = true;
+    p.last = performance.now();
+    return;
+  }
+
+  if (m.k === 'np') {
+    if (NET.host) return;           // 机器人由房主统一模拟
+    NET.npcData = m.a;
+    return;
+  }
+
+  if (m.k === 'ev') { netApplyEvent(m); return; }
+
+  if (m.k === 'sync') {
+    if (NET.host) return;               // 主机只信自己
+    NET.sync = { state: m.s, mapIdx: m.mi || 0, disasterType: m.dt || null, t: m.t || 0, round: m.r || 1 };
+    NET.hasSync = true;
+    const typeChanged = (m.s === 'disaster' && m.dt && m.dt !== G.disasterType);
+    if (m.s !== G.state || typeChanged) {
+      if (typeChanged && G.state === 'disaster') clearDisaster?.();
+      setState(m.s, NET.sync);
+      G.t = m.t || 0;
+      if (!started && typeof doStartGame === 'function') setTimeout(doStartGame, 60);
+    } else {
+      G.t = m.t || 0;
+    }
+    // 状态补包：事件丢包时按房主的列表补齐，保证两端看到同一场灾害
+    if (m.rk || m.sk) setTimeout(() => netReconcile(m), 30);
+    return;
+  }
+}
+
+function netTick(dt) {
+  const now = performance.now();
+
+  // 主机定期广播回合状态
+  if (NET.host && NET.connected && now - NET.lastSyncSent > 250) {
+    NET.lastSyncSent = now;
+    const extra = {};
+    if (G.instance){
+      if (G.instance.kind === 'meteor' && G.instance.rocks.length)
+        extra.rk = G.instance.rocks.map(r => [+r.userData.tx.toFixed(1), +r.userData.tz.toFixed(1), +r.userData.v.toFixed(1)]);
+      if (G.instance.kind === 'storm' && G.instance.strikes.length)
+        extra.sk = G.instance.strikes.map(st => [+st.x.toFixed(1), +st.z.toFixed(1), +st.timer.toFixed(2)]);
+    }
+    netSend('sync', Object.assign({ s: G.state, mi: G.mapIdx, dt: G.disasterType, t: +G.t.toFixed(2), r: G.round }, extra));
+  }
+
+  // 房主广播机器人位置（3Hz，4 个机器人开销很小）
+  if (NET.host && NET.connected && now - NET.lastNpcSent > 300) {
+    NET.lastNpcSent = now;
+    const a = npcs.map(n => [
+      +n.pos.x.toFixed(1), +n.pos.y.toFixed(1), +n.pos.z.toFixed(1),
+      +n.group.rotation.y.toFixed(2), n.dead ? 1 : 0
+    ]);
+    netSend('np', { a });
+  }
+
+  // 自己位置上报：游戏中 10Hz，未开局时 1Hz（兼作心跳，防对端误判离线）
+  if (NET.connected && now - NET.lastPosSent > (started ? 100 : 1000)) {
+    NET.lastPosSent = now;
+    netSend('p', {
+      x: +player.pos.x.toFixed(2), y: +player.pos.y.toFixed(2), z: +player.pos.z.toFixed(2),
+      r: +player.group.rotation.y.toFixed(2), hp: Math.round(player.hp), d: player.dead ? 1 : 0
+    });
+  }
+
+  // 远端玩家插值与摆动
+  for (const p of NET.peers.values()) {
+    if (!p.active) continue;
+    if (now - p.last > 9000) { netRemovePeer(p.id); continue; }
+    const before = p.pos.distanceTo(p.tgt);
+    p.pos.lerp(p.tgt, Math.min(1, dt * 14));
+    p.group.position.copy(p.pos);
+    let d = p.tgtYaw - p.yaw;
+    while (d > Math.PI) d -= Math.PI * 2;
+    while (d < -Math.PI) d += Math.PI * 2;
+    p.yaw += d * Math.min(1, dt * 10);
+
+    if (p.dead) {
+      p.group.rotation.set(-Math.PI / 2, p.yaw, 0);
+      p.group.position.y = p.pos.y + 0.45;
+    } else {
+      p.group.rotation.set(0, p.yaw, 0);
+      const u = p.group.userData;
+      const moving = before > 0.02;
+      if (moving) {
+        p.animT += dt * 8.5;
+        const sw = Math.sin(p.animT) * 0.6;
+        u.legL.rotation.x = sw; u.legR.rotation.x = -sw;
+        u.armL.rotation.x = -sw * 0.55; u.armR.rotation.x = sw * 0.55;
+      } else {
+        const damp = Math.min(1, dt * 10);
+        u.legL.rotation.x += (0 - u.legL.rotation.x) * damp;
+        u.legR.rotation.x += (0 - u.legR.rotation.x) * damp;
+        u.armL.rotation.x += (0 - u.armL.rotation.x) * damp;
+        u.armR.rotation.x += (0 - u.armR.rotation.x) * damp;
+      }
+    }
+  }
+}
+
+addEventListener('beforeunload', () => { try { if (NET.connected) netSend('bye'); } catch (e) {} });
+window.__NET = NET;   // 调试/自动化测试入口
+window.__DBG = { setState, G, player, startDisaster, spawnDebris, knock, forceDisaster: (t)=>setState('disaster', {disasterType: t}), debris: () => debrisList.length };
+
+/* ============================================================
    启动 / 主循环
    ============================================================ */
 let started = false;
@@ -3024,12 +3628,16 @@ function loop(now){
     updateVoteCountdown(dt);
     updateItemCooldown(dt);
     updateNpcDeathParticles(dt);
+  updateDebris(dt);
     if (G.state === 'prep' || G.state === 'disaster') updateItemBoxes(dt);
   } else {
     updateCamera(dt);
     updateNpcs(dt);
   }
 
+  seaTex.offset.x += dt * 0.010;
+  seaTex.offset.y += dt * 0.006;
+  if (NET.on) netTick(dt);
   renderer.render(scene, camera);
 }
 
@@ -3062,20 +3670,28 @@ document.getElementById('btnSolo').addEventListener('click', e => {
   doStartGame();
 });
 
+function enterTeamRoom(){
+  const hashRoom = (location.hash.match(/room=([A-Za-z0-9]{4,8})/) || [])[1];
+  const code = hashRoom ? hashRoom.toUpperCase() : Math.random().toString(36).slice(2,8).toUpperCase();
+  const host = !hashRoom;
+  teamCodeEl.textContent = code;
+  teamCodeHintEl.textContent = host ? '点我复制邀请链接' : '你正在加入这个房间';
+  teamPanelEl.style.display = 'flex';
+  netStart(code, host).then(ok => {
+    if (!ok) teamCodeHintEl.textContent = '联机不可用，可点返回改玩单人';
+  });
+}
+
 document.getElementById('btnTeam').addEventListener('click', e => {
   e.stopPropagation();
-  // 生成随机6位房间码
-  const code = Math.random().toString(36).slice(2,8).toUpperCase();
-  teamCodeEl.textContent = code;
-  teamCodeHintEl.textContent = '点击复制链接';
-  teamPanelEl.style.display = 'flex';
+  enterTeamRoom();
 });
 
 teamCodeEl.addEventListener('click', () => {
   const url = location.href.split('#')[0] + '#room=' + teamCodeEl.textContent;
   if (navigator.clipboard) {
     navigator.clipboard.writeText(url).then(() => {
-      teamCodeHintEl.textContent = '✅ 链接已复制！';
+      teamCodeHintEl.textContent = '链接已复制';
       setTimeout(() => { teamCodeHintEl.textContent = '点击复制链接'; }, 2000);
     }).catch(() => { teamCodeHintEl.textContent = url; });
   } else {
@@ -3134,6 +3750,15 @@ camera.position.set(0, 20, -45);
 camera.lookAt(0, 3, 0);
 
 renderer.setAnimationLoop(loop);
+
+// 带房间码的邀请链接：自动进入组队面板
+if (/room=[A-Za-z0-9]{4,8}/.test(location.hash)) {
+  setTimeout(() => {
+    const sEl = document.getElementById('start');
+    if (sEl) sEl.style.display = 'none';
+    enterTeamRoom();
+  }, 200);
+}
 </script>
 </body>
 </html>
