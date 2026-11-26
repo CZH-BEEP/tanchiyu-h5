@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>灾害生存岛 · 3D H5</title>
 <style>
+
 /* ============================================================================
    灾害生存岛 · UI v6
    一套设计变量 + 一套组件，替代此前叠加的 v1/v4/v5 补丁层
@@ -15,20 +16,20 @@
 *{margin:0;padding:0;box-sizing:border-box}
 
 :root{
-  --acc:#5cc8ff;          /* 强调青 */
-  --acc-d:#1f83b8;
-  --ok:#46d17e;
-  --warn:#ffb347;
-  --bad:#ff5f5f;
-  --ink:#e9f5ff;          /* 主文字 */
-  --ink2:#9fbdd4;         /* 次文字 */
-  --ink3:#6b869c;         /* 弱文字 */
-  --line:rgba(132,196,246,.18);
-  --line2:rgba(132,196,246,.34);
-  --g1:linear-gradient(180deg,rgba(13,26,41,.92),rgba(6,14,24,.84));
-  --g2:linear-gradient(180deg,rgba(9,19,32,.95),rgba(4,10,18,.92));
-  --sh:0 10px 28px rgba(0,0,0,.36),inset 0 1px 0 rgba(255,255,255,.06);
-  --sh-lg:0 28px 70px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.05);
+  --acc:#ffc247;          /* 主强调：琥珀金 */
+  --acc-d:#c9761a;
+  --ok:#57d98a;
+  --warn:#ff9f43;
+  --bad:#ff5f4d;
+  --ink:#f2f6fa;
+  --ink2:#a6b7c4;
+  --ink3:#71838f;
+  --line:#263846;
+  --line2:#3a5266;
+  --g1:#121b24;           /* 实心石板（不再是半透明玻璃） */
+  --g2:#0d151d;
+  --sh:0 2px 0 rgba(4,8,12,.9),0 8px 18px rgba(0,0,0,.34);
+  --sh-lg:0 4px 0 rgba(4,8,12,.9),0 22px 52px rgba(0,0,0,.52);
 }
 
 html,body{width:100%;height:100%;overflow:hidden;background:#050b12;color:var(--ink);
@@ -41,7 +42,7 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
 svg .st{stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;fill:none}
 
 /* ---- 1 HUD 顶层 ---- */
-#hud{position:fixed;inset:0;pointer-events:none;z-index:10;color:var(--ink)}
+#hud{position:fixed;inset:0;pointer-events:none;z-index:14;color:var(--ink)}
 
 /* ---- 2 阶段 + 倒计时 ---- */
 #top{position:absolute;top:14px;left:50%;transform:translateX(-50%);text-align:center;
@@ -56,7 +57,7 @@ svg .st{stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoi
 /* ---- 3 信息条（三格合一，竖线分隔） ---- */
 #roundInfo{position:absolute;left:16px;top:16px;display:flex;align-items:stretch;
   height:38px;padding:0 2px;border-radius:12px;background:var(--g1);
-  border:1px solid var(--line);box-shadow:var(--sh);backdrop-filter:blur(10px);
+  border:1px solid var(--line);box-shadow:var(--sh);
   transition:top .22s cubic-bezier(.22,1,.36,1)}
 #roundInfo.push{top:74px}
 .chip{position:relative;display:flex;align-items:center;gap:7px;padding:0 11px;
@@ -88,7 +89,7 @@ svg .st{stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoi
 /* ---- 5 幸存者 / 状态 ---- */
 #survivors{position:absolute;left:16px;top:68px;min-width:150px;max-width:220px;
   padding:9px 12px 10px;border-radius:12px;background:var(--g1);
-  border:1px solid var(--line);box-shadow:var(--sh);backdrop-filter:blur(10px);
+  border:1px solid var(--line);box-shadow:var(--sh);
   transition:top .22s cubic-bezier(.22,1,.36,1)}
 #survivors.push{top:126px}
 #survivors h3{display:flex;align-items:center;gap:6px;font-size:9px;letter-spacing:.18em;
@@ -126,12 +127,12 @@ svg .st{stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoi
   border-radius:4px 12px 12px 4px;border:1px solid var(--line);border-left:3px solid var(--acc);
   background:linear-gradient(90deg,rgba(10,22,36,.92),rgba(6,14,24,.84));
   box-shadow:0 12px 30px rgba(0,0,0,.36);font-size:12.5px;line-height:1.5;
-  color:var(--ink);text-align:left;white-space:pre-wrap;backdrop-filter:blur(10px)}
+  color:var(--ink);text-align:left;white-space:pre-wrap;}
 #skipBtn{position:absolute;left:50%;bottom:84px;transform:translateX(-50%);
   display:none;pointer-events:auto;padding:7px 18px;border-radius:999px;
   border:1px solid var(--line2);background:rgba(11,26,42,.88);color:var(--ink);
   font-size:12px;font-weight:800;letter-spacing:.08em;box-shadow:0 8px 22px rgba(0,0,0,.34);
-  backdrop-filter:blur(8px)}
+  }
 #skipBtn:active{transform:translate(-50%,2px) scale(.98)}
 #settingsBtn{position:absolute;right:18px;bottom:22px;pointer-events:auto;
   width:54px;height:54px;border-radius:15px;display:flex;align-items:center;
@@ -152,7 +153,7 @@ svg .st{stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoi
 #center .sub{margin-top:12px;font-size:13px;letter-spacing:1px;color:var(--ink2)}
 
 /* ---- 9 灾害警告条 ---- */
-#disasterWarning{position:fixed;top:-96px;left:50%;transform:translateX(-50%);z-index:12;
+#disasterWarning{position:fixed;top:-96px;left:50%;transform:translateX(-50%);z-index:15;
   min-width:300px;max-width:min(470px,calc(100% - 32px));
   border-radius:0 0 13px 13px;overflow:hidden;pointer-events:none;
   background:var(--g1);border:1px solid rgba(255,95,95,.26);border-top:none;
@@ -228,7 +229,7 @@ svg .st{stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoi
 #start{position:fixed;inset:0;z-index:20;display:flex;flex-direction:column;
   align-items:center;justify-content:center;
   background:radial-gradient(ellipse at 50% 34%,rgba(12,44,70,.62),rgba(3,8,14,.86));
-  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+  }
 #start h1{font-size:clamp(28px,5vw,54px);font-weight:900;letter-spacing:7px;
   color:#f4fbff;text-align:center;
   text-shadow:0 0 44px rgba(92,200,255,.48),0 6px 22px rgba(0,0,0,.72)}
@@ -259,7 +260,7 @@ svg .st{stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoi
 #rotateGo:active{transform:translateY(1px)}
 
 #teamPanel{position:fixed;inset:0;z-index:25;display:none;align-items:center;justify-content:center;
-  background:rgba(2,7,13,.72);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+  background:rgba(2,7,13,.72);}
 #teamPanel .tpanel{width:min(360px,calc(100% - 32px));padding:26px 22px 22px;
   border-radius:18px;background:var(--g2);border:1px solid var(--line);
   box-shadow:var(--sh-lg);text-align:center}
@@ -280,7 +281,7 @@ svg .st{stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoi
   box-shadow:0 8px 20px rgba(30,130,180,.36),inset 0 1px 0 rgba(255,255,255,.36)}
 
 #votePanel{position:fixed;inset:0;z-index:18;display:none;align-items:center;justify-content:center;
-  background:rgba(2,7,13,.64);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+  background:rgba(2,7,13,.64);}
 #votePanel .vpanel{width:min(500px,calc(100% - 28px));padding:20px;border-radius:18px;
   background:var(--g2);border:1px solid var(--line);box-shadow:var(--sh-lg)}
 #votePanel h2{font-size:15px;letter-spacing:.16em;text-align:center;margin-bottom:4px;
@@ -341,7 +342,7 @@ svg .st{stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoi
 #resultCountdown b{color:var(--acc);font-variant-numeric:tabular-nums}
 
 #settings{position:fixed;inset:0;z-index:26;display:none;align-items:center;justify-content:center;
-  background:rgba(2,7,13,.64);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+  background:rgba(2,7,13,.64);}
 #settings .panel{width:min(430px,calc(100% - 28px));max-height:calc(100% - 36px);
   overflow-y:auto;padding:20px 20px 16px;border-radius:18px;background:var(--g2);
   border:1px solid var(--line);box-shadow:var(--sh-lg);
@@ -355,19 +356,19 @@ svg .st{stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoi
   padding:10px 0;border-top:1px solid rgba(132,196,246,.09);
   font-size:12.5px;color:var(--ink2)}
 #settings .row{display:flex}
-.row select,.row button{min-width:104px;height:34px;padding:0 12px;border-radius:10px;
-  border:1px solid var(--line2);background:rgba(16,36,58,.7);color:var(--ink);
+.row select,.row button{min-width:104px;height:34px;padding:0 12px;border-radius:9px;
+  border:1px solid var(--line2);border-bottom:3px solid #0a1117;background:#16222e;color:var(--ink);
   font-size:12px;font-weight:700;pointer-events:auto}
 .row select{-webkit-appearance:none;appearance:none;text-align:left}
-.row button:active{background:rgba(30,62,92,.82)}
-.row input[type=range]{-webkit-appearance:none;appearance:none;width:130px;height:4px;
-  border-radius:2px;background:linear-gradient(90deg,rgba(92,200,255,.55),rgba(92,200,255,.12));
+.row button:active{transform:translateY(2px);border-bottom-width:1px;background:#1d2b39}
+.row input[type=range]{-webkit-appearance:none;appearance:none;width:130px;height:5px;
+  border-radius:3px;background:linear-gradient(90deg,rgba(255,194,71,.6),rgba(255,194,71,.12));
   outline:none;pointer-events:auto}
-.row input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;
-  border-radius:50%;background:radial-gradient(circle at 40% 30%,#eafaff,#5cc8ff 62%,#1f83b8);
-  box-shadow:0 2px 8px rgba(0,0,0,.4),0 0 12px rgba(92,200,255,.56);cursor:pointer}
-.row input[type=range]::-moz-range-thumb{width:16px;height:16px;border:none;border-radius:50%;
-  background:#5cc8ff}
+.row input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;
+  border-radius:50%;background:radial-gradient(circle at 38% 28%,#fff6df,#ffc247 60%,#c9761a);
+  border:1px solid #ffe1a3;box-shadow:0 2px 6px rgba(0,0,0,.45);cursor:pointer}
+.row input[type=range]::-moz-range-thumb{width:18px;height:18px;border:1px solid #ffe1a3;border-radius:50%;
+  background:#ffc247}
 .help{margin-top:12px;padding-top:12px;border-top:1px solid rgba(132,196,246,.09);
   font-size:10px;line-height:1.8;color:var(--ink3)}
 .closeSet{width:100%;height:44px;margin-top:14px;border-radius:12px;border:1px solid var(--line2);
@@ -378,7 +379,7 @@ svg .st{stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoi
   transform:translateX(-50%);pointer-events:auto;padding:9px 22px;border-radius:999px;
   border:1px solid var(--line2);background:rgba(11,26,42,.88);color:var(--ink);
   font-size:13px;font-weight:800;letter-spacing:.1em;box-shadow:0 8px 22px rgba(0,0,0,.34);
-  backdrop-filter:blur(8px)}
+  }
 #elevatorBtn:active{transform:translate(-50%,2px)}
 
 #loading{position:fixed;inset:0;z-index:30;display:none;align-items:center;
@@ -405,6 +406,100 @@ svg .st{stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoi
 /* ============================================================================
    14 手机竖屏（390×844 一类）
    ============================================================================ */
+
+/* ============================================================================
+   v7 · 视觉语言重定
+   方向：去掉「半透明玻璃 + 霓虹外发光」这套通用观感，改成一款游戏该有的
+   实心石板 + 硬边投影 + 高对比主色；按钮图标换成能看出动作的人形剪影。
+   ============================================================================ */
+
+/* ---- 面板：石板 + 左侧主色标条 ---- */
+#roundInfo{background:var(--g1);border:1px solid var(--line);border-left:3px solid var(--acc);
+  box-shadow:var(--sh);border-radius:10px}
+.chip .k{color:var(--acc);letter-spacing:.13em;font-weight:800}
+#timer{text-shadow:0 3px 0 rgba(0,0,0,.5),0 8px 20px rgba(0,0,0,.45)}
+#banner{text-shadow:0 4px 0 rgba(0,0,0,.4),0 12px 28px rgba(0,0,0,.5)}
+#survivors{background:var(--g1);border:1px solid var(--line);box-shadow:var(--sh);
+  border-radius:10px;padding:8px 11px 9px}
+#survivors h3{color:var(--ink2);letter-spacing:.16em}
+#survivors h3:before{background:var(--acc);border-radius:2px;width:6px;height:6px;box-shadow:none}
+#survivors div{color:var(--ink)}
+#tipBox{background:var(--g1);border:1px solid var(--line);border-left:3px solid var(--acc);
+  box-shadow:var(--sh);border-radius:4px 10px 10px 4px}
+#skipBtn{background:#16222e;border:1px solid var(--line2);border-bottom:3px solid #0a1117;
+  box-shadow:0 3px 0 rgba(4,8,12,.6);border-radius:999px}
+#skipBtn:active{transform:translate(-50%,3px) scale(.99);border-bottom-width:1px;
+  box-shadow:0 1px 0 rgba(4,8,12,.6)}
+#settingsBtn{background:#16222e;border:2px solid var(--line2);border-bottom:4px solid #0a1117;
+  box-shadow:0 4px 0 rgba(4,8,12,.6);border-radius:13px;color:var(--ink)}
+#settingsBtn:active{transform:translateY(3px);border-bottom-width:2px;box-shadow:0 1px 0 rgba(4,8,12,.6)}
+
+/* ---- 血量 ---- */
+#hpbar{height:9px;border-radius:3px;background:#0a1219;border:1px solid var(--line);
+  box-shadow:inset 0 1px 3px rgba(0,0,0,.7)}
+#hpfill{background:linear-gradient(90deg,#3fca7c,#93f0b0);border-radius:2px}
+#hplabel{color:var(--ink2);letter-spacing:.14em}
+#hpnum{color:var(--ink);font-weight:900}
+
+/* ---- 摇杆 ---- */
+.joy{background:radial-gradient(circle at 50% 30%,#22323f,#0a1218 74%);
+  border:2px solid #2b4052;
+  box-shadow:0 6px 0 rgba(4,8,12,.5),inset 0 2px 9px rgba(255,255,255,.05)}
+.joy:after{border:1px dashed rgba(255,194,71,.26)}
+.joy.active{transform:scale(1.03);
+  box-shadow:0 3px 0 rgba(4,8,12,.5),inset 0 0 20px rgba(255,194,71,.16)}
+.knob{background:radial-gradient(circle at 36% 28%,#ffffff,#e2ebf1 46%,#9db2c1 100%);
+  box-shadow:0 5px 0 rgba(4,8,12,.5),inset 0 -3px 7px rgba(0,0,0,.2)}
+
+/* ---- 动作键：跳跃=琥珀 / 奔跑=青绿，实心人形剪影 ---- */
+.ab button{width:84px;height:84px;border-radius:50%;border:2px solid transparent}
+.ab button svg{width:44px;height:44px}
+.ab button svg .st{stroke-width:4.4}
+#btnJump{color:#fff;background:linear-gradient(180deg,#ffb43c,#e07d12);border-color:#ffd894;
+  box-shadow:0 7px 0 #8a4b06,0 12px 22px rgba(0,0,0,.42)}
+#btnJump:active{transform:translateY(5px);box-shadow:0 2px 0 #8a4b06}
+#btnRun{color:#eafff8;background:linear-gradient(180deg,#3fd0ab,#1a8f74);border-color:#a6f5de;
+  box-shadow:0 7px 0 #0b5140,0 12px 22px rgba(0,0,0,.42)}
+#btnRun:active{transform:translateY(5px);box-shadow:0 2px 0 #0b5140}
+#btnRun.on{color:#04302a;background:linear-gradient(180deg,#8bf4d8,#33ba9a);border-color:#e2fff7;
+  box-shadow:0 5px 0 #0b5140,0 0 0 3px rgba(63,208,171,.22)}
+
+/* ---- 道具槽 ---- */
+.itemSlot{width:52px;height:52px;border-radius:12px;background:#0f1a24;
+  border:2px solid #2f4456;box-shadow:0 4px 0 rgba(4,8,12,.5)}
+.itemSlot.selected{border-color:var(--acc);transform:translateY(-3px);
+  box-shadow:0 0 0 2px rgba(255,194,71,.22),0 5px 0 rgba(4,8,12,.5)}
+.itemSlot:active{transform:translateY(2px) scale(.97);box-shadow:0 1px 0 rgba(4,8,12,.5)}
+.itIc{width:28px;height:28px}
+.itemSlot:before{left:5px;top:2px;color:var(--ink3);font-size:8px;font-weight:800;opacity:.9}
+.itemSlot .cdBadge{background:rgba(6,12,18,.8);border-radius:10px;color:var(--warn);
+  font-weight:900;letter-spacing:0}
+
+/* ---- 警告条 ---- */
+#disasterWarning{background:var(--g2);border:1px solid #4a231e;
+  box-shadow:0 14px 34px rgba(0,0,0,.55)}
+#warnTitle{background:#c8362b;color:#fff;letter-spacing:2.5px}
+#warnTitle:before{background:#ffd0c6;box-shadow:none}
+#warnMsg{background:#1a0f0d;color:#ffd3c9}
+
+/* ---- 开始界面 ---- */
+.sbtn{border-radius:12px;letter-spacing:.1em;border:2px solid transparent;
+  box-shadow:0 5px 0 rgba(4,8,12,.55)}
+.sbtn-solo{color:#2a1802;background:linear-gradient(180deg,#ffc85a,#eda02a);border-color:#ffe1a3}
+.sbtn-solo:active{transform:translateY(4px);box-shadow:0 1px 0 rgba(4,8,12,.55)}
+.sbtn-team{color:var(--ink);background:#16222e;border-color:var(--line2)}
+.sbtn-team:active{transform:translateY(4px);box-shadow:0 1px 0 rgba(4,8,12,.55)}
+#start h1{text-shadow:0 4px 0 rgba(0,0,0,.35),0 14px 34px rgba(0,0,0,.55)}
+#start .sub{color:var(--ink2)}
+#start .sub:before,#start .sub:after{background:var(--acc);opacity:.5}
+
+/* ---- 弹层 ---- */
+#settings .panel,#teamPanel .panel,#resultCard,#scoreBoard,#votePanel .vpanel{
+  background:var(--g2);border:1px solid var(--line2);box-shadow:var(--sh-lg)}
+
+/* ---- 触摸设备：隐藏键盘序号，槽位交给拇指 ---- */
+@media (pointer:coarse){.itemSlot:before{display:none}}
+
 @media (max-width:760px) and (pointer:coarse){
   #hint{display:none}
 
@@ -416,7 +511,7 @@ svg .st{stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoi
   #hpwrap{right:10px;top:calc(env(safe-area-inset-top,0px) + 10px);width:104px}
   #hpbar{height:7px}
   #hpnum{bottom:-13px;font-size:9px}
-  #settingsBtn{right:10px;top:calc(env(safe-area-inset-top,0px) + 30px);
+  #settingsBtn{right:10px;top:calc(env(safe-area-inset-top,0px) + 46px);
     width:36px;height:36px;border-radius:11px;bottom:auto}
   #settingsBtn svg{width:17px;height:17px}
 
@@ -434,9 +529,9 @@ svg .st{stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoi
   #survivors div{font-size:10px;line-height:1.5}
 
   #itemBar{right:9px;top:calc(env(safe-area-inset-top,0px) + 82px);gap:7px}
-  .itemSlot{width:42px;height:42px;border-radius:11px}
+  .itemSlot{width:46px;height:46px;border-radius:11px}
   .itemSlot:before{left:4px;top:2px;font-size:7px}
-  .itIc{width:22px;height:22px}
+  .itIc{width:25px;height:25px}
   .itemSlot .cdBadge{border-radius:10px;font-size:12px}
   .itemTooltip{display:none}
 
@@ -450,8 +545,8 @@ svg .st{stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoi
     width:120px;height:120px}
   .knob{width:44px;height:44px;margin:-22px 0 0 -22px}
   .ab{right:14px;bottom:calc(env(safe-area-inset-bottom,0px) + 14px);gap:12px}
-  .ab button{width:74px;height:74px}
-  .ab button svg{width:36px;height:36px}
+  .ab button{width:78px;height:78px}
+  .ab button svg{width:41px;height:41px}
   .lookPad{height:calc(100% - 170px)}
 
   #banner{top:36%}
@@ -571,6 +666,27 @@ svg .st{stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoi
   #elevatorBtn{bottom:80px;padding:7px 18px;font-size:11.5px}
 }
 
+
+/* ---- 轻提示（道具点击反馈） ---- */
+#toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 300px);z-index:16;
+  transform:translate(-50%,10px);opacity:0;pointer-events:none;
+  padding:8px 15px;border-radius:8px;background:#141f29;border:1px solid #3a5266;
+  border-left:3px solid var(--acc);box-shadow:0 6px 18px rgba(0,0,0,.45);
+  font-size:12px;font-weight:700;color:var(--ink);white-space:nowrap;
+  transition:opacity .16s,transform .16s}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+#survivors{pointer-events:auto}
+
+#survivors h3 .sbArrow{float:right;margin-left:6px;color:var(--ink3);font-size:9px;
+  letter-spacing:0;transform:translateY(-1px)}
+
+body.is-start #mobile,body.is-start #disasterWarning{display:none!important}
+
+@media (orientation:landscape) and (max-height:520px) and (pointer:coarse){
+  #skipBtn{top:108px;bottom:auto}
+  #toast{bottom:calc(env(safe-area-inset-bottom,0px) + 74px)}
+}
+
 </style>
 </head>
 <body>
@@ -595,9 +711,9 @@ svg .st{stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoi
   <button id="settingsBtn" type="button" aria-label="设置"><svg viewBox="0 0 48 48" aria-hidden="true"><circle class="st" cx="24" cy="24" r="6.6"/><path class="st" d="M24 8.6v4.2M24 35.2v4.2M8.6 24h4.2M35.2 24h4.2M13.2 13.2l3 3M31.8 31.8l3 3M34.8 13.2l-3 3M16.2 31.8l-3 3"/></svg></button>
   <div id="hint">WASD 移动 · Shift 加速 · 空格 跳跃<br>鼠标 视角 · 滚轮 缩放 · 1/2/3 道具 · E 使用 · Tab 排行榜 · N 跳过等待 · ESC 释放鼠标</div>
   <div id="itemBar">
-    <div class="itemSlot selected" data-tip="草药：恢复30HP"><svg class="itIc" viewBox="0 0 24 24"><path d="M4.5 19.5Q4.5 4.5 19.5 4.5Q19.5 19.5 4.5 19.5Z" fill="#74d95f" stroke="#2f8f36" stroke-width="1.2"/><path d="M19.5 4.5L4.5 19.5" stroke="#2f8f36" stroke-width="1.2"/></svg><span class="cdBadge"></span><div class="itemTooltip">草药<br>+30 HP</div></div>
-    <div class="itemSlot" data-tip="苹果：恢复15HP"><svg class="itIc" viewBox="0 0 24 24"><circle cx="12" cy="14.4" r="6" fill="#e2564d" stroke="#a8322b" stroke-width="1.2"/><path d="M12 8.6V5" stroke="#8a6a3a" stroke-width="1.5"/><path d="M12 6.2c1.2-1.5 3.1-1.7 4.2-.9-.2 1.7-1.9 2.6-4.2 2.1z" fill="#74d95f"/></svg><span class="cdBadge"></span><div class="itemTooltip">苹果<br>+15 HP</div></div>
-    <div class="itemSlot" data-tip="气球：短暂漂浮"><svg class="itIc" viewBox="0 0 24 24"><ellipse cx="12" cy="9.4" rx="4.6" ry="5.8" fill="#ff7b8a" stroke="#c8455a" stroke-width="1.2"/><path d="M12 15.4v4.2" stroke="#c8455a" stroke-width="1.3"/><path d="M10.9 15h2.2l-1.1 1.6z" fill="#c8455a" stroke="none"/></svg><span class="cdBadge"></span><div class="itemTooltip">气球<br>短暂漂浮</div></div>
+    <div class="itemSlot selected" data-tip="草药：恢复30HP"><svg class="itIc" viewBox="0 0 32 32"><path d="M16 28V15.4" stroke="#2f7a3a" stroke-width="2" stroke-linecap="round" fill="none"/><path d="M16 18.4C11 18.4 7.8 15.4 6.6 10.8 11.6 9.6 15.4 12.2 16 18.4Z" fill="#67d97a" stroke="#22632c" stroke-width="1.6"/><path d="M16 22.4C21 22.4 24.2 19.4 25.4 14.8 20.4 13.6 16.6 16.2 16 22.4Z" fill="#4fbf63" stroke="#22632c" stroke-width="1.6"/><path d="M16 13.6C15.2 9.6 16.6 6 19.8 3.8 21.2 7.4 19.6 11.4 16 13.6Z" fill="#8ce894" stroke="#22632c" stroke-width="1.6"/></svg><span class="cdBadge"></span><div class="itemTooltip">草药<br>+30 HP</div></div>
+    <div class="itemSlot" data-tip="苹果：恢复15HP"><svg class="itIc" viewBox="0 0 32 32"><path d="M16 10.6C13 8.8 8.6 10.2 7.4 14.4 5.8 19.8 9.2 28 16 28 22.8 28 26.2 19.8 24.6 14.4 23.4 10.2 19 8.8 16 10.6Z" fill="#e2453b" stroke="#7e1b16" stroke-width="1.7"/><ellipse cx="11.8" cy="16.2" rx="1.8" ry="3.4" fill="#ff948c" opacity=".7"/><path d="M16 10.6V6.6" stroke="#7a5124" stroke-width="2.1" stroke-linecap="round"/><path d="M16.8 7.6C19 4.4 23.2 4.2 25.2 6.2 23.8 9 20 9.6 16.8 7.6Z" fill="#67d97a" stroke="#22632c" stroke-width="1.5"/></svg><span class="cdBadge"></span><div class="itemTooltip">苹果<br>+15 HP</div></div>
+    <div class="itemSlot" data-tip="气球：短暂漂浮"><svg class="itIc" viewBox="0 0 32 32"><ellipse cx="16" cy="12.4" rx="7.2" ry="8.8" fill="#ff6b8a" stroke="#8f2340" stroke-width="1.7"/><ellipse cx="13" cy="9.2" rx="1.9" ry="3.2" fill="#ffffff" opacity=".55"/><path d="M13.6 20.4L16 23.2 18.4 20.4Z" fill="#8f2340"/><path d="M16 23.2C13.4 25.4 18.6 27.2 16 30" stroke="#8f2340" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg><span class="cdBadge"></span><div class="itemTooltip">气球<br>短暂漂浮</div></div>
   </div>
 </div>
 
@@ -680,7 +796,7 @@ svg .st{stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoi
     <button class="closeSet" id="closeSettings" type="button">关闭</button>
   </div>
 </div>
-<div id="mobile"><div class="joy" id="joy"><div class="knob" id="knob"></div></div><div class="lookPad" id="lookPad"></div><div class="lookGuide" id="lookGuide"></div><div class="ab"><button id="btnRun" type="button" aria-label="加速"><svg viewBox="0 0 48 48" aria-hidden="true"><path class="st" d="M10 17h17"/><path class="st" d="M10 24h11"/><path class="st" d="M10 31h15"/><path class="st" d="M30 19l8 5-8 5"/></svg></button><button id="btnJump" type="button" aria-label="跳跃"><svg viewBox="0 0 48 48" aria-hidden="true"><path class="st" d="M24 35V14"/><path class="st" d="M14.5 23.5L24 14l9.5 9.5"/><path class="st" d="M11 40h26"/></svg></button></div></div>
+<div id="mobile"><div class="joy" id="joy"><div class="knob" id="knob"></div></div><div class="lookPad" id="lookPad"></div><div class="lookGuide" id="lookGuide"></div><div class="ab"><button id="btnRun" type="button" aria-label="加速"><svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="29.6" cy="10.6" r="4.1" fill="currentColor" stroke="none"/><path class="st" d="M28.4 15L21.6 24.4"/><path class="st" d="M28.6 17L34.8 21.4"/><path class="st" d="M28.4 17.2L23.6 12.2"/><path class="st" d="M21.6 24.4L27.8 29.4L26.2 35.2"/><path class="st" d="M21.6 24.4L14.8 30.8"/><path class="st" d="M8.2 17.6h6.4"/><path class="st" d="M5.8 24.6h6.4"/><path class="st" d="M8.2 31.6h6"/></svg></button><button id="btnJump" type="button" aria-label="跳跃"><svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="25.4" cy="10.4" r="4.3" fill="currentColor" stroke="none"/><path class="st" d="M25.4 15L23.8 25.2"/><path class="st" d="M25.6 16.8L32.6 11.4"/><path class="st" d="M25.6 17.2L18.2 13.6"/><path class="st" d="M23.8 25L29.6 30.2"/><path class="st" d="M23.8 25L17.6 30.6"/><path class="st" d="M11 40.6h6.4"/><path class="st" d="M30.4 40.6h6.4"/></svg></button></div></div>
 
 <script>
 window.addEventListener('error', function (e) {
@@ -809,7 +925,8 @@ sun.castShadow = true;
 sun.shadow.mapSize.set(2048, 2048);
 const sc = sun.shadow.camera;
 sc.left=-72; sc.right=72; sc.top=72; sc.bottom=-72; sc.near=1; sc.far=280;
-sun.shadow.bias = -0.0008;
+sun.shadow.bias = -0.0004;
+sun.shadow.normalBias = 0.045;   // 大平面的阴影痤疮会让草地看起来一闪一闪
 scene.add(sun);
 scene.add(sun.target);
 applyQuality();
@@ -1100,6 +1217,9 @@ function clearMapObjects(){
 
 // 临时 box：记录到 currentMapObjects，碰撞体会在 BASE_COLLIDER_COUNT 之后
 function mapBox(w,h,d,color,x,y,z,collide){
+  // 薄装饰板（麦田/铁锈/地面贴片）原本中心压在 y=0，底面与地面顶面共面会闪
+  // 统一抬成"底边正好坐在地面上"，留 3mm 间隙
+  if (collide === false && h <= 0.2 && y > -0.01 && y < 0.2) y = h / 2 + 0.003;
   const m = new THREE.Mesh(new THREE.BoxGeometry(w,h,d), mat(color));
   m.position.set(x,y,z);
   m.castShadow = true;
@@ -3201,12 +3321,28 @@ function updateCamera(dt){
 
   // 大厅：塔体是封闭结构，避障会把相机压到贴脸，观景阶段直接跳过
   if (G.state !== 'lobby'){
-    const hit = cameraHitDistance(target, dir, dist);
-    if (hit < dist){
-      // 撞墙时别把相机压到贴脸（整屏都是墙）：保底 2.6，并把取景中心抬高做俯视补偿
-      dist = Math.max(2.6, hit - 0.4);
-      const squeeze = Math.max(0, Math.min(1, (3.4 - hit) / 1.6));
-      target.y += squeeze * 1.25;
+    let hit = cameraHitDistance(target, dir, dist);
+    if (hit < dist * 0.96){
+      // 撞墙：按「偏转最小」的顺序换机位（先微微抬，再左右让开），找一个能看见人的角度，
+      // 都比贴墙强时取最好的那个；实在四面是墙才压低距离
+      const attempts = [[0,0.35],[-0.5,0],[0.5,0],[-0.5,0.3],[0.5,0.3],[0,0.85],[-1,0.2],[1,0.2]];
+      let best = { dir: dir, hit: hit };
+      for (const [dy, dp] of attempts){
+        const pp = Math.min(camPitch + dp, 1.42);
+        const d2 = new THREE.Vector3(
+          Math.sin(camYaw + dy) * Math.cos(pp), Math.sin(pp), Math.cos(camYaw + dy) * Math.cos(pp)
+        ).normalize();
+        const h2 = cameraHitDistance(target, d2, dist);
+        if (h2 > best.hit + 0.5) best = { dir: d2, hit: h2 };
+        if (h2 >= dist * 0.98) { best = { dir: d2, hit: h2 }; break; }
+      }
+      dir.copy(best.dir); hit = best.hit;
+      if (hit < dist * 0.96){
+        // 实在没有合适机位（夹缝里）：贴近但不穿墙，同时把取景中心抬高一点，
+        // 至少保证角色在画面里、不是一整屏墙面
+        dist = Math.max(3.2, hit - 0.4);
+        target.y += Math.max(0, Math.min(0.9, (3.2 - hit) * 0.5));
+      }
     }
   }
 
@@ -3266,9 +3402,9 @@ renderer.domElement.addEventListener('touchend', () => { pinchDist0 = null; }, {
    道具栏点击使用（INPUT-EQUIP/USE）
    ============================================================ */
 const ITEMS = [
-  { name:'草药', key:'1', effect(){ damage(-30); showBanner('+30 HP', 900); playSfx('survive'); spawnFloatText('+30 HP', '#4ade80'); } },
-  { name:'苹果', key:'2', effect(){ damage(-15); showBanner('+15 HP', 900); playSfx('survive'); spawnFloatText('+15 HP', '#fbbf24'); } },
-  { name:'气球', key:'3', effect(){ player.vel.y = Math.max(player.vel.y, JUMP_V * 1.6); player.onGround = false; showBanner('飞升！', 900); spawnFloatText('飞升', '#9ff'); } }
+  { name:'草药', key:'1', effect(){ damage(-30); playSfx('survive'); spawnFloatText('+30 HP', '#4ade80'); } },
+  { name:'苹果', key:'2', effect(){ damage(-15); playSfx('survive'); spawnFloatText('+15 HP', '#fbbf24'); } },
+  { name:'气球', key:'3', effect(){ player.vel.y = Math.max(player.vel.y, JUMP_V * 1.6); player.onGround = false; spawnFloatText('飞升', '#9ff'); } }
 ];
 let selectedSlot = 0;
 const itemSlots = document.querySelectorAll('.itemSlot');
@@ -3293,12 +3429,22 @@ function updateItemCooldown(dt){
   }
 }
 
+let toastEl = null, toastT = 0;
+function showToast(msg){
+  if(!toastEl){ toastEl = document.createElement('div'); toastEl.id = 'toast'; document.body.appendChild(toastEl); }
+  toastEl.textContent = msg; toastEl.classList.add('show');
+  clearTimeout(toastT); toastT = setTimeout(() => toastEl.classList.remove('show'), 1500);
+}
+
 function useItem(idx){
-  if(player.dead) return;
-  if(G.state !== 'disaster' && G.state !== 'prep') return;
-  if(itemCD[idx] > 0) return;
-  ITEMS[idx].effect();
+  const it = ITEMS[idx];
+  if(player.dead) { showToast('已阵亡，无法使用道具'); return; }
+  if(G.state !== 'disaster' && G.state !== 'prep') { showToast('准备阶段之后才能用道具'); return; }
+  if(itemCD[idx] > 0) { showToast(it.name + ' 冷却中 · ' + Math.ceil(itemCD[idx]) + ' 秒'); return; }
+  it.effect();
   itemCD[idx] = ITEM_CD[idx];
+  showToast(it.name + ' 已使用');
+  if(navigator.vibrate) navigator.vibrate(28);
 }
 
 itemSlots.forEach((slot, i) => {
@@ -3306,6 +3452,10 @@ itemSlots.forEach((slot, i) => {
   slot.style.pointerEvents = 'auto';
   slot.addEventListener('click', e => { e.stopPropagation(); selectedSlot = i; updateSelectedSlot(); useItem(i); });
 });
+
+const survCard = document.getElementById('survivors');
+survCard.title = '点击查看排行榜';
+survCard.addEventListener('click', e => { e.stopPropagation(); showScoreBoard(); });
 
 function updateSelectedSlot(){
   itemSlots.forEach((s, i) => s.classList.toggle('selected', i === selectedSlot));
@@ -4092,6 +4242,9 @@ function loop(now){
 }
 
 const startEl = document.getElementById('start');
+const hudEl = document.getElementById('hud');
+hudEl.style.visibility = 'hidden';   // 开始界面期间不露出游戏 HUD
+document.body.classList.add('is-start');   // 同时收起移动控件和灾害条（它们不在 HUD 里）
 const teamPanelEl = document.getElementById('teamPanel');
 const teamCodeEl = document.getElementById('teamCode');
 const teamCodeHintEl = document.getElementById('teamCodeHint');
@@ -4101,6 +4254,8 @@ function doStartGame() {
   playSfx('start');
   startEl.style.display = 'none';
   teamPanelEl.style.display = 'none';
+  hudEl.style.visibility = 'visible';
+  document.body.classList.remove('is-start');
   started = true;
   setState('lobby');
   if (isTouchDevice) {
